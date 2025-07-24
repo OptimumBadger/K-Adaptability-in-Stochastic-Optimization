@@ -1,6 +1,6 @@
 ## Files
 - PowerFlow Model.ipynb  
-  Base model for power flow analysis.
+  Base model for power flow analysis
 
 - PowerFlow with Generator Uncertainty.ipynb 
   Extends the model with generator failure scenarios ( Randomness in generators)
