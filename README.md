@@ -6,7 +6,7 @@
   Extends the model with generator failure scenarios ( Randomness in generators)
 
 - Powerflow with additional cost uncertainty.ipynb  
-  Poewerflow Model with uncertainty in costs 
+  Powerflow Model with uncertainty in costs 
 
 - facility_location.ipynb
   Solves a facility location optimization problem under demand uncertainty
