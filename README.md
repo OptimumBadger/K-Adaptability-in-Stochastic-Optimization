@@ -1,4 +1,4 @@
-**PowerFlow Model.ipynb**  
+PowerFlow Model.ipynb**  
   Base model for power flow analysis.
 
 - **PowerFlow with Generator Uncertainty.ipynb**  
@@ -12,5 +12,5 @@
 
 ## Input Data
 
-- `instances/`: Contains general test cases or base inputs.
+- `instances/`: Contains instances for facility location problem.
 - `powerflow instances/`: Input files specific to power flow simulations.
