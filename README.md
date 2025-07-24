@@ -8,7 +8,7 @@
 - Powerflow with additional cost uncertainty.ipynb  
   Poewerflow Model with uncertainty in costs 
 
-- facility_location.ipynb**  
+- facility_location.ipynb
   Solves a facility location optimization problem under demand uncertainty
 
 ## Input Data
