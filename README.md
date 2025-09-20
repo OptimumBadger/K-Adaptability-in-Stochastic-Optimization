@@ -19,14 +19,31 @@
    julia -e 'using Pkg; Pkg.add(["JuMP", "Gurobi", "Random", "Distributions", "DataFrames", "LinearAlgebra"])'
    ```
 
-4. **Run the script**:
+4. **Run the scripts**:
    ```bash
+   # Core 3 phases only (faster)
    julia complete_facility_location.jl
+   
+   # Full pipeline with L-Augmentation heuristic
+   julia l_augmentation_heuristic.jl
    ```
 
 ## Files
 
-- `complete_facility_location.jl` - **Main script (recommended)**
+### Main Scripts
+- `complete_facility_location.jl` - **Core 3 phases (recommended for basic analysis)**
+  - Phase 1: Scenario Generation
+  - Phase 2: Reformulated Extensive Form  
+  - Phase 3: Evaluation
+  - Faster execution, good for initial analysis
+
+- `l_augmentation_heuristic.jl` - **Full pipeline with L-Augmentation heuristic (recommended for advanced analysis)**
+  - All 3 core phases PLUS L-Augmentation heuristic
+  - Shows before/after performance comparison
+  - Demonstrates improvement from heuristic optimization
+  - Longer execution time but better solutions
+
+### Additional Files
 - `facility_location.ipynb` - Original notebook implementation
 - `debug_facility_location.jl` - Debug version with detailed progress
 - `facility_location_script.jl` - Alternative implementation
