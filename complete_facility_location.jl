@@ -388,7 +388,17 @@ function main()
     println("="^60)
     
     # Parameters
-    file_path = "/Users/Patron/code/Candidate-selection-via-Stochastic-IP/instances/cap91.txt"
+    # Use relative path - works for anyone who clones the repository
+    file_path = "instances/cap91.txt"
+    
+    # Check if file exists, provide helpful error message
+    if !isfile(file_path)
+        println("❌ Error: Data file not found!")
+        println("Expected file: $file_path")
+        println("Please make sure you're running from the project root directory")
+        println("and that the instances/ folder contains the data files.")
+        return
+    end
     unmet_pen = 50
     scaling_factor = 0.000015
     bernoulli_case = false
