@@ -45,9 +45,6 @@
 
 ### Additional Files
 - `facility_location.ipynb` - Original notebook implementation
-- `debug_facility_location.jl` - Debug version with detailed progress
-- `facility_location_script.jl` - Alternative implementation
-- `run_all_cells.jl` - For notebook use
 
 ### Power Flow Models
 - PowerFlow Model.ipynb  
