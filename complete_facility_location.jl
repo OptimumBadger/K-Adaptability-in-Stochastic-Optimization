@@ -214,101 +214,6 @@ function n_unique_rows(A::AbstractMatrix)
     return uniq, length(uniq)
 end
 
-function obtain_policy(nloc, ncust, capacity, cost, online_samples, xsolutions, K, fixedcost, unmet_pen, scaling_factor)
-    """Obtain K optimal solutions using reformulated extensive form"""
-    S = size(online_samples, 1)
-    l = size(xsolutions, 1)
-    obj_matrix, _ = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor)
-    _, z = Reformulated_Extensive_Form(S, l, K, obj_matrix)
-    return z
-end
-
-function assign_partitions(nloc, ncust, capacity, cost, z, xsolutions, online_samples, fixedcost, unmet_pen, scaling_factor)
-    """Assign scenarios to optimal solutions"""
-    selected_indices = findall(v -> v ≥ 0.5, z)
-    K = length(selected_indices)
-    S = size(online_samples, 1)
-    partitions = [Int[] for _ in 1:K]
-
-    for j in 1:S
-        sample = online_samples[j, :]
-        best_val = Inf
-        best_k = 0
-        for (k_idx, sol_idx) in enumerate(selected_indices)
-            val, _ = solve_for_continuous_var(nloc, ncust, capacity, cost, sample, xsolutions[sol_idx, :], fixedcost, unmet_pen, scaling_factor)
-            if val < best_val
-                best_val = val
-                best_k = k_idx
-            end
-        end
-        push!(partitions[best_k], j)
-    end
-    return partitions
-end
-
-function extensive_form(nloc, ncust, capacity, cost, partition, online_samples, fixedcost, unmet_pen, scaling_factor)
-    """Solve extensive form for a given partition"""
-    model = Model(Gurobi.Optimizer)
-    nscen = length(partition)
-
-    # Decision Variables
-    @variable(model, x[1:nloc], Bin)
-    @variable(model, y[1:nloc, 1:ncust, 1:nscen] >= 0)
-    @variable(model, shortfall[1:ncust, 1:nscen] >= 0)
-
-    # Constraints
-    for k in 1:nscen
-        scenario_index = partition[k]
-        @constraint(model, [j in 1:ncust], sum(y[i, j, k] for i in 1:nloc) + shortfall[j, k] == online_samples[scenario_index, j])
-        @constraint(model, [i in 1:nloc], sum(y[i, j, k] for j in 1:ncust) - capacity[i]*x[i] <= 0)
-    end
-
-    # Objective function
-    @objective(model, Min, 
-        sum(fixedcost[i]*x[i] for i in 1:nloc) + 
-        scaling_factor/nscen * sum(cost[i, j]*y[i, j, k] for i in 1:nloc for j in 1:ncust for k in 1:nscen) + 
-        1/nscen * sum(unmet_pen*shortfall[j, k] for j in 1:ncust for k in 1:nscen))
-
-    optimize!(model)
-    return collect(value.(x))
-end
-
-function Augmentation_Heuristic(nloc, ncust, capacity, cost, online_samples, xsolutions, max_iter, K, fixedcost, unmet_pen, scaling_factor)
-    """L-Augmentation Heuristic"""
-    println("Starting L-Augmentation Heuristic...")
-    L = copy(xsolutions)
-    count = 0
-    
-    for i in 1:max_iter
-        count += 1
-        println("  Iteration $count")
-        L_prev = copy(L)
-        
-        # Obtain K candidates
-        z = obtain_policy(nloc, ncust, capacity, cost, online_samples, L, K, fixedcost, unmet_pen, scaling_factor)
-        
-        # Generate partitions
-        partitions = assign_partitions(nloc, ncust, capacity, cost, z, L, online_samples, fixedcost, unmet_pen, scaling_factor)
-        
-        # Solve extensive form for each partition
-        Y_new = zeros(K, nloc)
-        for (i, part) in enumerate(partitions)
-            if !isempty(part)
-                Y_new[i, :] = extensive_form(nloc, ncust, capacity, cost, part, online_samples, fixedcost, unmet_pen, scaling_factor)
-            end
-        end
-        
-        L = unique(vcat(L_prev, Y_new), dims=1)
-        
-        if size(L, 1) == size(L_prev, 1)
-            println("  No new solutions found. Stopping.")
-            return L, z, count
-        end
-    end
-    
-    znew = obtain_policy(nloc, ncust, capacity, cost, online_samples, L, K, fixedcost, unmet_pen, scaling_factor)
-    return L, znew, count
-end
 
 # =============================================================================
 # EVALUATION FUNCTIONS
@@ -406,7 +311,6 @@ function main()
     nsamples = 100  # Number of online samples
     test_samples = 100  # Number of test samples
     K = 5  # Number of solutions to select
-    max_iter = 10  # Maximum iterations for heuristic
     
     println("Loading data from: $file_path")
     capacity, fixedcost, cost, demandmean = read_orlib_cap(file_path)
@@ -476,22 +380,6 @@ function main()
     penalty_pos = findall(x -> x > 0.1, pcos)
     penalty_val = pcos[penalty_pos]
     println("Scenarios with penalties: $(length(penalty_pos))")
-    
-    # println("\n" * "="^40)
-    # println("PHASE 4: L-AUGMENTATION HEURISTIC")
-    # println("="^40)
-    
-    # # Run L-Augmentation Heuristic
-    # candidates, znew, cnt = Augmentation_Heuristic(nloc, ncust, capacity, cost, online_samples, xsolutions, max_iter, K, fixedcost, unmet_pen, scaling_factor)
-    # println("Heuristic completed in $cnt iterations")
-    
-    # # Evaluate heuristic performance
-    # heuristiccost, p1, m1 = Evaluation(nloc, ncust, cost, capacity, test_samples_data, candidates, znew, fixedcost, unmet_pen, scaling_factor)
-    # println("Average heuristic cost: $heuristiccost")
-    
-    # # Calculate heuristic gap
-    # heuristic_gap = (heuristiccost - offline_cost) / offline_cost * 100
-    # println("Heuristic performance gap: $(round(heuristic_gap, digits=2))%")
     
     println("\n" * "="^60)
     println("FINAL RESULTS SUMMARY (First 3 Phases)")
