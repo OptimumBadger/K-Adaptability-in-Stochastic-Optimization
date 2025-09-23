@@ -1,9 +1,8 @@
 #!/usr/bin/env julia
 
 """
-L-Augmentation Heuristic - Standalone Implementation
-This script runs the L-Augmentation heuristic for facility location optimization.
-It includes all necessary infrastructure to run independently.
+Stochastic Facility Location Problem - Complete Implementation
+This script runs the entire facility location optimization pipeline automatically.
 """
 
 using JuMP, Gurobi, Random, Distributions, DataFrames, LinearAlgebra
@@ -128,7 +127,7 @@ function sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcos
     ncust = length(demandmean)
     xsolutions = zeros(nscen, nloc)
     
-    println("🔄 Generating $nscen scenarios...")
+    println("Generating $nscen scenarios...")
     for scenario in 1:nscen
         if scenario % 100 == 0
             println("  Processed $scenario scenarios")
@@ -150,7 +149,7 @@ function Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_sam
     obj_value = zeros(total_scenarios, total_solutions)
     ratio = zeros(total_scenarios, total_solutions)
     
-    println("🔄 Computing extensive form matrix...")
+    println("Computing extensive form matrix...")
     for scenario in 1:total_scenarios
         if scenario % 20 == 0
             println("  Processed $scenario scenarios")
@@ -167,7 +166,6 @@ end
 
 function Reformulated_Extensive_Form(S, l, K, obj_value)
     """Solve the reformulated extensive form to select K optimal solutions"""
-    println("🔄 Solving reformulated extensive form...")
     model = Model(Gurobi.Optimizer)
     MOI.set(model, MOI.TimeLimitSec(), 30.0)
 
@@ -199,10 +197,8 @@ function Reformulated_Extensive_Form(S, l, K, obj_value)
     optimize!(model)
 
     if termination_status(model) == MOI.OPTIMAL
-        println("✅ Reformulated extensive form solved successfully")
         return objective_value(model), value.(z)
     else
-        println("❌ Reformulated extensive form failed to solve")
         return -1, []
     end
 end
@@ -234,11 +230,7 @@ function assign_partitions(nloc, ncust, capacity, cost, z, xsolutions, online_sa
     S = size(online_samples, 1)
     partitions = [Int[] for _ in 1:K]
 
-    println("🔄 Assigning scenarios to partitions...")
     for j in 1:S
-        if j % 20 == 0
-            println("  Processing scenario $j/$S")
-        end
         sample = online_samples[j, :]
         best_val = Inf
         best_k = 0
@@ -251,7 +243,6 @@ function assign_partitions(nloc, ncust, capacity, cost, z, xsolutions, online_sa
         end
         push!(partitions[best_k], j)
     end
-    println("✅ Completed partition assignment")
     return partitions
 end
 
@@ -284,26 +275,22 @@ end
 
 function Augmentation_Heuristic(nloc, ncust, capacity, cost, online_samples, xsolutions, max_iter, K, fixedcost, unmet_pen, scaling_factor)
     """L-Augmentation Heuristic"""
-    println("🔄 Starting L-Augmentation Heuristic...")
-    println("📊 Maximum iterations: $max_iter")
+    println("Starting L-Augmentation Heuristic...")
     L = copy(xsolutions)
     count = 0
     
     for i in 1:max_iter
         count += 1
-        println("  🔄 Iteration $count/$max_iter")
+        println("  Iteration $count")
         L_prev = copy(L)
         
         # Obtain K candidates
-        println("    📊 Obtaining policy...")
         z = obtain_policy(nloc, ncust, capacity, cost, online_samples, L, K, fixedcost, unmet_pen, scaling_factor)
         
         # Generate partitions
-        println("    📊 Assigning partitions...")
         partitions = assign_partitions(nloc, ncust, capacity, cost, z, L, online_samples, fixedcost, unmet_pen, scaling_factor)
         
         # Solve extensive form for each partition
-        println("    📊 Solving extensive forms...")
         Y_new = zeros(K, nloc)
         for (i, part) in enumerate(partitions)
             if !isempty(part)
@@ -314,10 +301,9 @@ function Augmentation_Heuristic(nloc, ncust, capacity, cost, online_samples, xso
         L = unique(vcat(L_prev, Y_new), dims=1)
         
         if size(L, 1) == size(L_prev, 1)
-            println("    ✅ No new solutions found. Stopping.")
+            println("  No new solutions found. Stopping.")
             return L, z, count
         end
-        println("    ✅ Added $(size(L, 1) - size(L_prev, 1)) new solutions")
     end
     
     znew = obtain_policy(nloc, ncust, capacity, cost, online_samples, L, K, fixedcost, unmet_pen, scaling_factor)
@@ -361,12 +347,8 @@ function Evaluation(nloc, ncust, cost, capacity, test_sample, x_solutions, z, fi
     p_cost = zeros(num_rows)
     m_cost = zeros(num_rows)
     
-    println("🔄 Evaluating solution performance...")
     model_cost = 0.0
     for index in 1:num_rows
-        if index % 50 == 0
-            println("  📈 Processing test sample $index/$num_rows")
-        end
         model_obj_value, p = Second_Stage_Cost(nloc, ncust, cost, capacity, test_sample[index, :], x_solutions, z, fixedcost, unmet_pen, scaling_factor)
         model_cost += model_obj_value
         p_cost[index] = p
@@ -382,11 +364,11 @@ function OfflineTest(nloc, ncust, capacity, cost, test_samples, fixedcost, unmet
     num_rows = size(test_samples, 1)
     offline_cost = zeros(num_rows)
     
-    println("🔄 Computing offline optimal costs...")
+    println("Computing offline optimal costs...")
     total_cost = 0.0
     for i in 1:num_rows
         if i % 50 == 0
-            println("  📈 Processing test sample $i/$num_rows")
+            println("  Processed $i test samples")
         end
         obj_value, _ = facility_location(nloc, ncust, capacity, cost, test_samples[i, :], fixedcost, unmet_pen, scaling_factor)
         offline_cost[i] = obj_value
@@ -402,35 +384,26 @@ end
 
 function main()
     println("="^60)
-    println("L-AUGMENTATION HEURISTIC FOR FACILITY LOCATION")
+    println("STOCHASTIC FACILITY LOCATION PROBLEM")
     println("="^60)
     
     # Parameters
-    file_path = "instances/cap91.txt"
+    file_path = "/Users/Patron/code/Candidate-selection-via-Stochastic-IP/instances/cap91.txt"
     unmet_pen = 50
     scaling_factor = 0.000015
-    bernoulli_case = false
-    nscen = 30  # Number of scenarios for sampling
+    bernoulli_case = true
+    nscen = 1000  # Number of scenarios for sampling
     nsamples = 100  # Number of online samples
-    test_samples = 100  # Number of test samples
+    test_samples = 300  # Number of test samples
     K = 5  # Number of solutions to select
     max_iter = 10  # Maximum iterations for heuristic
     
-    # Check if file exists
-    if !isfile(file_path)
-        println("❌ Error: Data file not found!")
-        println("Expected file: $file_path")
-        println("Please make sure you're running from the project root directory")
-        println("and that the instances/ folder contains the data files.")
-        return
-    end
-    
-    println("📁 Loading data from: $file_path")
+    println("Loading data from: $file_path")
     capacity, fixedcost, cost, demandmean = read_orlib_cap(file_path)
     nloc = length(fixedcost)
     ncust = length(demandmean)
     
-    println("✅ Problem size: $nloc facilities, $ncust customers")
+    println("Problem size: $nloc facilities, $ncust customers")
     
     # Generate demand standard deviations
     theta = rand(Uniform(0, 0.5), ncust)
@@ -445,17 +418,17 @@ function main()
     
     # Count unique solutions
     _, u1 = n_unique_rows(xsolutions)
-    println("✅ Generated $nscen scenarios with $u1 unique solutions")
+    println("Generated $nscen scenarios with $u1 unique solutions")
     
     # Generate online samples
-    println("🔄 Generating $nsamples online samples...")
+    println("Generating $nsamples online samples...")
     online_samples = zeros(nsamples, ncust)
     for s in 1:nsamples
         online_samples[s, :] = generate_demand_scenario(ncust, demandmean, demandstdev, bernoulli_case)
     end
     
     # Generate test samples
-    println("🔄 Generating $test_samples test samples...")
+    println("Generating $test_samples test samples...")
     test_samples_data = zeros(test_samples, ncust)
     for s in 1:test_samples
         test_samples_data[s, :] = generate_demand_scenario(ncust, demandmean, demandstdev, bernoulli_case)
@@ -468,31 +441,31 @@ function main()
     # Solve reformulated extensive form
     obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor)
     n_neg1 = count(x -> x == -1, obj_matrix)
-    println("✅ Infeasible scenario-solution pairs: $n_neg1")
+    println("Infeasible scenario-solution pairs: $n_neg1")
     
     Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix)
-    println("✅ Reformulated extensive form objective: $Solution")
+    println("Reformulated extensive form objective: $Solution")
     
     println("\n" * "="^40)
-    println("PHASE 3: EVALUATION (BEFORE HEURISTIC)")
+    println("PHASE 3: EVALUATION")
     println("="^40)
     
     # Calculate offline costs
     offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor)
-    println("✅ Average offline cost: $offline_cost")
+    println("Average offline cost: $offline_cost")
     
     # Evaluate model performance
     modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor)
-    println("✅ Average model cost: $modelcost")
+    println("Average model cost: $modelcost")
     
     # Calculate gap
     gap = (modelcost - offline_cost) / offline_cost * 100
-    println("✅ Performance gap: $(round(gap, digits=2))%")
+    println("Performance gap: $(round(gap, digits=2))%")
     
     # Analyze penalties
     penalty_pos = findall(x -> x > 0.1, pcos)
     penalty_val = pcos[penalty_pos]
-    println("✅ Scenarios with penalties: $(length(penalty_pos))")
+    println("Scenarios with penalties: $(length(penalty_pos))")
     
     println("\n" * "="^40)
     println("PHASE 4: L-AUGMENTATION HEURISTIC")
@@ -500,35 +473,31 @@ function main()
     
     # Run L-Augmentation Heuristic
     candidates, znew, cnt = Augmentation_Heuristic(nloc, ncust, capacity, cost, online_samples, xsolutions, max_iter, K, fixedcost, unmet_pen, scaling_factor)
-    println("✅ Heuristic completed in $cnt iterations")
+    println("Heuristic completed in $cnt iterations")
     
     # Evaluate heuristic performance
     heuristiccost, p1, m1 = Evaluation(nloc, ncust, cost, capacity, test_samples_data, candidates, znew, fixedcost, unmet_pen, scaling_factor)
-    println("✅ Average heuristic cost: $heuristiccost")
+    println("Average heuristic cost: $heuristiccost")
     
     # Calculate heuristic gap
     heuristic_gap = (heuristiccost - offline_cost) / offline_cost * 100
-    println("✅ Heuristic performance gap: $(round(heuristic_gap, digits=2))%")
+    println("Heuristic performance gap: $(round(heuristic_gap, digits=2))%")
     
     println("\n" * "="^60)
     println("FINAL RESULTS SUMMARY")
     println("="^60)
     println("Offline optimal cost:     $(round(offline_cost, digits=2))")
-    println("Model cost (before):      $(round(modelcost, digits=2))")
-    println("Heuristic cost (after):   $(round(heuristiccost, digits=2))")
+    println("Model cost:               $(round(modelcost, digits=2))")
+    println("Heuristic cost:           $(round(heuristiccost, digits=2))")
     println("Model gap:                $(round(gap, digits=2))%")
     println("Heuristic gap:            $(round(heuristic_gap, digits=2))%")
     println("Improvement:              $(round(gap - heuristic_gap, digits=2))%")
-    println("Heuristic iterations:     $cnt")
     println("="^60)
     
-    return offline_cost, modelcost, heuristiccost, gap, heuristic_gap, cnt
+    return offline_cost, modelcost, heuristiccost, gap, heuristic_gap
 end
 
 # Run the main function
 if abspath(PROGRAM_FILE) == @__FILE__
     main()
 end
-
-
-

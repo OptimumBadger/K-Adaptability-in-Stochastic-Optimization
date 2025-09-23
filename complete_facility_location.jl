@@ -51,9 +51,17 @@ end
 # CORE OPTIMIZATION FUNCTIONS
 # =============================================================================
 
-function facility_location(nloc, ncust, capacity, cost, demand, fixedcost, unmet_pen, scaling_factor)
+function facility_location(nloc, ncust, capacity, cost, demand, fixedcost, unmet_pen, scaling_factor, log_file=nothing)
     """Solve the basic facility location problem"""
     model = Model(Gurobi.Optimizer)
+    
+    # Set logging based on whether we want to save logs
+    if log_file !== nothing
+        set_optimizer_attribute(model, "LogFile", log_file)
+        set_optimizer_attribute(model, "LogToConsole", 0)  # Don't show in console
+    else
+        set_optimizer_attribute(model, "OutputFlag", 1)  # Show in console
+    end
     
     # Decision Variables
     @variable(model, x[1:nloc], Bin)
@@ -122,7 +130,7 @@ function generate_demand_scenario(ncust, demandmean, demandstdev, bernoulli_case
     return demand
 end
 
-function sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case)
+function sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, log_file=nothing)
     """Generate multiple scenarios and solve for each"""
     ncust = length(demandmean)
     xsolutions = zeros(nscen, nloc)
@@ -133,7 +141,7 @@ function sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcos
             println("  Processed $scenario scenarios")
         end
         demand = generate_demand_scenario(ncust, demandmean, demandstdev, bernoulli_case)
-        _, xsolutions[scenario, :] = facility_location(nloc, ncust, capacity, cost, demand, fixedcost, unmet_pen, scaling_factor)
+        _, xsolutions[scenario, :] = facility_location(nloc, ncust, capacity, cost, demand, fixedcost, unmet_pen, scaling_factor, log_file)
     end
     return xsolutions
 end
@@ -327,8 +335,17 @@ function main()
     println("PHASE 1: SCENARIO GENERATION")
     println("="^40)
     
-    # Generate scenarios and solutions
-    xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case)
+    # Create logs directory if it doesn't exist
+    if !isdir("logs")
+        mkdir("logs")
+    end
+    
+    # Set up log file for Phase 1
+    phase1_log_file = "logs/phase1_scenario_generation.log"
+    println("Saving Phase 1 Gurobi logs to: $phase1_log_file")
+    
+    # Generate scenarios and solutions with logging
+    xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, phase1_log_file)
     
     # Count unique solutions
     _, u1 = n_unique_rows(xsolutions)
