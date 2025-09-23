@@ -364,7 +364,7 @@ function main()
     nscen = 30  # Number of scenarios for sampling
     nsamples = 100  # Number of online samples
     test_samples = 100  # Number of test samples
-    K = 5  # Number of solutions to select
+    K = 1  # Number of solutions to select
     
     println("Loading data from: $file_path")
     capacity, fixedcost, cost, demandmean = read_orlib_cap(file_path)
@@ -406,7 +406,8 @@ function main()
     println("  Phase 3: offline_test.log, evaluation.log")
     
     # Generate scenarios and solutions with logging
-    xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, phase1_log)
+    println("Starting Phase 1: Scenario Generation...")
+    phase1_time = @elapsed xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, phase1_log)
     
     # Count unique solutions
     _, u1 = n_unique_rows(xsolutions)
@@ -436,11 +437,13 @@ function main()
     println("="^40)
     
     # Solve reformulated extensive form with logging
-    obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor, phase2_calc_log)
+    println("Starting Phase 2: Extensive Form Calculations...")
+    phase2_calc_time = @elapsed obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor, phase2_calc_log)
     n_neg1 = count(x -> x == -1, obj_matrix)
     println("Infeasible scenario-solution pairs: $n_neg1")
     
-    Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix, phase2_reform_log)
+    println("Starting Phase 2: Reformulated Extensive Form...")
+    phase2_reform_time = @elapsed Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix, phase2_reform_log)
     println("Reformulated extensive form objective: $Solution")
     
     # Add summary to Phase 2 logs
@@ -455,11 +458,13 @@ function main()
     println("="^40)
     
     # Calculate offline costs with logging
-    offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor, phase3_offline_log)
+    println("Starting Phase 3: Offline Test...")
+    phase3_offline_time = @elapsed offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor, phase3_offline_log)
     println("Average offline cost: $offline_cost")
     
     # Evaluate model performance with logging
-    modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor, phase3_eval_log)
+    println("Starting Phase 3: Evaluation...")
+    phase3_eval_time = @elapsed modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor, phase3_eval_log)
     println("Average model cost: $modelcost")
     
     # Calculate gap
@@ -486,6 +491,45 @@ function main()
     println("Model gap:                $(round(gap, digits=2))%")
     println("Scenarios with penalties: $(length(penalty_pos))")
     println("="^60)
+    
+    # Calculate total time
+    total_time = phase1_time + phase2_calc_time + phase2_reform_time + phase3_offline_time + phase3_eval_time
+    
+    # Print timing summary to console
+    println("\n" * "="^60)
+    println("TIMING SUMMARY")
+    println("="^60)
+    println("Phase 1 (Scenario Generation):     $(round(phase1_time, digits=2)) seconds")
+    println("Phase 2 (Extensive Form Calc):     $(round(phase2_calc_time, digits=2)) seconds")
+    println("Phase 2 (Reformulated Ext Form):   $(round(phase2_reform_time, digits=2)) seconds")
+    println("Phase 3 (Offline Test):            $(round(phase3_offline_time, digits=2)) seconds")
+    println("Phase 3 (Evaluation):              $(round(phase3_eval_time, digits=2)) seconds")
+    println("Total Time:                        $(round(total_time, digits=2)) seconds")
+    println("="^60)
+    
+    # Create timing summary file
+    timing_summary_file = "$(base_log_path)/timing_summary.txt"
+    open(timing_summary_file, "w") do io
+        println(io, "TIMING SUMMARY FOR NSCEN=$(nscen), K=$(K)")
+        println(io, "="^50)
+        println(io, "Phase 1 (Scenario Generation):     $(round(phase1_time, digits=2)) seconds")
+        println(io, "Phase 2 (Extensive Form Calc):     $(round(phase2_calc_time, digits=2)) seconds")
+        println(io, "Phase 2 (Reformulated Ext Form):   $(round(phase2_reform_time, digits=2)) seconds")
+        println(io, "Phase 3 (Offline Test):            $(round(phase3_offline_time, digits=2)) seconds")
+        println(io, "Phase 3 (Evaluation):              $(round(phase3_eval_time, digits=2)) seconds")
+        println(io, "Total Time:                        $(round(total_time, digits=2)) seconds")
+        println(io, "="^50)
+        println(io, "")
+        println(io, "RESULTS SUMMARY")
+        println(io, "="^50)
+        println(io, "Offline optimal cost:     $(round(offline_cost, digits=2))")
+        println(io, "Model cost:               $(round(modelcost, digits=2))")
+        println(io, "Model gap:                $(round(gap, digits=2))%")
+        println(io, "Scenarios with penalties: $(length(penalty_pos))")
+        println(io, "="^50)
+    end
+    
+    println("Timing summary saved to: $timing_summary_file")
     
     return offline_cost, modelcost, gap
 end
