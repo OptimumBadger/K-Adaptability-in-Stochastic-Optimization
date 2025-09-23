@@ -2,24 +2,12 @@
 
 ## Quick Start
 
-1. **Clone the repository**:
-   ```bash
-   git clone <your-repo-url>
-   cd Candidate-selection-via-Stochastic-IP
-   ```
-
-2. **Install Julia** (if not already installed):
-   ```bash
-   # On Mac with Homebrew
-   brew install julia
-   ```
-
-3. **Install required packages**:
+1. **Required packages**:
    ```bash
    julia -e 'using Pkg; Pkg.add(["JuMP", "Gurobi", "Random", "Distributions", "DataFrames", "LinearAlgebra"])'
    ```
 
-4. **Run the scripts**:
+2. **Run the scripts**:
    ```bash
    # Core 3 phases only (faster)
    julia complete_facility_location.jl
@@ -31,20 +19,18 @@
 ## Files
 
 ### Main Scripts
-- `complete_facility_location.jl` - **Core 3 phases (recommended for basic analysis)**
+- `complete_facility_location.jl` - **Core 3 phases**
   - Phase 1: Scenario Generation
   - Phase 2: Reformulated Extensive Form  
   - Phase 3: Evaluation
   - Faster execution, good for initial analysis
 
-- `l_augmentation_heuristic.jl` - **Full pipeline with L-Augmentation heuristic (recommended for advanced analysis)**
+- `l_augmentation_heuristic.jl` - **Full pipeline with L-Augmentation heuristic**
   - All 3 core phases PLUS L-Augmentation heuristic
-  - Shows before/after performance comparison
-  - Demonstrates improvement from heuristic optimization
-  - Longer execution time but better solutions
 
-### Additional Files
-- `facility_location.ipynb` - Original notebook implementation
+
+### Julia Files
+- `complete_facility_location.jl` - Julia implemenetation of facility location problem
 
 ### Power Flow Models
 - PowerFlow Model.ipynb  
@@ -58,8 +44,11 @@
 
 ## Input Data
 
-- `instances/`: Contains instances for facility location problem.
+- ` facility location instances/`: Contains instances for facility location problem.
 - `powerflow instances/`: Input files specific to power flow simulations.
+
+## Logs
+- common contains logs and results of test samples
 
 ## Requirements
 
