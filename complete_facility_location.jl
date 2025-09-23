@@ -361,11 +361,9 @@ function main()
     unmet_pen = 50
     scaling_factor = 0.000015
     bernoulli_case = false
-    nscen = 30  # Number of scenarios for sampling
+    nscen_list = [30, 50, 100]  # List of nscen values to test
     nsamples = 100  # Number of online samples
     test_samples = 100  # Number of test samples
-    K = 1  # Number of solutions to select
-    
     println("Loading data from: $file_path")
     capacity, fixedcost, cost, demandmean = read_orlib_cap(file_path)
     nloc = length(fixedcost)
@@ -377,55 +375,47 @@ function main()
     theta = rand(Uniform(0, 0.5), ncust)
     demandstdev = theta .* demandmean
     
-    println("\n" * "="^40)
-    println("PHASE 1: SCENARIO GENERATION")
-    println("="^40)
+    # Create directory structure for common and nscen-specific logs
+    base_log_path = "Logs/Facility Location Logs"
+    common_log_path = "$(base_log_path)/common"
     
-    # Create parameter-based directory structure
-    param_folder = "nscen$(nscen)_K$(K)"
-    base_log_path = "Logs/Facility Location Logs/$(param_folder)"
+    # Create common directory
+    if !isdir(common_log_path)
+        mkpath(common_log_path)
+    end
     
-    # Create all necessary directories
-    for phase in ["phase1", "phase2", "phase3"]
-        phase_dir = "$(base_log_path)/$(phase)"
-        if !isdir(phase_dir)
-            mkpath(phase_dir)
+    # Create nscen-specific directories
+    for nscen in nscen_list
+        nscen_log_path = "$(base_log_path)/L$(nscen)"
+        for phase in ["phase1", "phase2", "phase3"]
+            phase_dir = "$(nscen_log_path)/$(phase)"
+            if !isdir(phase_dir)
+                mkpath(phase_dir)
+            end
         end
     end
     
-    # Set up all 5 log files
-    phase1_log = "$(base_log_path)/phase1/scenario_generation.log"
-    phase2_calc_log = "$(base_log_path)/phase2/extensive_form_calculations.log"
-    phase2_reform_log = "$(base_log_path)/phase2/reformulated_extensive_form.log"
-    phase3_offline_log = "$(base_log_path)/phase3/offline_test.log"
-    phase3_eval_log = "$(base_log_path)/phase3/evaluation.log"
-    
     println("Saving logs to: $base_log_path")
-    println("  Phase 1: scenario_generation.log")
-    println("  Phase 2: extensive_form_calculations.log, reformulated_extensive_form.log")
-    println("  Phase 3: offline_test.log, evaluation.log")
+    println("  Common phases: offline_test.log")
+    println("  nscen-specific phases: scenario_generation.log, decoupling_calculations.log")
+    println("  K-specific phases: reformulated_extensive_form_KX.log, evaluation_KX.log")
     
-    # Generate scenarios and solutions with logging
-    println("Starting Phase 1: Scenario Generation...")
-    phase1_time = @elapsed xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, phase1_log)
+    # =============================================================================
+    # ULTRA-COMMON PHASES (Run once for all nscen values)
+    # =============================================================================
     
-    # Count unique solutions
-    _, u1 = n_unique_rows(xsolutions)
-    println("Generated $nscen scenarios with $u1 unique solutions")
+    println("\n" * "="^80)
+    println("ULTRA-COMMON PHASES (Run once for all nscen values)")
+    println("="^80)
     
-    # Add summary to Phase 1 log
-    phase1_params = Dict("nscen" => nscen, "nloc" => nloc, "ncust" => ncust, "bernoulli_case" => bernoulli_case)
-    phase1_results = Dict("unique_solutions" => u1, "total_scenarios" => nscen)
-    append_summary_to_log(phase1_log, "PHASE 1: SCENARIO GENERATION", phase1_params, phase1_results)
-    
-    # Generate online samples
+    # Generate online samples (ULTRA-COMMON - run once)
     println("Generating $nsamples online samples...")
     online_samples = zeros(nsamples, ncust)
     for s in 1:nsamples
         online_samples[s, :] = generate_demand_scenario(ncust, demandmean, demandstdev, bernoulli_case)
     end
     
-    # Generate test samples
+    # Generate test samples (ULTRA-COMMON - run once)
     println("Generating $test_samples test samples...")
     test_samples_data = zeros(test_samples, ncust)
     for s in 1:test_samples
@@ -433,105 +423,233 @@ function main()
     end
     
     println("\n" * "="^40)
-    println("PHASE 2: REFORMULATED EXTENSIVE FORM")
+    println("PHASE 3A: OFFLINE TEST (ULTRA-COMMON)")
     println("="^40)
     
-    # Solve reformulated extensive form with logging
-    println("Starting Phase 2: Extensive Form Calculations...")
-    phase2_calc_time = @elapsed obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor, phase2_calc_log)
-    n_neg1 = count(x -> x == -1, obj_matrix)
-    println("Infeasible scenario-solution pairs: $n_neg1")
-    
-    println("Starting Phase 2: Reformulated Extensive Form...")
-    phase2_reform_time = @elapsed Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix, phase2_reform_log)
-    println("Reformulated extensive form objective: $Solution")
-    
-    # Add summary to Phase 2 logs
-    phase2_params = Dict("nsamples" => nsamples, "nscen" => nscen, "K" => K, "infeasible_pairs" => n_neg1)
-    phase2_calc_results = Dict("total_scenarios" => nsamples, "total_solutions" => nscen, "infeasible_pairs" => n_neg1)
-    phase2_reform_results = Dict("objective_value" => Solution, "selected_solutions" => K)
-    append_summary_to_log(phase2_calc_log, "PHASE 2A: EXTENSIVE FORM CALCULATIONS", phase2_params, phase2_calc_results)
-    append_summary_to_log(phase2_reform_log, "PHASE 2B: REFORMULATED EXTENSIVE FORM", phase2_params, phase2_reform_results)
-    
-    println("\n" * "="^40)
-    println("PHASE 3: EVALUATION")
-    println("="^40)
-    
-    # Calculate offline costs with logging
+    # Calculate offline costs (ULTRA-COMMON - run once)
+    offline_test_log = "$(common_log_path)/offline_test.log"
     println("Starting Phase 3: Offline Test...")
-    phase3_offline_time = @elapsed offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor, phase3_offline_log)
+    offline_test_time = @elapsed offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor, offline_test_log)
     println("Average offline cost: $offline_cost")
     
-    # Evaluate model performance with logging
-    println("Starting Phase 3: Evaluation...")
-    phase3_eval_time = @elapsed modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor, phase3_eval_log)
-    println("Average model cost: $modelcost")
-    
-    # Calculate gap
-    gap = (modelcost - offline_cost) / offline_cost * 100
-    println("Performance gap: $(round(gap, digits=2))%")
-    
-    # Analyze penalties
-    penalty_pos = findall(x -> x > 0.1, pcos)
-    penalty_val = pcos[penalty_pos]
-    println("Scenarios with penalties: $(length(penalty_pos))")
-    
-    # Add summary to Phase 3 logs
+    # Add summary to Phase 3A log
     phase3_params = Dict("test_samples" => test_samples, "nloc" => nloc, "ncust" => ncust)
     phase3_offline_results = Dict("average_offline_cost" => offline_cost, "total_test_samples" => test_samples)
-    phase3_eval_results = Dict("average_model_cost" => modelcost, "performance_gap_percent" => round(gap, digits=2), "scenarios_with_penalties" => length(penalty_pos))
-    append_summary_to_log(phase3_offline_log, "PHASE 3A: OFFLINE TEST", phase3_params, phase3_offline_results)
-    append_summary_to_log(phase3_eval_log, "PHASE 3B: EVALUATION", phase3_params, phase3_eval_results)
+    append_summary_to_log(offline_test_log, "PHASE 3A: OFFLINE TEST (ULTRA-COMMON)", phase3_params, phase3_offline_results)
     
-    println("\n" * "="^60)
-    println("FINAL RESULTS SUMMARY (First 3 Phases)")
-    println("="^60)
-    println("Offline optimal cost:     $(round(offline_cost, digits=2))")
-    println("Model cost:               $(round(modelcost, digits=2))")
-    println("Model gap:                $(round(gap, digits=2))%")
-    println("Scenarios with penalties: $(length(penalty_pos))")
-    println("="^60)
-    
-    # Calculate total time
-    total_time = phase1_time + phase2_calc_time + phase2_reform_time + phase3_offline_time + phase3_eval_time
-    
-    # Print timing summary to console
-    println("\n" * "="^60)
-    println("TIMING SUMMARY")
-    println("="^60)
-    println("Phase 1 (Scenario Generation):     $(round(phase1_time, digits=2)) seconds")
-    println("Phase 2 (Extensive Form Calc):     $(round(phase2_calc_time, digits=2)) seconds")
-    println("Phase 2 (Reformulated Ext Form):   $(round(phase2_reform_time, digits=2)) seconds")
-    println("Phase 3 (Offline Test):            $(round(phase3_offline_time, digits=2)) seconds")
-    println("Phase 3 (Evaluation):              $(round(phase3_eval_time, digits=2)) seconds")
-    println("Total Time:                        $(round(total_time, digits=2)) seconds")
-    println("="^60)
-    
-    # Create timing summary file
-    timing_summary_file = "$(base_log_path)/timing_summary.txt"
-    open(timing_summary_file, "w") do io
-        println(io, "TIMING SUMMARY FOR NSCEN=$(nscen), K=$(K)")
+    # Create common timing summary
+    common_timing_file = "$(common_log_path)/timing_summary_common.txt"
+    open(common_timing_file, "w") do io
+        println(io, "COMMON PHASES TIMING SUMMARY")
         println(io, "="^50)
-        println(io, "Phase 1 (Scenario Generation):     $(round(phase1_time, digits=2)) seconds")
-        println(io, "Phase 2 (Extensive Form Calc):     $(round(phase2_calc_time, digits=2)) seconds")
-        println(io, "Phase 2 (Reformulated Ext Form):   $(round(phase2_reform_time, digits=2)) seconds")
-        println(io, "Phase 3 (Offline Test):            $(round(phase3_offline_time, digits=2)) seconds")
-        println(io, "Phase 3 (Evaluation):              $(round(phase3_eval_time, digits=2)) seconds")
-        println(io, "Total Time:                        $(round(total_time, digits=2)) seconds")
+        println(io, "Phase 3A (Offline Test):          $(round(offline_test_time, digits=2)) seconds")
+        println(io, "Total Common Time:                $(round(offline_test_time, digits=2)) seconds")
         println(io, "="^50)
         println(io, "")
-        println(io, "RESULTS SUMMARY")
+        println(io, "COMMON RESULTS")
         println(io, "="^50)
-        println(io, "Offline optimal cost:     $(round(offline_cost, digits=2))")
-        println(io, "Model cost:               $(round(modelcost, digits=2))")
-        println(io, "Model gap:                $(round(gap, digits=2))%")
-        println(io, "Scenarios with penalties: $(length(penalty_pos))")
+        println(io, "Online samples:          $nsamples")
+        println(io, "Test samples:            $test_samples")
+        println(io, "Offline cost:            $(round(offline_cost, digits=2))")
         println(io, "="^50)
     end
     
-    println("Timing summary saved to: $timing_summary_file")
+    println("Common timing summary saved to: $common_timing_file")
     
-    return offline_cost, modelcost, gap
+    # =============================================================================
+    # NSCEN-SPECIFIC PHASES (Run for each nscen value)
+    # =============================================================================
+    
+    println("\n" * "="^80)
+    println("NSCEN-SPECIFIC PHASES (Run for each nscen value)")
+    println("="^80)
+    
+    # Run experiments for each nscen value
+    for (nscen_idx, nscen) in enumerate(nscen_list)
+        println("\n" * "="^80)
+        println("RUNNING NSCEN = $nscen / $(length(nscen_list)) (L$nscen)")
+        println("="^80)
+        
+        # Set up nscen-specific log files
+        nscen_log_path = "$(base_log_path)/L$(nscen)"
+        scenario_generation_log = "$(nscen_log_path)/phase1/scenario_generation.log"
+        decoupling_calculations_log = "$(nscen_log_path)/phase2/decoupling_calculations.log"
+        
+        println("\n" * "="^40)
+        println("PHASE 1: SCENARIO GENERATION (L$nscen)")
+        println("="^40)
+        
+        # Generate scenarios and solutions with logging (nscen-specific)
+        println("Starting Phase 1: Scenario Generation...")
+        scenario_generation_time = @elapsed xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, scenario_generation_log)
+        
+        # Count unique solutions
+        _, u1 = n_unique_rows(xsolutions)
+        println("Generated $nscen scenarios with $u1 unique solutions")
+        
+        # Add summary to Phase 1 log
+        phase1_params = Dict("nscen" => nscen, "nloc" => nloc, "ncust" => ncust, "bernoulli_case" => bernoulli_case)
+        phase1_results = Dict("unique_solutions" => u1, "total_scenarios" => nscen)
+        append_summary_to_log(scenario_generation_log, "PHASE 1: SCENARIO GENERATION (L$nscen)", phase1_params, phase1_results)
+        
+        println("\n" * "="^40)
+        println("PHASE 2A: DECOUPLING CALCULATIONS (L$nscen)")
+        println("="^40)
+        
+        # Solve decoupling calculations (nscen-specific)
+        println("Starting Phase 2: Decoupling Calculations...")
+        decoupling_calc_time = @elapsed obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor, decoupling_calculations_log)
+        n_neg1 = count(x -> x == -1, obj_matrix)
+        println("Infeasible scenario-solution pairs: $n_neg1")
+        
+        # Add summary to Phase 2A log
+        phase2_params = Dict("nsamples" => nsamples, "nscen" => nscen, "infeasible_pairs" => n_neg1)
+        phase2_calc_results = Dict("total_scenarios" => nsamples, "total_solutions" => nscen, "infeasible_pairs" => n_neg1)
+        append_summary_to_log(decoupling_calculations_log, "PHASE 2A: DECOUPLING CALCULATIONS (L$nscen)", phase2_params, phase2_calc_results)
+        
+        # =============================================================================
+        # K-SPECIFIC PHASES (Run for each K value)
+        # =============================================================================
+        
+        println("\n" * "="^80)
+        println("K-SPECIFIC PHASES (Run for each K value for L$nscen)")
+        println("="^80)
+        
+        # Store K-specific results for summary
+        k_results = []
+        
+        # Run experiments for K = 1 to 10
+        for K in 1:10
+            println("\n" * "="^80)
+            println("RUNNING K = $K / 10 (L$nscen)")
+            println("="^80)
+            
+            # Set up K-specific log files
+            reformulated_extensive_form_log = "$(nscen_log_path)/phase2/reformulated_extensive_form_K$(K).log"
+            evaluation_log = "$(nscen_log_path)/phase3/evaluation_K$(K).log"
+            
+            println("\n" * "="^40)
+            println("PHASE 2B: REFORMULATED EXTENSIVE FORM (K=$K)")
+            println("="^40)
+            
+            # Solve reformulated extensive form (K-SPECIFIC)
+            println("Starting Phase 2: Reformulated Extensive Form...")
+            reformulated_time = @elapsed Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix, reformulated_extensive_form_log)
+            println("Reformulated extensive form objective: $Solution")
+            
+            # Add summary to Phase 2B log
+            phase2_reform_results = Dict("objective_value" => Solution, "selected_solutions" => K)
+            append_summary_to_log(reformulated_extensive_form_log, "PHASE 2B: REFORMULATED EXTENSIVE FORM (K=$K)", phase2_params, phase2_reform_results)
+            
+            println("\n" * "="^40)
+            println("PHASE 3B: EVALUATION (K=$K)")
+            println("="^40)
+            
+            # Evaluate model performance (K-SPECIFIC)
+            println("Starting Phase 3: Evaluation...")
+            evaluation_time = @elapsed modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor, evaluation_log)
+            println("Average model cost: $modelcost")
+            
+            # Calculate gap
+            gap = (modelcost - offline_cost) / offline_cost * 100
+            println("Performance gap: $(round(gap, digits=2))%")
+            
+            # Analyze penalties
+            penalty_pos = findall(x -> x > 0.1, pcos)
+            penalty_val = pcos[penalty_pos]
+            println("Scenarios with penalties: $(length(penalty_pos))")
+            
+            # Add summary to Phase 3B log
+            phase3_eval_results = Dict("average_model_cost" => modelcost, "performance_gap_percent" => round(gap, digits=2), "scenarios_with_penalties" => length(penalty_pos))
+            append_summary_to_log(evaluation_log, "PHASE 3B: EVALUATION (K=$K)", phase3_params, phase3_eval_results)
+            
+            println("\n" * "="^60)
+            println("FINAL RESULTS SUMMARY FOR K=$K (L$nscen)")
+            println("="^60)
+            println("Offline optimal cost:     $(round(offline_cost, digits=2))")
+            println("Model cost:               $(round(modelcost, digits=2))")
+            println("Model gap:                $(round(gap, digits=2))%")
+            println("Scenarios with penalties: $(length(penalty_pos))")
+            println("="^60)
+            
+            # Calculate K-specific total time
+            k_total_time = reformulated_time + evaluation_time
+            
+            # Print K-specific timing summary to console
+            println("\n" * "="^60)
+            println("K-SPECIFIC TIMING SUMMARY FOR K=$K (L$nscen)")
+            println("="^60)
+            println("Phase 2B (Reformulated Ext Form):   $(round(reformulated_time, digits=2)) seconds")
+            println("Phase 3B (Evaluation):              $(round(evaluation_time, digits=2)) seconds")
+            println("K-Specific Total Time:              $(round(k_total_time, digits=2)) seconds")
+            println("="^60)
+            
+            # Create K-specific timing summary file
+            k_timing_file = "$(nscen_log_path)/timing_summary_K$(K).txt"
+            open(k_timing_file, "w") do io
+                println(io, "K-SPECIFIC TIMING SUMMARY FOR L=$(nscen), K=$(K)")
+                println(io, "="^50)
+                println(io, "Phase 2B (Reformulated Ext Form):   $(round(reformulated_time, digits=2)) seconds")
+                println(io, "Phase 3B (Evaluation):              $(round(evaluation_time, digits=2)) seconds")
+                println(io, "K-Specific Total Time:              $(round(k_total_time, digits=2)) seconds")
+                println(io, "="^50)
+                println(io, "")
+                println(io, "RESULTS SUMMARY FOR K=$(K)")
+                println(io, "="^50)
+                println(io, "Offline optimal cost:     $(round(offline_cost, digits=2))")
+                println(io, "Model cost:               $(round(modelcost, digits=2))")
+                println(io, "Model gap:                $(round(gap, digits=2))%")
+                println(io, "Scenarios with penalties: $(length(penalty_pos))")
+                println(io, "="^50)
+            end
+            
+            println("K-specific timing summary saved to: $k_timing_file")
+            
+            # Store results for nscen summary
+            push!(k_results, (K, gap, modelcost, reformulated_time, evaluation_time))
+            
+            println("Completed K = $K (L$nscen)")
+            println("")
+        end
+        
+        # Create nscen-specific timing summary
+        nscen_timing_file = "$(nscen_log_path)/timing_summary_L$(nscen).txt"
+        open(nscen_timing_file, "w") do io
+            println(io, "NSCEN-SPECIFIC TIMING SUMMARY FOR L=$(nscen)")
+            println(io, "="^50)
+            println(io, "Phase 1 (Scenario Generation):    $(round(scenario_generation_time, digits=2)) seconds")
+            println(io, "Phase 2A (Decoupling Calc):       $(round(decoupling_calc_time, digits=2)) seconds")
+            println(io, "Total nscen-common Time:          $(round(scenario_generation_time + decoupling_calc_time, digits=2)) seconds")
+            println(io, "="^50)
+            println(io, "")
+            println(io, "K-SPECIFIC TIMING SUMMARY")
+            println(io, "="^50)
+            for (K, gap, modelcost, reform_time, eval_time) in k_results
+                total_time = reform_time + eval_time
+                println(io, "K=$(K):  Reformulated: $(round(reform_time, digits=2))s, Evaluation: $(round(eval_time, digits=2))s, Total: $(round(total_time, digits=2))s")
+            end
+            println(io, "="^50)
+            println(io, "")
+            println(io, "OVERALL RESULTS FOR L=$(nscen)")
+            println(io, "="^50)
+            best_k = argmin([gap for (K, gap, modelcost, reform_time, eval_time) in k_results])
+            best_gap = k_results[best_k][2]
+            println(io, "Best K:                           $(k_results[best_k][1])")
+            println(io, "Best gap:                        $(round(best_gap, digits=2))%")
+            println(io, "="^50)
+        end
+        
+        println("nscen-specific timing summary saved to: $nscen_timing_file")
+        println("Completed L$nscen")
+        println("")
+    end
+    
+    println("="^80)
+    println("ALL EXPERIMENTS COMPLETED!")
+    println("Results saved in: Logs/Facility Location Logs/")
+    println("="^80)
+    
+    return nothing
 end
 
 # Run the main function
