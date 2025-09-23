@@ -82,9 +82,17 @@ function facility_location(nloc, ncust, capacity, cost, demand, fixedcost, unmet
     return objective_value(model), collect(value.(x))
 end
 
-function solve_for_continuous_var(nloc, ncust, capacity, cost, demand, solved_x, fixedcost, unmet_pen, scaling_factor)
+function solve_for_continuous_var(nloc, ncust, capacity, cost, demand, solved_x, fixedcost, unmet_pen, scaling_factor, log_file=nothing)
     """Solve for continuous variables with fixed binary decisions"""
     model = Model(Gurobi.Optimizer)
+    
+    # Set logging based on whether we want to save logs
+    if log_file !== nothing
+        set_optimizer_attribute(model, "LogFile", log_file)
+        set_optimizer_attribute(model, "LogToConsole", 0)  # Don't show in console
+    else
+        set_optimizer_attribute(model, "OutputFlag", 1)  # Show in console
+    end
     
     # Decision Variables
     @variable(model, x[1:nloc], Bin)
@@ -150,7 +158,7 @@ end
 # REFORMULATED EXTENSIVE FORM
 # =============================================================================
 
-function Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor)
+function Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor, log_file=nothing)
     """Calculate objective values for all scenario-solution pairs"""
     total_scenarios = size(online_samples, 1)
     total_solutions = size(xsolutions, 1)
@@ -166,16 +174,24 @@ function Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_sam
         for solution in 1:total_solutions
             obj_value[scenario, solution], ratio[scenario, solution] = solve_for_continuous_var(
                 nloc, ncust, capacity, cost, demand, xsolutions[solution, :], 
-                fixedcost, unmet_pen, scaling_factor)
+                fixedcost, unmet_pen, scaling_factor, log_file)
         end
     end
     return obj_value, ratio
 end
 
-function Reformulated_Extensive_Form(S, l, K, obj_value)
+function Reformulated_Extensive_Form(S, l, K, obj_value, log_file=nothing)
     """Solve the reformulated extensive form to select K optimal solutions"""
     model = Model(Gurobi.Optimizer)
     MOI.set(model, MOI.TimeLimitSec(), 30.0)
+    
+    # Set logging based on whether we want to save logs
+    if log_file !== nothing
+        set_optimizer_attribute(model, "LogFile", log_file)
+        set_optimizer_attribute(model, "LogToConsole", 0)  # Don't show in console
+    else
+        set_optimizer_attribute(model, "OutputFlag", 1)  # Show in console
+    end
 
     # Decision Variables
     @variable(model, z[1:l], Bin)
@@ -227,9 +243,17 @@ end
 # EVALUATION FUNCTIONS
 # =============================================================================
 
-function Second_Stage_Cost(nloc, ncust, cost, capacity, demand, xsolutions, z, fixedcost, unmet_pen, scaling_factor)
+function Second_Stage_Cost(nloc, ncust, cost, capacity, demand, xsolutions, z, fixedcost, unmet_pen, scaling_factor, log_file=nothing)
     """Calculate second stage cost for given solution"""
     model = Model(Gurobi.Optimizer)
+    
+    # Set logging based on whether we want to save logs
+    if log_file !== nothing
+        set_optimizer_attribute(model, "LogFile", log_file)
+        set_optimizer_attribute(model, "LogToConsole", 0)  # Don't show in console
+    else
+        set_optimizer_attribute(model, "OutputFlag", 1)  # Show in console
+    end
     
     # Decision Variables
     @variable(model, x[1:nloc], Bin)
@@ -254,7 +278,7 @@ function Second_Stage_Cost(nloc, ncust, cost, capacity, demand, xsolutions, z, f
     return objective_value(model), sum(unmet_pen*value.(shortfall[j]) for j in 1:ncust)
 end
 
-function Evaluation(nloc, ncust, cost, capacity, test_sample, x_solutions, z, fixedcost, unmet_pen, scaling_factor)
+function Evaluation(nloc, ncust, cost, capacity, test_sample, x_solutions, z, fixedcost, unmet_pen, scaling_factor, log_file=nothing)
     """Evaluate solution performance on test data"""
     num_rows = size(test_sample, 1)
     p_cost = zeros(num_rows)
@@ -262,7 +286,7 @@ function Evaluation(nloc, ncust, cost, capacity, test_sample, x_solutions, z, fi
     
     model_cost = 0.0
     for index in 1:num_rows
-        model_obj_value, p = Second_Stage_Cost(nloc, ncust, cost, capacity, test_sample[index, :], x_solutions, z, fixedcost, unmet_pen, scaling_factor)
+        model_obj_value, p = Second_Stage_Cost(nloc, ncust, cost, capacity, test_sample[index, :], x_solutions, z, fixedcost, unmet_pen, scaling_factor, log_file)
         model_cost += model_obj_value
         p_cost[index] = p
         m_cost[index] = model_obj_value
@@ -272,7 +296,7 @@ function Evaluation(nloc, ncust, cost, capacity, test_sample, x_solutions, z, fi
     return total_model_cost, p_cost, m_cost
 end
 
-function OfflineTest(nloc, ncust, capacity, cost, test_samples, fixedcost, unmet_pen, scaling_factor)
+function OfflineTest(nloc, ncust, capacity, cost, test_samples, fixedcost, unmet_pen, scaling_factor, log_file=nothing)
     """Calculate offline optimal costs for test data"""
     num_rows = size(test_samples, 1)
     offline_cost = zeros(num_rows)
@@ -283,12 +307,34 @@ function OfflineTest(nloc, ncust, capacity, cost, test_samples, fixedcost, unmet
         if i % 50 == 0
             println("  Processed $i test samples")
         end
-        obj_value, _ = facility_location(nloc, ncust, capacity, cost, test_samples[i, :], fixedcost, unmet_pen, scaling_factor)
+        obj_value, _ = facility_location(nloc, ncust, capacity, cost, test_samples[i, :], fixedcost, unmet_pen, scaling_factor, log_file)
         offline_cost[i] = obj_value
         total_cost += obj_value
     end
     total_offline_cost = total_cost / num_rows
     return total_offline_cost
+end
+
+# =============================================================================
+# LOGGING UTILITIES
+# =============================================================================
+
+function append_summary_to_log(log_file, phase_name, parameters, results)
+    """Append summary statistics to log file"""
+    open(log_file, "a") do io
+        println(io, "\n" * "="^60)
+        println(io, "SUMMARY STATISTICS - $phase_name")
+        println(io, "="^60)
+        println(io, "Parameters:")
+        for (key, value) in parameters
+            println(io, "  $key: $value")
+        end
+        println(io, "\nResults:")
+        for (key, value) in results
+            println(io, "  $key: $value")
+        end
+        println(io, "="^60)
+    end
 end
 
 # =============================================================================
@@ -335,21 +381,41 @@ function main()
     println("PHASE 1: SCENARIO GENERATION")
     println("="^40)
     
-    # Create logs directory if it doesn't exist
-    if !isdir("logs")
-        mkdir("logs")
+    # Create parameter-based directory structure
+    param_folder = "nscen$(nscen)_K$(K)"
+    base_log_path = "Logs/Facility Location Logs/$(param_folder)"
+    
+    # Create all necessary directories
+    for phase in ["phase1", "phase2", "phase3"]
+        phase_dir = "$(base_log_path)/$(phase)"
+        if !isdir(phase_dir)
+            mkpath(phase_dir)
+        end
     end
     
-    # Set up log file for Phase 1
-    phase1_log_file = "logs/phase1_scenario_generation.log"
-    println("Saving Phase 1 Gurobi logs to: $phase1_log_file")
+    # Set up all 5 log files
+    phase1_log = "$(base_log_path)/phase1/scenario_generation.log"
+    phase2_calc_log = "$(base_log_path)/phase2/extensive_form_calculations.log"
+    phase2_reform_log = "$(base_log_path)/phase2/reformulated_extensive_form.log"
+    phase3_offline_log = "$(base_log_path)/phase3/offline_test.log"
+    phase3_eval_log = "$(base_log_path)/phase3/evaluation.log"
+    
+    println("Saving logs to: $base_log_path")
+    println("  Phase 1: scenario_generation.log")
+    println("  Phase 2: extensive_form_calculations.log, reformulated_extensive_form.log")
+    println("  Phase 3: offline_test.log, evaluation.log")
     
     # Generate scenarios and solutions with logging
-    xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, phase1_log_file)
+    xsolutions = sampling(nscen, nloc, demandmean, demandstdev, capacity, cost, fixedcost, unmet_pen, scaling_factor, bernoulli_case, phase1_log)
     
     # Count unique solutions
     _, u1 = n_unique_rows(xsolutions)
     println("Generated $nscen scenarios with $u1 unique solutions")
+    
+    # Add summary to Phase 1 log
+    phase1_params = Dict("nscen" => nscen, "nloc" => nloc, "ncust" => ncust, "bernoulli_case" => bernoulli_case)
+    phase1_results = Dict("unique_solutions" => u1, "total_scenarios" => nscen)
+    append_summary_to_log(phase1_log, "PHASE 1: SCENARIO GENERATION", phase1_params, phase1_results)
     
     # Generate online samples
     println("Generating $nsamples online samples...")
@@ -369,24 +435,31 @@ function main()
     println("PHASE 2: REFORMULATED EXTENSIVE FORM")
     println("="^40)
     
-    # Solve reformulated extensive form
-    obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor)
+    # Solve reformulated extensive form with logging
+    obj_matrix, r = Calculations_For_Extensive_Form(nloc, ncust, capacity, cost, online_samples, xsolutions, fixedcost, unmet_pen, scaling_factor, phase2_calc_log)
     n_neg1 = count(x -> x == -1, obj_matrix)
     println("Infeasible scenario-solution pairs: $n_neg1")
     
-    Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix)
+    Solution, z = Reformulated_Extensive_Form(nsamples, nscen, K, obj_matrix, phase2_reform_log)
     println("Reformulated extensive form objective: $Solution")
+    
+    # Add summary to Phase 2 logs
+    phase2_params = Dict("nsamples" => nsamples, "nscen" => nscen, "K" => K, "infeasible_pairs" => n_neg1)
+    phase2_calc_results = Dict("total_scenarios" => nsamples, "total_solutions" => nscen, "infeasible_pairs" => n_neg1)
+    phase2_reform_results = Dict("objective_value" => Solution, "selected_solutions" => K)
+    append_summary_to_log(phase2_calc_log, "PHASE 2A: EXTENSIVE FORM CALCULATIONS", phase2_params, phase2_calc_results)
+    append_summary_to_log(phase2_reform_log, "PHASE 2B: REFORMULATED EXTENSIVE FORM", phase2_params, phase2_reform_results)
     
     println("\n" * "="^40)
     println("PHASE 3: EVALUATION")
     println("="^40)
     
-    # Calculate offline costs
-    offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor)
+    # Calculate offline costs with logging
+    offline_cost = OfflineTest(nloc, ncust, capacity, cost, test_samples_data, fixedcost, unmet_pen, scaling_factor, phase3_offline_log)
     println("Average offline cost: $offline_cost")
     
-    # Evaluate model performance
-    modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor)
+    # Evaluate model performance with logging
+    modelcost, pcos, mcost = Evaluation(nloc, ncust, cost, capacity, test_samples_data, xsolutions, z, fixedcost, unmet_pen, scaling_factor, phase3_eval_log)
     println("Average model cost: $modelcost")
     
     # Calculate gap
@@ -397,6 +470,13 @@ function main()
     penalty_pos = findall(x -> x > 0.1, pcos)
     penalty_val = pcos[penalty_pos]
     println("Scenarios with penalties: $(length(penalty_pos))")
+    
+    # Add summary to Phase 3 logs
+    phase3_params = Dict("test_samples" => test_samples, "nloc" => nloc, "ncust" => ncust)
+    phase3_offline_results = Dict("average_offline_cost" => offline_cost, "total_test_samples" => test_samples)
+    phase3_eval_results = Dict("average_model_cost" => modelcost, "performance_gap_percent" => round(gap, digits=2), "scenarios_with_penalties" => length(penalty_pos))
+    append_summary_to_log(phase3_offline_log, "PHASE 3A: OFFLINE TEST", phase3_params, phase3_offline_results)
+    append_summary_to_log(phase3_eval_log, "PHASE 3B: EVALUATION", phase3_params, phase3_eval_results)
     
     println("\n" * "="^60)
     println("FINAL RESULTS SUMMARY (First 3 Phases)")
