@@ -19,13 +19,13 @@
 ## Files
 
 ### Main Scripts
-- `complete_facility_location.jl` - **Core 3 phases **
+- `complete_facility_location.jl` - **Core 3 phases**
   - Phase 1: Scenario Generation
   - Phase 2: Reformulated Extensive Form  
   - Phase 3: Evaluation
   - Faster execution, good for initial analysis
 
-- `l_augmentation_heuristic.jl` - **Full pipeline with L-Augmentation heuristic **
+- `l_augmentation_heuristic.jl` - **Full pipeline with L-Augmentation heuristic**
   - All 3 core phases PLUS L-Augmentation heuristic
 
 
