@@ -667,10 +667,10 @@ function main()
     network = PowerModels.parse_file(file_path)
     
     # Read the Excel data containing random parameters 
-    param_data = XLSX.readtable(file_path_excel, "118_15") |> DataFrame
+    param_data = XLSX.readtable(file_path_excel, "Sheet1") |> DataFrame
     
     # Extract center data from Excel file
-    center_data = param_data[1, :]  # First row contains the demand values
+    center_data = Vector{Float64}(param_data[1, :])  # First row contains the demand values
     
     println("✅ Data loaded successfully!")
     println("Network: $(length(network["bus"])) buses, $(length(network["branch"])) branches, $(length(network["gen"])) generators")
@@ -680,99 +680,227 @@ function main()
     # =============================================================================
     
     # Model parameters
-    nscen = 20          # Number of scenarios for sampling
-    nsamples = 200      # Number of online samples
-    test_samples = 20   # Number of test samples
-    K = 10              # Number of policies to select
-    capacity_factor = 1.20  # Capacity scaling factor
+    nscen_list = [20, 30, 50]  # Number of scenarios for sampling (will loop through these)
+    nsamples = 100             # Number of online samples
+    test_samples = 50          # Number of test samples
+    K_values = [1, 2, 3, 4, 5, 6, 7]  # Number of policies to select (will loop through these)
+    capacity_factor = 1.20     # Capacity scaling factor
     
     println("\nModel Parameters:")
-    println("  Scenarios for sampling: $nscen")
+    println("  nscen values: $nscen_list")
     println("  Online samples: $nsamples")
     println("  Test samples: $test_samples")
-    println("  K (policies to select): $K")
+    println("  K values (policies to select): $K_values")
     println("  Capacity factor: $capacity_factor")
     
     # =============================================================================
-    # PHASE 1: SCENARIO GENERATION & OFFLINE CALCULATIONS
+    # LOGGING SETUP
     # =============================================================================
     
-    println("\n" * "="^40)
-    println("PHASE 1: SCENARIO GENERATION & OFFLINE CALCULATIONS")
-    println("="^40)
+    # Create log directory structure
+    log_base_dir = "Logs/PowerFlow Logs"
+    log_common_dir = "$log_base_dir/common"
     
-    println("Starting Phase 1: Scenario Generation...")
-    phase1_time = @elapsed begin
-        demand_samples, x_solutions = sampling_for_offline_calc(network, center_data, nscen; capacity_factor=capacity_factor)
-    end
+    # Create common directory
+    mkpath(log_common_dir)
     
-    println("Generated $nscen scenarios with $(size(x_solutions, 1)) solutions")
+    # Define common log file paths (used once across all nscen)
+    log_offline_test = "$log_common_dir/offline_test.log"
+    timing_common_file = "$log_common_dir/timing_summary_common.txt"
     
-    # Generate online samples
+    println("\n📁 Log files will be saved to: $log_base_dir")
+    println("📁 Common logs: $log_common_dir")
+    
+    # =============================================================================
+    # ULTRA-COMMON PHASES (RUN ONCE ACROSS ALL NSCEN)
+    # =============================================================================
+    
+    println("\n" * "="^60)
+    println("ULTRA-COMMON PHASES: ONLINE SAMPLES, TEST SAMPLES & OFFLINE TEST")
+    println("="^60)
+    
+    # Generate online samples (common across all nscen)
     println("Generating $nsamples online samples...")
     online_samples = generate_scenarios(center_data, nsamples)
     
-    # Generate test samples
+    # Generate test samples (common across all nscen)
     println("Generating $test_samples test samples...")
     test_sample = generate_scenarios(center_data, test_samples)
     
-    println("✅ Phase 1 completed in $(round(phase1_time, digits=2)) seconds")
-    
-    # =============================================================================
-    # PHASE 2: POLICY SELECTION & EXTENSIVE FORM
-    # =============================================================================
-    
-    println("\n" * "="^40)
-    println("PHASE 2: POLICY SELECTION & EXTENSIVE FORM")
-    println("="^40)
-    
-    println("Starting Phase 2: Extensive Form Calculations...")
-    phase2_calc_time = @elapsed begin
-        obj_value, solved_x = Calculations_For_Extensive_Form(network, online_samples, nsamples, nscen, x_solutions)
-    end
-    
-    n_neg1 = count(x -> x == -1, obj_value)
-    println("Infeasible scenario-solution pairs: $n_neg1")
-    
-    println("Starting Phase 2: Reformulated Extensive Form...")
-    phase2_reform_time = @elapsed begin
-        Solution, z, time_taken = Reformulated_Extensive_Form(nsamples, nscen, K, obj_value)
-    end
-    
-    println("Reformulated extensive form objective: $Solution")
-    println("✅ Phase 2 completed in $(round(phase2_calc_time + phase2_reform_time, digits=2)) seconds")
-    
-    # =============================================================================
-    # PHASE 3: EVALUATION
-    # =============================================================================
-    
-    println("\n" * "="^40)
-    println("PHASE 3: EVALUATION")
-    println("="^40)
-    
-    # Calculate offline costs
-    println("Starting Phase 3: Offline Test...")
-    phase3_offline_time = @elapsed begin
-        original_cost, offline_cost_list, penalty_blist = OfflineTest(network, test_sample)
+    # Run offline test (common across all nscen)
+    println("Starting Offline Test...")
+    offline_test_time = @elapsed begin
+        original_cost, offline_cost_list, penalty_blist = OfflineTest(network, test_sample, log_offline_test)
     end
     println("Average offline cost: $original_cost")
+    println("✅ Ultra-common phases completed in $(round(offline_test_time, digits=2)) seconds")
     
-    # Evaluate model performance
-    println("Starting Phase 3: Evaluation...")
-    phase3_eval_time = @elapsed begin
-        model_cost, model_cost_list, penlist = Evaluation(network, test_sample, offline_cost_list, x_solutions, z)
+    # =============================================================================
+    # NSCEN-SPECIFIC AND K-SPECIFIC PHASES (LOOP THROUGH NSCEN VALUES)
+    # =============================================================================
+    
+    println("\n" * "="^60)
+    println("NSCEN-SPECIFIC AND K-SPECIFIC PHASES")
+    println("="^60)
+    
+    # Store results for all nscen and K combinations
+    all_results = Dict()
+    
+    for (nscen_idx, nscen) in enumerate(nscen_list)
+        println("\n" * "="^50)
+        println("PROCESSING NSCEN = $nscen ($(nscen_idx)/$(length(nscen_list)))")
+        println("="^50)
+        
+        # Create nscen-specific log directory structure
+        log_nscen_dir = "$log_base_dir/L$(nscen)"
+        mkpath("$log_nscen_dir/phase1")
+        mkpath("$log_nscen_dir/phase2")
+        mkpath("$log_nscen_dir/phase3")
+        
+        # Define nscen-specific log file paths
+        log_phase1 = "$log_nscen_dir/phase1/scenario_generation.log"
+        log_phase2a = "$log_nscen_dir/phase2/decoupling_calculations.log"
+        timing_nscen_file = "$log_nscen_dir/timing_summary_L$(nscen).txt"
+        
+        # =============================================================================
+        # PHASE 1: SCENARIO GENERATION (NSCEN-SPECIFIC)
+        # =============================================================================
+        
+        println("Starting Phase 1: Scenario Generation for nscen=$nscen...")
+        phase1_time = @elapsed begin
+            demand_samples, x_solutions = sampling_for_offline_calc(network, center_data, nscen; capacity_factor=capacity_factor, log_file=log_phase1)
+        end
+        
+        println("Generated $nscen scenarios with $(size(x_solutions, 1)) solutions")
+        
+        # =============================================================================
+        # PHASE 2A: DECOUPLING CALCULATIONS (NSCEN-SPECIFIC)
+        # =============================================================================
+        
+        println("Starting Phase 2A: Decoupling Calculations for nscen=$nscen...")
+        phase2_calc_time = @elapsed begin
+            obj_value, solved_x = Calculations_For_Extensive_Form(network, online_samples, nsamples, nscen, x_solutions, log_phase2a)
+        end
+        
+        n_neg1 = count(x -> x == -1, obj_value)
+        println("Infeasible scenario-solution pairs: $n_neg1")
+        
+        # Store results for this nscen
+        all_results[nscen] = Dict()
+        
+        # =============================================================================
+        # K-SPECIFIC PHASES (LOOP THROUGH K VALUES FOR THIS NSCEN)
+        # =============================================================================
+        
+        for (k_idx, K) in enumerate(K_values)
+            println("\n" * "="^40)
+            println("PROCESSING K = $K for nscen=$nscen ($(k_idx)/$(length(K_values)))")
+            println("="^40)
+            
+            # Define K-specific log file paths
+            log_phase2b = "$log_nscen_dir/phase2/reformulated_extensive_form_K$(K).log"
+            log_phase3b = "$log_nscen_dir/phase3/evaluation_K$(K).log"
+            timing_k_file = "$log_nscen_dir/timing_summary_K$(K).txt"
+            
+            # =============================================================================
+            # PHASE 2B: REFORMULATED EXTENSIVE FORM (K-SPECIFIC)
+            # =============================================================================
+            
+            println("Starting Phase 2B: Reformulated Extensive Form for K=$K...")
+            phase2_reform_time = @elapsed begin
+                Solution, z, time_taken = Reformulated_Extensive_Form(nsamples, nscen, K, obj_value, log_phase2b)
+            end
+            
+            println("Reformulated extensive form objective for K=$K: $Solution")
+            
+            # =============================================================================
+            # PHASE 3B: EVALUATION (K-SPECIFIC)
+            # =============================================================================
+            
+            println("Starting Phase 3B: Evaluation for K=$K...")
+            phase3_eval_time = @elapsed begin
+                model_cost, model_cost_list, penlist = Evaluation(network, test_sample, offline_cost_list, x_solutions, z, log_phase3b)
+            end
+            
+            # Calculate gap
+            gap = (model_cost - original_cost) / original_cost * 100
+            
+            # Analyze penalties
+            penalty_pos = findall(x -> x > 0.1, penlist)
+            
+            println("Results for nscen=$nscen, K=$K:")
+            println("  Model cost: $(round(model_cost, digits=2))")
+            println("  Performance gap: $(round(gap, digits=2))%")
+            println("  Scenarios with penalties: $(length(penalty_pos))")
+            println("  Phase 2B time: $(round(phase2_reform_time, digits=2)) seconds")
+            println("  Phase 3B time: $(round(phase3_eval_time, digits=2)) seconds")
+            
+            # Store results for this K
+            all_results[nscen][K] = Dict(
+                "solution" => Solution,
+                "model_cost" => model_cost,
+                "gap" => gap,
+                "penalties" => length(penalty_pos),
+                "phase2b_time" => phase2_reform_time,
+                "phase3b_time" => phase3_eval_time
+            )
+            
+            # Write K-specific timing summary
+            open(timing_k_file, "w") do io
+                println(io, "POWERFLOW MODEL TIMING SUMMARY - K=$K")
+                println(io, "="^50)
+                println(io, "Parameters:")
+                println(io, "  nscen: $nscen")
+                println(io, "  K: $K")
+                println(io, "  nsamples: $nsamples")
+                println(io, "  test_samples: $test_samples")
+                println(io, "  capacity_factor: $capacity_factor")
+                println(io, "")
+                println(io, "Execution Times:")
+                println(io, "  Phase 2B (Reformulated Ext Form):  $(round(phase2_reform_time, digits=2)) seconds")
+                println(io, "  Phase 3B (Evaluation):             $(round(phase3_eval_time, digits=2)) seconds")
+                println(io, "  Total K-specific Time:             $(round(phase2_reform_time + phase3_eval_time, digits=2)) seconds")
+                println(io, "")
+                println(io, "Results:")
+                println(io, "  Offline optimal cost:     $(round(original_cost, digits=2))")
+                println(io, "  Model cost:               $(round(model_cost, digits=2))")
+                println(io, "  Model gap:                $(round(gap, digits=2))%")
+                println(io, "  Scenarios with penalties: $(length(penalty_pos))")
+            end
+            
+            println("✅ nscen=$nscen, K=$K completed successfully!")
+        end
+        
+        # Write nscen-specific timing summary
+        open(timing_nscen_file, "w") do io
+            println(io, "POWERFLOW MODEL TIMING SUMMARY - NSCEN=$nscen")
+            println(io, "="^50)
+            println(io, "Parameters:")
+            println(io, "  nscen: $nscen")
+            println(io, "  K_values: $K_values")
+            println(io, "  nsamples: $nsamples")
+            println(io, "  test_samples: $test_samples")
+            println(io, "  capacity_factor: $capacity_factor")
+            println(io, "")
+            println(io, "Execution Times:")
+            println(io, "  Phase 1 (Scenario Generation):     $(round(phase1_time, digits=2)) seconds")
+            println(io, "  Phase 2A (Decoupling Calc):        $(round(phase2_calc_time, digits=2)) seconds")
+            println(io, "")
+            println(io, "Results by K:")
+            for K in K_values
+                result = all_results[nscen][K]
+                println(io, "  K=$K:")
+                println(io, "    Model cost:               $(round(result["model_cost"], digits=2))")
+                println(io, "    Model gap:                $(round(result["gap"], digits=2))%")
+                println(io, "    Scenarios with penalties: $(result["penalties"])")
+                println(io, "    Phase 2B time:            $(round(result["phase2b_time"], digits=2)) seconds")
+                println(io, "    Phase 3B time:            $(round(result["phase3b_time"], digits=2)) seconds")
+            end
+        end
+        
+        println("✅ nscen=$nscen completed successfully!")
     end
-    println("Average model cost: $model_cost")
     
-    # Calculate gap
-    gap = (model_cost - original_cost) / original_cost * 100
-    println("Performance gap: $(round(gap, digits=2))%")
-    
-    # Analyze penalties
-    penalty_pos = findall(x -> x > 0.1, penlist)
-    println("Scenarios with penalties: $(length(penalty_pos))")
-    
-    println("✅ Phase 3 completed in $(round(phase3_offline_time + phase3_eval_time, digits=2)) seconds")
     
     # =============================================================================
     # RESULTS SUMMARY
@@ -782,26 +910,103 @@ function main()
     println("FINAL RESULTS SUMMARY")
     println("="^60)
     println("Offline optimal cost:     $(round(original_cost, digits=2))")
-    println("Model cost:               $(round(model_cost, digits=2))")
-    println("Model gap:                $(round(gap, digits=2))%")
-    println("Scenarios with penalties: $(length(penalty_pos))")
+    println("")
+    println("Results by nscen and K:")
+    for nscen in nscen_list
+        println("  nscen=$nscen:")
+        for K in K_values
+            result = all_results[nscen][K]
+            println("    K=$K:")
+            println("      Model cost:               $(round(result["model_cost"], digits=2))")
+            println("      Model gap:                $(round(result["gap"], digits=2))%")
+            println("      Scenarios with penalties: $(result["penalties"])")
+        end
+    end
     println("="^60)
-    
-    # Calculate total time
-    total_time = phase1_time + phase2_calc_time + phase2_reform_time + phase3_offline_time + phase3_eval_time
     
     # Print timing summary to console
     println("\n" * "="^60)
     println("TIMING SUMMARY")
     println("="^60)
-    println("Phase 1 (Scenario Generation):     $(round(phase1_time, digits=2)) seconds")
-    println("Phase 2 (Extensive Form Calc):     $(round(phase2_calc_time, digits=2)) seconds")
-    println("Phase 2 (Reformulated Ext Form):   $(round(phase2_reform_time, digits=2)) seconds")
-    println("Phase 3 (Offline Test):            $(round(phase3_offline_time, digits=2)) seconds")
-    println("Phase 3 (Evaluation):              $(round(phase3_eval_time, digits=2)) seconds")
-    println("Total Time:                        $(round(total_time, digits=2)) seconds")
+    println("Ultra-common phases (Offline Test): $(round(offline_test_time, digits=2)) seconds")
+    println("")
+    println("Breakdown by nscen:")
+    for nscen in nscen_list
+        # Calculate total time for this nscen (we need to get these from the loop)
+        # For now, just show the structure
+        println("  nscen=$nscen: [Phase 1 + Phase 2A + all K-specific phases]")
+    end
     println("="^60)
     
+    # =============================================================================
+    # WRITE COMMON TIMING SUMMARY TO FILE
+    # =============================================================================
+    
+    open(timing_common_file, "w") do io
+        println(io, "POWERFLOW MODEL TIMING SUMMARY - COMMON PHASES")
+        println(io, "="^50)
+        println(io, "Parameters:")
+        println(io, "  nscen_list: $nscen_list")
+        println(io, "  nsamples: $nsamples")
+        println(io, "  test_samples: $test_samples")
+        println(io, "  K_values: $K_values")
+        println(io, "  capacity_factor: $capacity_factor")
+        println(io, "")
+        println(io, "Ultra-Common Execution Times:")
+        println(io, "  Offline Test:               $(round(offline_test_time, digits=2)) seconds")
+        println(io, "")
+        println(io, "Results:")
+        println(io, "  Offline optimal cost:       $(round(original_cost, digits=2))")
+        println(io, "")
+        println(io, "Note: This file contains timing for phases that run once")
+        println(io, "across all nscen values. See individual L{nscen} directories")
+        println(io, "for nscen-specific and K-specific timing details.")
+    end
+    
+    # =============================================================================
+    # APPEND SUMMARY STATISTICS TO LOG FILES
+    # =============================================================================
+    
+    # Common offline test summary
+    offline_test_params = Dict("test_samples" => test_samples)
+    offline_test_results = Dict("average_offline_cost" => round(original_cost, digits=2), "execution_time" => "$(round(offline_test_time, digits=2)) seconds")
+    append_summary_to_log(log_offline_test, "Ultra-Common - Offline Test", offline_test_params, offline_test_results)
+    
+    # nscen-specific and K-specific summaries
+    for nscen in nscen_list
+        log_nscen_dir = "$log_base_dir/L$(nscen)"
+        
+        # Phase 1 summary for this nscen
+        log_phase1 = "$log_nscen_dir/phase1/scenario_generation.log"
+        phase1_params = Dict("nscen" => nscen, "capacity_factor" => capacity_factor)
+        phase1_results = Dict("scenarios_generated" => nscen, "execution_time" => "See timing files for details")
+        append_summary_to_log(log_phase1, "Phase 1 - Scenario Generation", phase1_params, phase1_results)
+        
+        # Phase 2A summary for this nscen
+        log_phase2a = "$log_nscen_dir/phase2/decoupling_calculations.log"
+        phase2a_params = Dict("nsamples" => nsamples, "nscen" => nscen)
+        phase2a_results = Dict("execution_time" => "See timing files for details")
+        append_summary_to_log(log_phase2a, "Phase 2A - Decoupling Calculations", phase2a_params, phase2a_results)
+        
+        # K-specific summaries for this nscen
+        for K in K_values
+            result = all_results[nscen][K]
+            
+            # Phase 2B summary for this K
+            log_phase2b = "$log_nscen_dir/phase2/reformulated_extensive_form_K$(K).log"
+            phase2b_params = Dict("nsamples" => nsamples, "nscen" => nscen, "K" => K)
+            phase2b_results = Dict("objective_value" => result["solution"], "execution_time" => "$(round(result["phase2b_time"], digits=2)) seconds")
+            append_summary_to_log(log_phase2b, "Phase 2B - Reformulated Extensive Form", phase2b_params, phase2b_results)
+            
+            # Phase 3B summary for this K
+            log_phase3b = "$log_nscen_dir/phase3/evaluation_K$(K).log"
+            phase3b_params = Dict("test_samples" => test_samples, "K" => K)
+            phase3b_results = Dict("average_model_cost" => round(result["model_cost"], digits=2), "performance_gap" => "$(round(result["gap"], digits=2))%", "scenarios_with_penalties" => result["penalties"], "execution_time" => "$(round(result["phase3b_time"], digits=2)) seconds")
+            append_summary_to_log(log_phase3b, "Phase 3B - Evaluation", phase3b_params, phase3b_results)
+        end
+    end
+    
+    println("\n📝 Log files and timing summary saved successfully!")
     println("\n🎉 PowerFlow model execution completed successfully!")
     
     return nothing

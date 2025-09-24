@@ -1,0 +1,60 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:21:57 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L50/phase2/reformulated_extensive_form_K6.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:21:57 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L50/phase2/reformulated_extensive_form_K6.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 5101 rows, 5050 columns and 15050 nonzeros
+Model fingerprint: 0x31dfcbc4
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+01, 7e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 6e+00]
+Presolve time: 0.02s
+Presolved: 5101 rows, 5050 columns, 15050 nonzeros
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Found heuristic solution: objective 3155.0308912
+
+Root relaxation: objective 3.112349e+03, 505 iterations, 0.01 seconds (0.02 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    3112.3491456 3112.34915  0.00%     -    0s
+
+Explored 1 nodes (505 simplex iterations) in 0.04 seconds (0.07 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 3112.35 3155.03 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.112349145577e+03, best bound 3.112349145577e+03, gap 0.0000%
+
+User-callback calls 158, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - Phase 2B - Reformulated Extensive Form
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 50
+  K: 6
+
+Results:
+  execution_time: 0.25 seconds
+  objective_value: 3112.3491455765625
+============================================================

@@ -1,0 +1,60 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:11:52 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L30/phase2/reformulated_extensive_form_K7.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:11:52 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L30/phase2/reformulated_extensive_form_K7.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0xf2261ab3
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+01, 7e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 3122.2842193
+
+Root relaxation: objective 3.110887e+03, 347 iterations, 0.00 seconds (0.01 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    3110.8874245 3110.88742  0.00%     -    0s
+
+Explored 1 nodes (347 simplex iterations) in 0.02 seconds (0.03 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 3110.89 3122.28 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.110887424471e+03, best bound 3.110887424471e+03, gap 0.0000%
+
+User-callback calls 150, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - Phase 2B - Reformulated Extensive Form
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  K: 7
+
+Results:
+  execution_time: 0.04 seconds
+  objective_value: 3110.8874244705453
+============================================================

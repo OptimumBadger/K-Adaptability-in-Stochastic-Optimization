@@ -1,0 +1,56 @@
+POWERFLOW MODEL TIMING SUMMARY - NSCEN=30
+==================================================
+Parameters:
+  nscen: 30
+  K_values: [1, 2, 3, 4, 5, 6, 7]
+  nsamples: 100
+  test_samples: 50
+  capacity_factor: 1.2
+
+Execution Times:
+  Phase 1 (Scenario Generation):     228.79 seconds
+  Phase 2A (Decoupling Calc):        20.85 seconds
+
+Results by K:
+  K=1:
+    Model cost:               3151.63
+    Model gap:                3.89%
+    Scenarios with penalties: 6
+    Phase 2B time:            0.09 seconds
+    Phase 3B time:            0.5 seconds
+  K=2:
+    Model cost:               3082.84
+    Model gap:                1.62%
+    Scenarios with penalties: 2
+    Phase 2B time:            0.06 seconds
+    Phase 3B time:            1.11 seconds
+  K=3:
+    Model cost:               3068.32
+    Model gap:                1.15%
+    Scenarios with penalties: 1
+    Phase 2B time:            0.05 seconds
+    Phase 3B time:            1.56 seconds
+  K=4:
+    Model cost:               3060.68
+    Model gap:                0.89%
+    Scenarios with penalties: 1
+    Phase 2B time:            0.05 seconds
+    Phase 3B time:            2.21 seconds
+  K=5:
+    Model cost:               3058.98
+    Model gap:                0.84%
+    Scenarios with penalties: 1
+    Phase 2B time:            0.04 seconds
+    Phase 3B time:            2.96 seconds
+  K=6:
+    Model cost:               3058.98
+    Model gap:                0.84%
+    Scenarios with penalties: 1
+    Phase 2B time:            0.04 seconds
+    Phase 3B time:            3.29 seconds
+  K=7:
+    Model cost:               3058.98
+    Model gap:                0.84%
+    Scenarios with penalties: 1
+    Phase 2B time:            0.04 seconds
+    Phase 3B time:            3.5 seconds

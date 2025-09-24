@@ -1,0 +1,18 @@
+POWERFLOW MODEL TIMING SUMMARY - COMMON PHASES
+==================================================
+Parameters:
+  nscen_list: [20, 30, 50]
+  nsamples: 100
+  test_samples: 50
+  K_values: [1, 2, 3, 4, 5, 6, 7]
+  capacity_factor: 1.2
+
+Ultra-Common Execution Times:
+  Offline Test:               541.88 seconds
+
+Results:
+  Offline optimal cost:       3033.56
+
+Note: This file contains timing for phases that run once
+across all nscen values. See individual L{nscen} directories
+for nscen-specific and K-specific timing details.

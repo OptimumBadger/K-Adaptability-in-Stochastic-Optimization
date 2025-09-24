@@ -1,0 +1,19 @@
+POWERFLOW MODEL TIMING SUMMARY - K=7
+==================================================
+Parameters:
+  nscen: 20
+  K: 7
+  nsamples: 100
+  test_samples: 50
+  capacity_factor: 1.2
+
+Execution Times:
+  Phase 2B (Reformulated Ext Form):  0.03 seconds
+  Phase 3B (Evaluation):             4.31 seconds
+  Total K-specific Time:             4.34 seconds
+
+Results:
+  Offline optimal cost:     3033.56
+  Model cost:               3062.12
+  Model gap:                0.94%
+  Scenarios with penalties: 1

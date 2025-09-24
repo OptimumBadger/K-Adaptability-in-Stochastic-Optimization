@@ -1,0 +1,120 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 18:46:44 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L20/phase2/reformulated_extensive_form_K2.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 18:46:44 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L20/phase2/reformulated_extensive_form_K2.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 2101 rows, 2020 columns and 6020 nonzeros
+Model fingerprint: 0x7a7323b2
+Variable types: 0 continuous, 2020 integer (2020 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+01, 7e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+00]
+Presolve time: 0.00s
+Presolved: 2101 rows, 2020 columns, 6020 nonzeros
+Variable types: 0 continuous, 2020 integer (2020 binary)
+Found heuristic solution: objective 3205.3589310
+
+Root relaxation: objective 3.138043e+03, 727 iterations, 0.01 seconds (0.02 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    3138.0427558 3138.04276  0.00%     -    0s
+
+Explored 1 nodes (727 simplex iterations) in 0.01 seconds (0.03 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 3138.04 3205.36 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.138042755832e+03, best bound 3.138042755832e+03, gap 0.0000%
+
+User-callback calls 150, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - Phase 2B - Reformulated Extensive Form
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 20
+  K: 2
+
+Results:
+  execution_time: 0.04 seconds
+  objective_value: 3138.042755831789
+============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:07:16 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L20/phase2/reformulated_extensive_form_K2.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:07:16 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L20/phase2/reformulated_extensive_form_K2.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 2101 rows, 2020 columns and 6020 nonzeros
+Model fingerprint: 0xb5758d91
+Variable types: 0 continuous, 2020 integer (2020 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+01, 5e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+00]
+Presolve time: 0.00s
+Presolved: 2101 rows, 2020 columns, 6020 nonzeros
+Variable types: 0 continuous, 2020 integer (2020 binary)
+Found heuristic solution: objective 3176.7282611
+
+Root relaxation: objective 3.141393e+03, 872 iterations, 0.01 seconds (0.02 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    3141.3926870 3141.39269  0.00%     -    0s
+
+Explored 1 nodes (872 simplex iterations) in 0.01 seconds (0.03 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 3141.39 3176.73 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.141392686963e+03, best bound 3.141392686963e+03, gap 0.0000%
+
+User-callback calls 152, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - Phase 2B - Reformulated Extensive Form
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 20
+  K: 2
+
+Results:
+  execution_time: 0.03 seconds
+  objective_value: 3141.3926869633956
+============================================================

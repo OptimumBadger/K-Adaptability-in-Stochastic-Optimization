@@ -1,0 +1,62 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:21:49 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L50/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 19:21:49 2025
+
+Set parameter LogFile to value "Logs/PowerFlow Logs/L50/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 5101 rows, 5050 columns and 15050 nonzeros
+Model fingerprint: 0xa5cf65f0
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+01, 7e+01]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.03s
+Presolved: 5101 rows, 5050 columns, 15050 nonzeros
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Found heuristic solution: objective 3264.8193399
+Found heuristic solution: objective 3255.9093646
+Found heuristic solution: objective 3237.1063979
+
+Root relaxation: objective 3.167722e+03, 1966 iterations, 0.02 seconds (0.06 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    3167.7216303 3167.72163  0.00%     -    0s
+
+Explored 1 nodes (1966 simplex iterations) in 0.06 seconds (0.13 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 3167.72 3237.11 3255.91 3264.82 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.167721630291e+03, best bound 3.167721630291e+03, gap 0.0000%
+
+User-callback calls 174, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - Phase 2B - Reformulated Extensive Form
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 50
+  K: 1
+
+Results:
+  execution_time: 0.16 seconds
+  objective_value: 3167.721630290528
+============================================================
