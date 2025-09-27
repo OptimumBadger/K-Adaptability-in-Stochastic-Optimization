@@ -360,7 +360,7 @@ function main()
     end
     unmet_pen = 50
     scaling_factor = 0.000015
-    bernoulli_case = true
+    bernoulli_case = false
     nscen_list = [30, 50, 100]  # List of nscen values to test
     nsamples = 100  # Number of online samples
     test_samples = 100  # Number of test samples

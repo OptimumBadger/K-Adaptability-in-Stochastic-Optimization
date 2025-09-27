@@ -246,3 +246,65 @@ Results:
   selected_solutions: 1
   objective_value: 71799.9121472544
 ============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:35:05 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:35:05 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 5101 rows, 5050 columns and 15050 nonzeros
+Model fingerprint: 0x3993e6c5
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [6e+02, 4e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.03s
+Presolved: 5101 rows, 5050 columns, 15050 nonzeros
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Found heuristic solution: objective 1080682.2058
+Found heuristic solution: objective 130518.65776
+Found heuristic solution: objective 130230.69368
+
+Root relaxation: objective 1.248148e+05, 2869 iterations, 0.02 seconds (0.05 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    124814.77819 124814.778  0.00%     -    0s
+
+Explored 1 nodes (2869 simplex iterations) in 0.05 seconds (0.12 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 124815 130231 130519 1.08068e+06 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.248147781876e+05, best bound 1.248147781876e+05, gap 0.0000%
+
+User-callback calls 167, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=1)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 50
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 1
+  objective_value: 124814.77818761817
+============================================================

@@ -250,3 +250,63 @@ Results:
   selected_solutions: 9
   objective_value: 60090.14859976252
 ============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:34:26 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L30/phase2/reformulated_extensive_form_K9.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:34:26 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L30/phase2/reformulated_extensive_form_K9.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0x54aaa2d1
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [6e+02, 4e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 121590.93043
+
+Root relaxation: objective 1.095042e+05, 489 iterations, 0.00 seconds (0.01 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    109504.23195 109504.232  0.00%     -    0s
+
+Explored 1 nodes (489 simplex iterations) in 0.01 seconds (0.03 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 109504 121591 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.095042319502e+05, best bound 1.095042319502e+05, gap 0.0000%
+
+User-callback calls 149, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=9)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 9
+  objective_value: 109504.23195016875
+============================================================
