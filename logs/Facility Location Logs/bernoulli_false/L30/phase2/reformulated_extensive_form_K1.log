@@ -1,0 +1,309 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 13:35:11 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 13:35:11 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0x654d4bcc
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [6e+02, 4e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 520202.20186
+Found heuristic solution: objective 222486.28706
+Found heuristic solution: objective 222478.54758
+
+Root relaxation: objective 1.273986e+05, 1815 iterations, 0.01 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    127398.61329 127398.613  0.00%     -    0s
+
+Explored 1 nodes (1815 simplex iterations) in 0.03 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 127399 222479 222486 520202 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.273986132876e+05, best bound 1.273986132876e+05, gap 0.0000%
+
+User-callback calls 159, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=1)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 1
+  objective_value: 127398.61328761124
+============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 13:53:24 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 13:53:24 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0x654d4bcc
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [6e+02, 4e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 520202.20186
+Found heuristic solution: objective 222486.28706
+Found heuristic solution: objective 222478.54758
+
+Root relaxation: objective 1.273986e+05, 1815 iterations, 0.01 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    127398.61329 127398.613  0.00%     -    0s
+
+Explored 1 nodes (1815 simplex iterations) in 0.03 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 127399 222479 222486 520202 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.273986132876e+05, best bound 1.273986132876e+05, gap 0.0000%
+
+User-callback calls 159, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=1)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 1
+  objective_value: 127398.61328761124
+============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 15:45:12 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Sep 23 15:45:12 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0xcc9ce133
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [6e+02, 4e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 129474.30480
+Found heuristic solution: objective 129318.48787
+
+Root relaxation: objective 1.247113e+05, 2169 iterations, 0.01 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    124711.34274 124711.343  0.00%     -    0s
+
+Explored 1 nodes (2169 simplex iterations) in 0.03 seconds (0.07 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 124711 129318 129474 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.247113427363e+05, best bound 1.247113427363e+05, gap 0.0000%
+
+User-callback calls 159, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=1)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 1
+  objective_value: 124711.34273629123
+============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Fri Sep 26 17:51:12 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Fri Sep 26 17:51:12 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0xed3b4614
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+02, 3e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 256225.36665
+Found heuristic solution: objective 119599.67376
+Found heuristic solution: objective 116094.11314
+
+Root relaxation: objective 7.173211e+04, 1827 iterations, 0.01 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    71732.108831 71732.1088  0.00%     -    0s
+
+Explored 1 nodes (1827 simplex iterations) in 0.03 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 71732.1 116094 119600 256225 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.173210883102e+04, best bound 7.173210883102e+04, gap 0.0000%
+
+User-callback calls 160, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=1)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 1
+  objective_value: 71732.10883102061
+============================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Fri Sep 26 17:56:03 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Fri Sep 26 17:56:03 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/L30/phase2/reformulated_extensive_form_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 3101 rows, 3030 columns and 9030 nonzeros
+Model fingerprint: 0xed3b4614
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+02, 3e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Presolve time: 0.01s
+Presolved: 3101 rows, 3030 columns, 9030 nonzeros
+Variable types: 0 continuous, 3030 integer (3030 binary)
+Found heuristic solution: objective 256225.36665
+Found heuristic solution: objective 119599.67376
+Found heuristic solution: objective 116094.11314
+
+Root relaxation: objective 7.173211e+04, 1827 iterations, 0.01 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    71732.108831 71732.1088  0.00%     -    0s
+
+Explored 1 nodes (1827 simplex iterations) in 0.03 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 71732.1 116094 119600 256225 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.173210883102e+04, best bound 7.173210883102e+04, gap 0.0000%
+
+User-callback calls 160, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=1)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 30
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 1
+  objective_value: 71732.10883102061
+============================================================

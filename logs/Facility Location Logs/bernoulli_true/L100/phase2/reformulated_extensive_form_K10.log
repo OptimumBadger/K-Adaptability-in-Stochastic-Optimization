@@ -1,0 +1,66 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:10:29 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L100/phase2/reformulated_extensive_form_K10.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:10:29 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L100/phase2/reformulated_extensive_form_K10.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 10101 rows, 10100 columns and 30100 nonzeros
+Model fingerprint: 0xcf98b62e
+Variable types: 0 continuous, 10100 integer (10100 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+02, 3e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve time: 0.04s
+Presolved: 10101 rows, 10100 columns, 30100 nonzeros
+Variable types: 0 continuous, 10100 integer (10100 binary)
+Found heuristic solution: objective 109999.91114
+
+Root relaxation: objective 5.949982e+04, 854 iterations, 0.02 seconds (0.04 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 59499.8178    0   44 109999.911 59499.8178  45.9%     -    0s
+H    0     0                    59507.741926 59499.8178  0.01%     -    0s
+H    0     0                    59501.743603 59499.8178  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Zero half: 1
+
+Explored 1 nodes (956 simplex iterations) in 0.12 seconds (0.19 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 59501.7 59507.7 110000 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 5.950174360306e+04, best bound 5.949981780823e+04, gap 0.0032%
+
+User-callback calls 190, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=10)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 100
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 10
+  objective_value: 59501.743603062474
+============================================================

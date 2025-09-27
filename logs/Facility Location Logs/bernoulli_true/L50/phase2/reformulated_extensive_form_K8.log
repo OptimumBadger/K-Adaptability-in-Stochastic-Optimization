@@ -1,0 +1,60 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:09:36 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L50/phase2/reformulated_extensive_form_K8.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:09:36 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L50/phase2/reformulated_extensive_form_K8.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+TimeLimit  30
+LogToConsole  0
+
+Optimize a model with 5101 rows, 5050 columns and 15050 nonzeros
+Model fingerprint: 0x543ac19a
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+02, 3e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+00]
+Presolve time: 0.02s
+Presolved: 5101 rows, 5050 columns, 15050 nonzeros
+Variable types: 0 continuous, 5050 integer (5050 binary)
+Found heuristic solution: objective 59641.032343
+
+Root relaxation: objective 5.679692e+04, 557 iterations, 0.01 seconds (0.02 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    56796.919716 56796.9197  0.00%     -    0s
+
+Explored 1 nodes (557 simplex iterations) in 0.03 seconds (0.07 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 56796.9 59641 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 5.679691971562e+04, best bound 5.679691971562e+04, gap 0.0000%
+
+User-callback calls 156, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 2B: REFORMULATED EXTENSIVE FORM (K=8)
+============================================================
+Parameters:
+  nsamples: 100
+  nscen: 50
+  infeasible_pairs: 0
+
+Results:
+  selected_solutions: 8
+  objective_value: 56796.919715623095
+============================================================

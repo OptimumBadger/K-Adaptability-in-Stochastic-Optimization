@@ -1,0 +1,2228 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xa812e9ae
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 1e+04]
+Found heuristic solution: objective 2849450.0000
+Presolve removed 29 rows and 755 columns
+Presolve time: 0.00s
+Presolved: 46 rows, 570 columns, 1095 nonzeros
+Variable types: 546 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.405450e+04, 88 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 54054.5004    0   11 2849450.00 54054.5004  98.1%     -    0s
+H    0     0                    115560.00036 54054.5004  53.2%     -    0s
+H    0     0                    108623.95704 54054.5004  50.2%     -    0s
+H    0     0                    79218.830477 57521.9802  27.4%     -    0s
+     0     0 57521.9802    0    6 79218.8305 57521.9802  27.4%     -    0s
+H    0     0                    73244.336538 57653.6096  21.3%     -    0s
+H    0     0                    61470.708623 57653.6096  6.21%     -    0s
+     0     0 58080.1577    0    9 61470.7086 58080.1577  5.52%     -    0s
+     0     0 58397.1761    0    4 61470.7086 58397.1761  5.00%     -    0s
+H    0     0                    60318.539992 58397.2131  3.19%     -    0s
+     0     0 58397.2131    0    4 60318.5400 58397.2131  3.19%     -    0s
+H    0     0                    60142.509084 58397.2131  2.90%     -    0s
+     0     0 58440.1806    0    2 60142.5091 58440.1806  2.83%     -    0s
+H    0     0                    60112.723935 58440.1806  2.78%     -    0s
+     0     0 58441.8582    0    2 60112.7239 58441.8582  2.78%     -    0s
+     0     0 58536.7533    0    4 60112.7239 58536.7533  2.62%     -    0s
+H    0     0                    59570.836564 58577.3525  1.67%     -    0s
+     0     0 58577.3525    0    5 59570.8366 58577.3525  1.67%     -    0s
+     0     0 58583.4489    0    4 59570.8366 58583.4489  1.66%     -    0s
+     0     0 58605.4053    0    5 59570.8366 58605.4053  1.62%     -    0s
+     0     0 58607.4865    0    6 59570.8366 58607.4865  1.62%     -    0s
+     0     0 58642.4998    0    3 59570.8366 58642.4998  1.56%     -    0s
+     0     0 58654.1607    0    4 59570.8366 58654.1607  1.54%     -    0s
+     0     0 58659.7216    0    3 59570.8366 58659.7216  1.53%     -    0s
+     0     0 58669.5674    0    2 59570.8366 58669.5674  1.51%     -    0s
+     0     0 58672.9179    0    3 59570.8366 58672.9179  1.51%     -    0s
+     0     0 58851.8145    0    5 59570.8366 58851.8145  1.21%     -    0s
+     0     0 59570.8366    0    4 59570.8366 59570.8366  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 38
+  MIR: 8
+  Flow cover: 4
+  Relax-and-lift: 5
+
+Explored 1 nodes (349 simplex iterations) in 0.02 seconds (0.02 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 8: 59570.8 60112.7 61470.7 ... 2.84945e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 5.957083656394e+04, best bound 5.957083656394e+04, gap 0.0000%
+
+User-callback calls 283, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xb7ab313d
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [9e+02, 1e+04]
+Found heuristic solution: objective 2160950.0000
+Presolve removed 30 rows and 781 columns
+Presolve time: 0.00s
+Presolved: 45 rows, 544 columns, 1044 nonzeros
+Variable types: 520 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.051958e+04, 67 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 50519.5807    0    8 2160950.00 50519.5807  97.7%     -    0s
+H    0     0                    96410.080711 50519.5807  47.6%     -    0s
+H    0     0                    96387.796580 50519.5807  47.6%     -    0s
+H    0     0                    61598.340503 50519.5807  18.0%     -    0s
+H    0     0                    54180.755259 54026.4988  0.28%     -    0s
+     0     0 54180.7553    0    2 54180.7553 54180.7553  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 8
+  Flow cover: 1
+
+Explored 1 nodes (115 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 54180.8 61598.3 96387.8 2.16095e+06 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 5.418075525862e+04, best bound 5.418075525862e+04, gap 0.0000%
+
+User-callback calls 202, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x2eec940c
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [7e+02, 9e+03]
+Found heuristic solution: objective 3150200.0000
+Presolve removed 17 rows and 443 columns
+Presolve time: 0.00s
+Presolved: 58 rows, 882 columns, 1707 nonzeros
+Variable types: 858 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.112913e+04, 95 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 51129.1283    0   16 3150200.00 51129.1283  98.4%     -    0s
+H    0     0                    147127.12825 51129.1283  65.2%     -    0s
+H    0     0                    113996.45415 51129.1283  55.1%     -    0s
+H    0     0                    104071.25720 51129.1283  50.9%     -    0s
+H    0     0                    99193.568841 51129.1283  48.5%     -    0s
+H    0     0                    75147.528487 51129.1283  32.0%     -    0s
+     0     0 54003.9966    0   12 75147.5285 54003.9966  28.1%     -    0s
+     0     0 54099.3613    0   12 75147.5285 54099.3613  28.0%     -    0s
+H    0     0                    68660.929703 54477.5770  20.7%     -    0s
+     0     0 54477.5770    0    8 68660.9297 54477.5770  20.7%     -    0s
+H    0     0                    61314.988807 54501.1416  11.1%     -    0s
+H    0     0                    61255.515705 54501.1416  11.0%     -    0s
+H    0     0                    60832.462041 54501.1416  10.4%     -    0s
+     0     0 54617.1745    0    9 60832.4620 54617.1745  10.2%     -    0s
+     0     0 54639.3166    0    9 60832.4620 54639.3166  10.2%     -    0s
+     0     0 54671.9510    0    5 60832.4620 54671.9510  10.1%     -    0s
+     0     0 54810.8437    0    1 60832.4620 54810.8437  9.90%     -    0s
+H    0     0                    60808.843718 54810.8437  9.86%     -    0s
+     0     0 54811.5416    0    2 60808.8437 54811.5416  9.86%     -    0s
+     0     0 54811.5416    0    2 60808.8437 54811.5416  9.86%     -    0s
+H    0     0                    60476.897350 54811.5416  9.37%     -    0s
+H    0     0                    60137.327003 54811.5416  8.86%     -    0s
+H    0     2                    60129.957643 54811.5416  8.84%     -    0s
+     0     2 54811.5416    0    2 60129.9576 54811.5416  8.84%     -    0s
+
+Cutting planes:
+  Implied bound: 108
+  MIR: 3
+  Inf proof: 8
+  Relax-and-lift: 1
+
+Explored 2101 nodes (39606 simplex iterations) in 0.15 seconds (0.29 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 60130 60476.9 60832.5 ... 147127
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.012995764294e+04, best bound 6.012995764294e+04, gap 0.0000%
+
+User-callback calls 4503, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xc5c594a6
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 2e+04]
+Found heuristic solution: objective 3208400.0000
+Presolve removed 24 rows and 625 columns
+Presolve time: 0.00s
+Presolved: 51 rows, 700 columns, 1350 nonzeros
+Variable types: 676 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 8.064899e+04, 84 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 80648.9934    0   13 3208400.00 80648.9934  97.5%     -    0s
+H    0     0                    161064.99337 80648.9934  49.9%     -    0s
+H    0     0                    127603.56224 80648.9934  36.8%     -    0s
+H    0     0                    126224.97765 80648.9934  36.1%     -    0s
+H    0     0                    117474.14808 80648.9934  31.3%     -    0s
+H    0     0                    110484.29186 83935.4337  24.0%     -    0s
+H    0     0                    104351.43369 83935.4337  19.6%     -    0s
+     0     0 83935.4337    0    3 104351.434 83935.4337  19.6%     -    0s
+     0     0 83968.9839    0    3 104351.434 83968.9839  19.5%     -    0s
+H    0     0                    104165.13720 83968.9839  19.4%     -    0s
+H    0     0                    96927.511602 83968.9839  13.4%     -    0s
+     0     0 84011.5116    0    2 96927.5116 84011.5116  13.3%     -    0s
+H    0     0                    89479.089819 84063.0898  6.05%     -    0s
+     0     0 84128.6859    0    2 89479.0898 84128.6859  5.98%     -    0s
+     0     0 84142.1901    0    3 89479.0898 84142.1901  5.96%     -    0s
+H    0     0                    89432.040019 84149.8029  5.91%     -    0s
+H    0     0                    89410.356713 84244.5685  5.78%     -    0s
+H    0     0                    88994.407804 84270.9530  5.31%     -    0s
+     0     0 84270.9530    0    1 88994.4078 84270.9530  5.31%     -    0s
+     0     0 84422.3290    0    3 88994.4078 84422.3290  5.14%     -    0s
+H    0     0                    88986.419569 84607.9457  4.92%     -    0s
+     0     0 84607.9457    0    2 88986.4196 84607.9457  4.92%     -    0s
+     0     0 84700.6675    0    2 88986.4196 84700.6675  4.82%     -    0s
+     0     0 84740.2282    0    2 88986.4196 84740.2282  4.77%     -    0s
+     0     2 84740.2282    0    2 88986.4196 84740.2282  4.77%     -    0s
+
+Cutting planes:
+  Implied bound: 48
+  MIR: 1
+  Relax-and-lift: 3
+
+Explored 131 nodes (2254 simplex iterations) in 0.04 seconds (0.05 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 88986.4 88994.4 96927.5 ... 3.2084e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 8.898641956931e+04, best bound 8.898641956931e+04, gap 0.0000%
+
+User-callback calls 533, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xf341a50f
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 6e+03]
+Found heuristic solution: objective 2785950.0000
+Presolve removed 24 rows and 625 columns
+Presolve time: 0.00s
+Presolved: 51 rows, 700 columns, 1350 nonzeros
+Variable types: 676 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 4.081529e+04, 101 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 40815.2895    0   13 2785950.00 40815.2895  98.5%     -    0s
+H    0     0                    117955.78950 40815.2895  65.4%     -    0s
+H    0     0                    97844.496988 40815.2895  58.3%     -    0s
+H    0     0                    71974.950203 40815.2895  43.3%     -    0s
+H    0     0                    64929.144257 40815.2895  37.1%     -    0s
+H    0     0                    47131.255810 40815.2895  13.4%     -    0s
+     0     0 44630.3338    0    6 47131.2558 44630.3338  5.31%     -    0s
+H    0     0                    46575.675621 44769.0180  3.88%     -    0s
+H    0     0                    46567.140040 44769.0180  3.86%     -    0s
+     0     0 44994.2551    0    5 46567.1400 44994.2551  3.38%     -    0s
+     0     0 45032.2805    0    2 46567.1400 45032.2805  3.30%     -    0s
+     0     0 45045.2904    0    2 46567.1400 45045.2904  3.27%     -    0s
+     0     0 45051.5402    0    2 46567.1400 45051.5402  3.25%     -    0s
+     0     0 45051.5402    0    2 46567.1400 45051.5402  3.25%     -    0s
+     0     0 45092.9168    0    2 46567.1400 45092.9168  3.17%     -    0s
+     0     0 45101.9534    0    1 46567.1400 45101.9534  3.15%     -    0s
+     0     0 45247.3232    0    1 46567.1400 45247.3232  2.83%     -    0s
+     0     0 45247.3232    0    1 46567.1400 45247.3232  2.83%     -    0s
+     0     0 45282.9238    0    1 46567.1400 45282.9238  2.76%     -    0s
+     0     0 45547.5545    0    1 46567.1400 45547.5545  2.19%     -    0s
+     0     0 45547.5545    0    1 46567.1400 45547.5545  2.19%     -    0s
+     0     2 45547.5545    0    1 46567.1400 45547.5545  2.19%     -    0s
+
+Cutting planes:
+  Implied bound: 12
+  MIR: 7
+  Flow cover: 7
+  Relax-and-lift: 8
+
+Explored 60 nodes (952 simplex iterations) in 0.03 seconds (0.04 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 7: 46567.1 47131.3 64929.1 ... 2.78595e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.656714003956e+04, best bound 4.656714003956e+04, gap 0.0000%
+
+User-callback calls 389, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x8a1d8e3c
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [8e+02, 1e+04]
+Found heuristic solution: objective 2576300.0000
+Presolve removed 24 rows and 625 columns
+Presolve time: 0.00s
+Presolved: 51 rows, 700 columns, 1350 nonzeros
+Variable types: 676 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.049725e+04, 124 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 50497.2524    0   11 2576300.00 50497.2524  98.0%     -    0s
+H    0     0                    114734.25241 50497.2524  56.0%     -    0s
+H    0     0                    87453.347779 50497.2524  42.3%     -    0s
+H    0     0                    85612.574753 50497.2524  41.0%     -    0s
+     0     0 51981.4874    0    8 85612.5748 51981.4874  39.3%     -    0s
+H    0     0                    78124.096934 52011.0257  33.4%     -    0s
+H    0     0                    57356.228151 52011.0257  9.32%     -    0s
+     0     0 52183.8105    0    6 57356.2282 52183.8105  9.02%     -    0s
+     0     0 52183.8105    0    3 57356.2282 52183.8105  9.02%     -    0s
+     0     0 52207.2256    0    4 57356.2282 52207.2256  8.98%     -    0s
+H    0     0                    56627.095030 52213.0191  7.79%     -    0s
+     0     0 52213.0191    0    5 56627.0950 52213.0191  7.79%     -    0s
+H    0     0                    56528.166699 52247.1470  7.57%     -    0s
+     0     0 52306.3353    0    4 56528.1667 52306.3353  7.47%     -    0s
+H    0     0                    56378.244713 52489.1087  6.90%     -    0s
+     0     0 52508.0049    0    1 56378.2447 52508.0049  6.86%     -    0s
+     0     0 52583.1090    0    3 56378.2447 52583.1090  6.73%     -    0s
+     0     0 52584.0707    0    3 56378.2447 52584.0707  6.73%     -    0s
+H    0     0                    56254.514361 52584.0707  6.52%     -    0s
+H    0     0                    56232.543395 52584.0707  6.49%     -    0s
+     0     2 52584.0707    0    3 56232.5434 52584.0707  6.49%     -    0s
+
+Cutting planes:
+  Implied bound: 60
+  MIR: 2
+
+Explored 353 nodes (5482 simplex iterations) in 0.05 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 56232.5 56378.2 56528.2 ... 2.5763e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 5.623254339469e+04, best bound 5.623254339469e+04, gap 0.0000%
+
+User-callback calls 973, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xbb0cc291
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 5e+03]
+Found heuristic solution: objective 2838700.0000
+Presolve removed 23 rows and 599 columns
+Presolve time: 0.00s
+Presolved: 52 rows, 726 columns, 1401 nonzeros
+Variable types: 702 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 4.214169e+04, 74 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 42141.6869    0   16 2838700.00 42141.6869  98.5%     -    0s
+H    0     0                    141254.68691 42141.6869  70.2%     -    0s
+H    0     0                    99285.774149 42141.6869  57.6%     -    0s
+H    0     0                    99250.925771 42141.6869  57.5%     -    0s
+H    0     0                    73738.045222 42141.6869  42.8%     -    0s
+     0     0 45828.5772    0    6 73738.0452 45828.5772  37.8%     -    0s
+H    0     0                    68186.831851 46169.3247  32.3%     -    0s
+H    0     0                    51310.180988 46169.3247  10.0%     -    0s
+H    0     0                    51095.786891 46169.3247  9.64%     -    0s
+H    0     0                    48080.023042 46169.3247  3.97%     -    0s
+H    0     0                    47803.626308 46169.3247  3.42%     -    0s
+     0     0 47064.0614    0    7 47803.6263 47064.0614  1.55%     -    0s
+     0     0 47170.5760    0    5 47803.6263 47170.5760  1.32%     -    0s
+     0     0 47250.4240    0    2 47803.6263 47250.4240  1.16%     -    0s
+     0     0 47250.4240    0   10 47803.6263 47250.4240  1.16%     -    0s
+     0     0 47250.4240    0    6 47803.6263 47250.4240  1.16%     -    0s
+     0     0 47250.4240    0    2 47803.6263 47250.4240  1.16%     -    0s
+     0     0 47250.4240    0    2 47803.6263 47250.4240  1.16%     -    0s
+     0     0 47250.4240    0    2 47803.6263 47250.4240  1.16%     -    0s
+     0     0 47313.4705    0    2 47803.6263 47313.4705  1.03%     -    0s
+     0     0 47411.8399    0    2 47803.6263 47411.8399  0.82%     -    0s
+
+Cutting planes:
+  Cover: 1
+  Implied bound: 21
+  MIR: 4
+  Flow cover: 3
+
+Explored 1 nodes (319 simplex iterations) in 0.02 seconds (0.02 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 9: 47803.6 48505.4 51095.8 ... 2.8387e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.780362630825e+04, best bound 4.780362630825e+04, gap 0.0000%
+
+User-callback calls 263, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x26a12265
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [7e+02, 9e+03]
+Found heuristic solution: objective 2456150.0000
+Presolve removed 25 rows and 651 columns
+Presolve time: 0.00s
+Presolved: 50 rows, 674 columns, 1299 nonzeros
+Variable types: 650 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.203445e+04, 88 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 52034.4468    0   10 2456150.00 52034.4468  97.9%     -    0s
+H    0     0                    109972.94677 52034.4468  52.7%     -    0s
+H    0     0                    90794.039681 52034.4468  42.7%     -    0s
+H    0     0                    87749.950338 52034.4468  40.7%     -    0s
+H    0     0                    82734.841512 52034.4468  37.1%     -    0s
+H    0     0                    68348.716454 55716.4474  18.5%     -    0s
+H    0     0                    60851.769273 55716.4474  8.44%     -    0s
+     0     0 55716.4474    0    2 60851.7693 55716.4474  8.44%     -    0s
+H    0     0                    60424.491772 55781.7396  7.68%     -    0s
+     0     0 55781.7396    0    3 60424.4918 55781.7396  7.68%     -    0s
+H    0     0                    60031.289651 55781.7396  7.08%     -    0s
+     0     0 55873.3889    0    3 60031.2897 55873.3889  6.93%     -    0s
+     0     0 56026.1996    0    3 60031.2897 56026.1996  6.67%     -    0s
+     0     0 56057.2072    0    3 60031.2897 56057.2072  6.62%     -    0s
+     0     0 56226.5322    0    4 60031.2897 56226.5322  6.34%     -    0s
+     0     0 56294.4086    0    4 60031.2897 56294.4086  6.22%     -    0s
+     0     2 56294.4086    0    4 60031.2897 56294.4086  6.22%     -    0s
+
+Cutting planes:
+  Implied bound: 24
+  MIR: 1
+  Flow cover: 1
+  Relax-and-lift: 2
+
+Explored 85 nodes (1526 simplex iterations) in 0.03 seconds (0.04 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 7: 60031.3 60424.5 68348.7 ... 2.45615e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.003128965050e+04, best bound 6.003128965050e+04, gap 0.0000%
+
+User-callback calls 422, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xa012e4c2
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [2e+03, 1e+04]
+Found heuristic solution: objective 3736150.0000
+Presolve removed 21 rows and 547 columns
+Presolve time: 0.00s
+Presolved: 54 rows, 778 columns, 1503 nonzeros
+Variable types: 754 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 6.235660e+04, 112 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 62356.5956    0   15 3736150.00 62356.5956  98.3%     -    0s
+H    0     0                    144995.09559 62356.5956  57.0%     -    0s
+H    0     0                    120770.87936 62356.5956  48.4%     -    0s
+H    0     0                    110775.34672 62356.5956  43.7%     -    0s
+H    0     0                    103989.23403 62356.5956  40.0%     -    0s
+H    0     0                    93931.225209 65162.3688  30.6%     -    0s
+     0     0 65162.3688    0    9 93931.2252 65162.3688  30.6%     -    0s
+H    0     0                    87179.273794 65249.2436  25.2%     -    0s
+H    0     0                    76640.160054 65249.2436  14.9%     -    0s
+     0     0 65249.2436    0    9 76640.1601 65249.2436  14.9%     -    0s
+     0     0 65517.7319    0    5 76640.1601 65517.7319  14.5%     -    0s
+H    0     0                    75199.983356 65525.9863  12.9%     -    0s
+H    0     0                    68324.742822 65525.9863  4.10%     -    0s
+     0     0 65604.9576    0    4 68324.7428 65604.9576  3.98%     -    0s
+H    0     0                    65829.221583 65618.9241  0.32%     -    0s
+     0     0 65618.9241    0    6 65829.2216 65618.9241  0.32%     -    0s
+     0     0 65691.9008    0    5 65829.2216 65691.9008  0.21%     -    0s
+     0     0 65691.9153    0    5 65829.2216 65691.9153  0.21%     -    0s
+     0     0 65714.0140    0    2 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0   10 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    8 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    6 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    6 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    4 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    4 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    4 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    3 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0140    0    2 65829.2216 65714.0140  0.18%     -    0s
+     0     0 65714.0191    0    2 65829.2216 65714.0191  0.18%     -    0s
+     0     0 65714.3037    0    3 65829.2216 65714.3037  0.17%     -    0s
+     0     0 65715.5398    0    3 65829.2216 65715.5398  0.17%     -    0s
+     0     0 65715.9633    0    3 65829.2216 65715.9633  0.17%     -    0s
+     0     0 65715.9633    0    5 65829.2216 65715.9633  0.17%     -    0s
+     0     0 65715.9633    0    4 65829.2216 65715.9633  0.17%     -    0s
+     0     0 65829.2216    0    4 65829.2216 65829.2216  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 12
+  MIR: 1
+  Relax-and-lift: 1
+
+Explored 1 nodes (558 simplex iterations) in 0.03 seconds (0.03 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 65829.2 65981.4 68324.7 ... 110775
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.582922158300e+04, best bound 6.582922158300e+04, gap 0.0000%
+
+User-callback calls 325, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xcd215b1d
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 8e+03]
+Found heuristic solution: objective 2699550.0000
+Presolve removed 22 rows and 573 columns
+Presolve time: 0.00s
+Presolved: 53 rows, 752 columns, 1452 nonzeros
+Variable types: 728 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 3.123248e+04, 94 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 31232.4829    0   14 2699550.00 31232.4829  98.8%     -    0s
+H    0     0                    116736.98295 31232.4829  73.2%     -    0s
+H    0     0                    87373.328926 31232.4829  64.3%     -    0s
+H    0     0                    81549.727384 31232.4829  61.7%     -    0s
+H    0     0                    74151.897718 31232.4829  57.9%     -    0s
+H    0     0                    73802.260113 34372.3051  53.4%     -    0s
+H    0     0                    39832.893983 34372.3051  13.7%     -    0s
+     0     0 34372.3051    0    6 39832.8940 34372.3051  13.7%     -    0s
+H    0     0                    38965.650387 34436.7527  11.6%     -    0s
+H    0     0                    38965.296987 34436.7527  11.6%     -    0s
+     0     0 34863.0184    0    3 38965.2970 34863.0184  10.5%     -    0s
+H    0     0                    38473.846305 34863.0184  9.39%     -    0s
+H    0     0                    37969.777610 34863.0184  8.18%     -    0s
+     0     0 35459.3197    0    4 37969.7776 35459.3197  6.61%     -    0s
+     0     0 35724.5854    0    9 37969.7776 35724.5854  5.91%     -    0s
+H    0     0                    37111.843962 35757.5668  3.65%     -    0s
+     0     0 35913.3998    0    1 37111.8440 35913.3998  3.23%     -    0s
+     0     0 35944.1998    0    3 37111.8440 35944.1998  3.15%     -    0s
+     0     0 35945.4785    0    3 37111.8440 35945.4785  3.14%     -    0s
+     0     0 35968.1688    0    1 37111.8440 35968.1688  3.08%     -    0s
+     0     0 35972.2268    0    1 37111.8440 35972.2268  3.07%     -    0s
+     0     0 35972.9568    0    1 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    1 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0   13 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    4 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    3 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    8 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    3 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    3 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    9 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    1 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35972.9568    0    1 37111.8440 35972.9568  3.07%     -    0s
+     0     0 35987.2152    0    2 37111.8440 35987.2152  3.03%     -    0s
+     0     0 35988.4974    0    2 37111.8440 35988.4974  3.03%     -    0s
+     0     0 35988.4974    0    2 37111.8440 35988.4974  3.03%     -    0s
+     0     2 35988.4974    0    2 37111.8440 35988.4974  3.03%     -    0s
+
+Cutting planes:
+  Implied bound: 46
+  MIR: 6
+  Flow cover: 3
+  Relax-and-lift: 1
+
+Explored 70 nodes (1450 simplex iterations) in 0.05 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 37111.8 37969.8 38473.8 ... 116737
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.711184396238e+04, best bound 3.711184396238e+04, gap 0.0000%
+
+User-callback calls 473, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x09adfb0e
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 2e+04]
+Found heuristic solution: objective 4077150.0000
+Presolve removed 26 rows and 677 columns
+Presolve time: 0.00s
+Presolved: 49 rows, 648 columns, 1248 nonzeros
+Variable types: 624 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 1.045883e+05, 112 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 104588.288    0   13 4077150.00 104588.288  97.4%     -    0s
+H    0     0                    176316.78783 104588.288  40.7%     -    0s
+H    0     0                    149247.70270 104588.288  29.9%     -    0s
+H    0     0                    147232.56450 104588.288  29.0%     -    0s
+H    0     0                    141233.42319 104588.288  25.9%     -    0s
+H    0     0                    133889.24446 108836.409  18.7%     -    0s
+     0     0 108836.409    0    5 133889.244 108836.409  18.7%     -    0s
+H    0     0                    127908.59136 108875.981  14.9%     -    0s
+H    0     0                    127067.04230 108875.981  14.3%     -    0s
+H    0     0                    120500.02171 108875.981  9.65%     -    0s
+H    0     0                    113636.51025 108907.879  4.16%     -    0s
+     0     0 108952.263    0    5 113636.510 108952.263  4.12%     -    0s
+H    0     0                    113633.11092 108952.263  4.12%     -    0s
+     0     0 108989.248    0    6 113633.111 108989.248  4.09%     -    0s
+     0     0 108989.248    0    6 113633.111 108989.248  4.09%     -    0s
+     0     0 109121.539    0    6 113633.111 109121.539  3.97%     -    0s
+H    0     0                    113630.43373 109121.539  3.97%     -    0s
+H    0     0                    113433.78571 109121.539  3.80%     -    0s
+H    0     0                    113095.41115 109121.539  3.51%     -    0s
+     0     0 109229.294    0    5 113095.411 109229.294  3.42%     -    0s
+H    0     0                    112873.89390 109238.733  3.22%     -    0s
+     0     0 109238.733    0    5 112873.894 109238.733  3.22%     -    0s
+     0     0 109240.460    0    6 112873.894 109240.460  3.22%     -    0s
+     0     0 109314.502    0    1 112873.894 109314.502  3.15%     -    0s
+     0     0 109324.559    0    3 112873.894 109324.559  3.14%     -    0s
+     0     0 109324.559    0    3 112873.894 109324.559  3.14%     -    0s
+     0     2 109324.559    0    3 112873.894 109324.559  3.14%     -    0s
+
+Cutting planes:
+  Implied bound: 55
+  MIR: 5
+  Relax-and-lift: 1
+
+Explored 349 nodes (6387 simplex iterations) in 0.04 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 112874 113095 113434 ... 147233
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.128738939000e+05, best bound 1.128738939000e+05, gap 0.0000%
+
+User-callback calls 980, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x3aa5f822
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [4e+02, 1e+04]
+Found heuristic solution: objective 2505200.0000
+Presolve removed 24 rows and 625 columns
+Presolve time: 0.00s
+Presolved: 51 rows, 700 columns, 1350 nonzeros
+Variable types: 676 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 6.095940e+04, 89 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 60959.4041    0    8 2505200.00 60959.4041  97.6%     -    0s
+H    0     0                    103407.40409 60959.4041  41.0%     -    0s
+H    0     0                    103335.90434 60959.4041  41.0%     -    0s
+H    0     0                    94335.234198 60959.4041  35.4%     -    0s
+H    0     0                    93885.376871 60959.4041  35.1%     -    0s
+H    0     0                    76391.006663 60959.4041  20.2%     -    0s
+     0     0 64580.9646    0    4 76391.0067 64580.9646  15.5%     -    0s
+H    0     0                    68813.504831 64615.8231  6.10%     -    0s
+     0     0 64769.0019    0    4 68813.5048 64769.0019  5.88%     -    0s
+     0     0 64844.8120    0    4 68813.5048 64844.8120  5.77%     -    0s
+     0     0 64931.6794    0    5 68813.5048 64931.6794  5.64%     -    0s
+     0     0 65063.7112    0    4 68813.5048 65063.7112  5.45%     -    0s
+     0     0 65284.4858    0    3 68813.5048 65284.4858  5.13%     -    0s
+H    0     0                    68643.763278 65775.3297  4.18%     -    0s
+     0     0 66080.0272    0    2 68643.7633 66080.0272  3.73%     -    0s
+     0     0 66693.3513    0    3 68643.7633 66693.3513  2.84%     -    0s
+     0     0 66999.2024    0    3 68643.7633 66999.2024  2.40%     -    0s
+     0     0 67513.9692    0    3 68643.7633 67513.9692  1.65%     -    0s
+     0     0 67557.6221    0    3 68643.7633 67557.6221  1.58%     -    0s
+     0     2 67557.6221    0    3 68643.7633 67557.6221  1.58%     -    0s
+
+Cutting planes:
+  Implied bound: 54
+  MIR: 5
+  Flow cover: 3
+  Relax-and-lift: 1
+
+Explored 56 nodes (1615 simplex iterations) in 0.04 seconds (0.05 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 6: 68643.8 68813.5 76391 ... 2.5052e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.864376327819e+04, best bound 6.864376327819e+04, gap 0.0000%
+
+User-callback calls 375, time in user-callback 0.01 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x2fc87556
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [9e+02, 1e+04]
+Found heuristic solution: objective 3004250.0000
+Presolve removed 23 rows and 599 columns
+Presolve time: 0.00s
+Presolved: 52 rows, 726 columns, 1401 nonzeros
+Variable types: 702 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 6.578798e+04, 94 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 65787.9834    0   12 3004250.00 65787.9834  97.8%     -    0s
+H    0     0                    133245.48335 65787.9834  50.6%     -    0s
+H    0     0                    105876.24482 65787.9834  37.9%     -    0s
+H    0     0                    97227.041967 65787.9834  32.3%     -    0s
+H    0     0                    82896.182818 65787.9834  20.6%     -    0s
+H    0     0                    73131.074682 68817.7855  5.90%     -    0s
+     0     0 68817.7855    0    5 73131.0747 68817.7855  5.90%     -    0s
+     0     0 68897.6461    0    5 73131.0747 68897.6461  5.79%     -    0s
+     0     0 69074.1991    0    6 73131.0747 69074.1991  5.55%     -    0s
+     0     0 69077.9122    0    5 73131.0747 69077.9122  5.54%     -    0s
+     0     0 69079.0489    0    4 73131.0747 69079.0489  5.54%     -    0s
+     0     0 69084.1600    0    1 73131.0747 69084.1600  5.53%     -    0s
+     0     0 69088.5541    0    1 73131.0747 69088.5541  5.53%     -    0s
+     0     0 69088.8885    0    1 73131.0747 69088.8885  5.53%     -    0s
+     0     2 69088.8885    0    1 73131.0747 69088.8885  5.53%     -    0s
+
+Cutting planes:
+  Implied bound: 25
+  MIR: 4
+  Flow cover: 3
+  Relax-and-lift: 1
+
+Explored 168 nodes (2287 simplex iterations) in 0.03 seconds (0.04 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 6: 73131.1 82896.2 97227 ... 3.00425e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.313107468213e+04, best bound 7.313107468213e+04, gap 0.0000%
+
+User-callback calls 584, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x94d01197
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [8e+02, 1e+04]
+Found heuristic solution: objective 2739900.0000
+Presolve removed 28 rows and 729 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 596 columns, 1146 nonzeros
+Variable types: 572 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.991156e+04, 78 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 59911.5641    0    9 2739900.00 59911.5641  97.8%     -    0s
+H    0     0                    107512.56413 59911.5641  44.3%     -    0s
+H    0     0                    100097.75971 59911.5641  40.1%     -    0s
+H    0     0                    93520.303472 59911.5641  35.9%     -    0s
+H    0     0                    86755.577555 59911.5641  30.9%     -    0s
+H    0     0                    86381.765797 64466.7703  25.4%     -    0s
+     0     0 64466.7703    0    7 86381.7658 64466.7703  25.4%     -    0s
+H    0     0                    67783.426045 64550.9526  4.77%     -    0s
+H    0     0                    67148.557061 64550.9526  3.87%     -    0s
+     0     0 64681.1198    0    3 67148.5571 64681.1198  3.67%     -    0s
+H    0     0                    66822.890303 64747.6828  3.11%     -    0s
+     0     0 65078.0428    0    5 66822.8903 65078.0428  2.61%     -    0s
+H    0     0                    66544.872840 65095.8739  2.18%     -    0s
+     0     0 65107.3083    0    5 66544.8728 65107.3083  2.16%     -    0s
+     0     0 65131.1822    0    5 66544.8728 65131.1822  2.12%     -    0s
+     0     0 66105.8211    0    7 66544.8728 66105.8211  0.66%     -    0s
+     0     0 66544.8728    0    6 66544.8728 66544.8728  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 26
+  MIR: 4
+  Flow cover: 3
+
+Explored 1 nodes (207 simplex iterations) in 0.01 seconds (0.01 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 9: 66544.9 66822.9 67148.6 ... 2.7399e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.654487283962e+04, best bound 6.654487283962e+04, gap 0.0000%
+
+User-callback calls 237, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x36a88524
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 2e+04]
+Found heuristic solution: objective 3800200.0000
+Presolve removed 24 rows and 625 columns
+Presolve time: 0.00s
+Presolved: 51 rows, 700 columns, 1350 nonzeros
+Variable types: 676 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 8.443251e+04, 89 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 84432.5117    0   13 3800200.00 84432.5117  97.8%     -    0s
+H    0     0                    158930.51174 84432.5117  46.9%     -    0s
+H    0     0                    132439.43530 84432.5117  36.2%     -    0s
+H    0     0                    129081.96472 84432.5117  34.6%     -    0s
+H    0     0                    122898.31624 87880.2106  28.5%     -    0s
+H    0     0                    115404.45164 87880.2106  23.9%     -    0s
+     0     0 87880.2106    0    3 115404.452 87880.2106  23.9%     -    0s
+H    0     0                    102378.21060 87928.2780  14.1%     -    0s
+H    0     0                    101281.69832 87928.2780  13.2%     -    0s
+H    0     0                    94432.760501 87928.2780  6.89%     -    0s
+     0     0 87973.5817    0    3 94432.7605 87973.5817  6.84%     -    0s
+     0     0 87990.0024    0    1 94432.7605 87990.0024  6.82%     -    0s
+H    0     0                    94262.367906 87990.0024  6.65%     -    0s
+     0     0 88018.7662    0    1 94262.3679 88018.7662  6.62%     -    0s
+     0     0 88032.4716    0    2 94262.3679 88032.4716  6.61%     -    0s
+     0     0 88041.6955    0    1 94262.3679 88041.6955  6.60%     -    0s
+     0     0 88077.3600    0    1 94262.3679 88077.3600  6.56%     -    0s
+     0     0 88083.3925    0    1 94262.3679 88083.3925  6.56%     -    0s
+H    0     0                    93826.132869 88083.3925  6.12%     -    0s
+H    0     0                    93809.714031 88083.3925  6.10%     -    0s
+     0     2 88086.7446    0    1 93809.7140 88086.7446  6.10%     -    0s
+
+Cutting planes:
+  Implied bound: 54
+  MIR: 1
+  Relax-and-lift: 2
+
+Explored 841 nodes (11210 simplex iterations) in 0.06 seconds (0.09 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 8: 93809.7 101282 102378 ... 3.8002e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 9.380971403100e+04, best bound 9.380971403100e+04, gap 0.0000%
+
+User-callback calls 1949, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x4b03d8c9
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e+02, 1e+04]
+Found heuristic solution: objective 2645600.0000
+Presolve removed 20 rows and 521 columns
+Presolve time: 0.00s
+Presolved: 55 rows, 804 columns, 1554 nonzeros
+Variable types: 780 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.955085e+04, 95 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 59550.8519    0   13 2645600.00 59550.8519  97.7%     -    0s
+H    0     0                    138094.85192 59550.8519  56.9%     -    0s
+H    0     0                    104118.79514 59550.8519  42.8%     -    0s
+H    0     0                    96233.307903 59550.8519  38.1%     -    0s
+H    0     0                    93778.276708 59550.8519  36.5%     -    0s
+     0     0 63965.9978    0    6 93778.2767 63965.9978  31.8%     -    0s
+H    0     0                    87446.796305 64123.7314  26.7%     -    0s
+H    0     0                    70191.438292 64123.7314  8.64%     -    0s
+H    0     0                    66886.339260 64452.4985  3.64%     -    0s
+     0     0 64452.4985    0    5 66886.3393 64452.4985  3.64%     -    0s
+H    0     0                    66405.931178 64528.9296  2.83%     -    0s
+     0     0 64610.1346    0    5 66405.9312 64610.1346  2.70%     -    0s
+     0     0 64687.0107    0    4 66405.9312 64687.0107  2.59%     -    0s
+     0     0 64919.5011    0    4 66405.9312 64919.5011  2.24%     -    0s
+     0     0 65331.4032    0    4 66405.9312 65331.4032  1.62%     -    0s
+     0     0 65363.9125    0    5 66405.9312 65363.9125  1.57%     -    0s
+     0     0 65367.1726    0    4 66405.9312 65367.1726  1.56%     -    0s
+     0     0 65823.4107    0    7 66405.9312 65823.4107  0.88%     -    0s
+     0     0 66405.9312    0    7 66405.9312 66405.9312  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 35
+  MIR: 5
+  Flow cover: 2
+
+Explored 1 nodes (290 simplex iterations) in 0.01 seconds (0.02 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 8: 66405.9 70191.4 87446.8 ... 2.6456e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.640593117844e+04, best bound 6.640593117844e+04, gap 0.0000%
+
+User-callback calls 247, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x78ffb935
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e+02, 4e+03]
+Found heuristic solution: objective 1612250.0000
+Presolve removed 25 rows and 651 columns
+Presolve time: 0.00s
+Presolved: 50 rows, 674 columns, 1299 nonzeros
+Variable types: 650 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 1.356201e+04, 83 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 13562.0117    0   11 1612250.00 13562.0117  99.2%     -    0s
+H    0     0                    87439.511699 13562.0117  84.5%     -    0s
+H    0     0                    47311.133781 13562.0117  71.3%     -    0s
+H    0     0                    36065.555310 13562.0117  62.4%     -    0s
+     0     0 14912.7461    0    9 36065.5553 14912.7461  58.7%     -    0s
+H    0     0                    22290.306617 14974.8037  32.8%     -    0s
+     0     0 15401.2694    0   10 22290.3066 15401.2694  30.9%     -    0s
+H    0     0                    22065.514646 15460.9745  29.9%     -    0s
+     0     0 15460.9745    0   10 22065.5146 15460.9745  29.9%     -    0s
+H    0     0                    22045.865231 15460.9745  29.9%     -    0s
+H    0     0                    21763.040874 15460.9745  29.0%     -    0s
+     0     0 15665.7790    0    6 21763.0409 15665.7790  28.0%     -    0s
+     0     0 15694.0604    0    2 21763.0409 15694.0604  27.9%     -    0s
+     0     0 15808.9991    0    1 21763.0409 15808.9991  27.4%     -    0s
+     0     0 15865.6203    0    2 21763.0409 15865.6203  27.1%     -    0s
+     0     0 15865.6203    0    2 21763.0409 15865.6203  27.1%     -    0s
+H    0     0                    21363.504520 15865.6203  25.7%     -    0s
+     0     2 15865.6203    0    2 21363.5045 15865.6203  25.7%     -    0s
+
+Cutting planes:
+  Implied bound: 66
+  MIR: 2
+
+Explored 551 nodes (8114 simplex iterations) in 0.06 seconds (0.09 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 8: 21363.5 21763 22045.9 ... 1.61225e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.136350452012e+04, best bound 2.136350452012e+04, gap 0.0000%
+
+User-callback calls 1376, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x9d6ec914
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [7e+02, 3e+03]
+Found heuristic solution: objective 1523050.0000
+Presolve removed 26 rows and 677 columns
+Presolve time: 0.00s
+Presolved: 49 rows, 648 columns, 1248 nonzeros
+Variable types: 624 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 1.363987e+04, 86 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 13639.8667    0   10 1523050.00 13639.8667  99.1%     -    0s
+H    0     0                    80909.366671 13639.8667  83.1%     -    0s
+H    0     0                    40792.661780 13639.8667  66.6%     -    0s
+H    0     0                    32145.273680 13639.8667  57.6%     -    0s
+H    0     0                    29208.146444 13639.8667  53.3%     -    0s
+H    0     0                    24264.629898 13639.8667  43.8%     -    0s
+     0     0 15326.7233    0    8 24264.6299 15326.7233  36.8%     -    0s
+H    0     0                    23407.416298 15407.1318  34.2%     -    0s
+     0     0 15738.8072    0    9 23407.4163 15738.8072  32.8%     -    0s
+     0     0 15857.9515    0    8 23407.4163 15857.9515  32.3%     -    0s
+     0     0 16281.0641    0    8 23407.4163 16281.0641  30.4%     -    0s
+     0     0 16379.0468    0    8 23407.4163 16379.0468  30.0%     -    0s
+H    0     0                    23295.756525 16379.0468  29.7%     -    0s
+H    0     0                    23124.337180 16806.9422  27.3%     -    0s
+     0     0 16806.9422    0    9 23124.3372 16806.9422  27.3%     -    0s
+     0     0 17066.3893    0    9 23124.3372 17066.3893  26.2%     -    0s
+     0     0 18015.0174    0    1 23124.3372 18015.0174  22.1%     -    0s
+     0     0 18144.7960    0    1 23124.3372 18144.7960  21.5%     -    0s
+     0     0 18144.7960    0    1 23124.3372 18144.7960  21.5%     -    0s
+H    0     0                    23050.247197 18144.7960  21.3%     -    0s
+     0     2 18144.7960    0    1 23050.2472 18144.7960  21.3%     -    0s
+H   63    71                    22717.940214 18144.7960  20.1%  17.3    0s
+
+Cutting planes:
+  Implied bound: 161
+  MIR: 1
+  Relax-and-lift: 5
+
+Explored 599 nodes (11856 simplex iterations) in 0.07 seconds (0.11 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 9: 22717.9 23050.2 23407.4 ... 1.52305e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.271794021363e+04, best bound 2.271794021363e+04, gap 0.0000%
+
+User-callback calls 1479, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xc4273e9b
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 8e+03]
+Found heuristic solution: objective 2347150.0000
+Presolve removed 29 rows and 755 columns
+Presolve time: 0.00s
+Presolved: 46 rows, 570 columns, 1095 nonzeros
+Variable types: 546 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 3.880077e+04, 75 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 38800.7682    0   10 2347150.00 38800.7682  98.3%     -    0s
+H    0     0                    97829.268236 38800.7682  60.3%     -    0s
+H    0     0                    91341.429408 38800.7682  57.5%     -    0s
+H    0     0                    84550.811198 38800.7682  54.1%     -    0s
+H    0     0                    83822.794400 38800.7682  53.7%     -    0s
+H    0     0                    78327.451671 40585.5052  48.2%     -    0s
+H    0     0                    48301.939464 41340.7237  14.4%     -    0s
+     0     0 41340.7237    0    4 48301.9395 41340.7237  14.4%     -    0s
+H    0     0                    47735.159071 41417.7243  13.2%     -    0s
+     0     0 41417.7243    0    4 47735.1591 41417.7243  13.2%     -    0s
+     0     0 41648.0687    0    2 47735.1591 41648.0687  12.8%     -    0s
+     0     0 41668.1510    0    2 47735.1591 41668.1510  12.7%     -    0s
+     0     0 41668.1510    0    3 47735.1591 41668.1510  12.7%     -    0s
+H    0     0                    47684.603511 41668.1510  12.6%     -    0s
+     0     0 41753.7240    0    1 47684.6035 41753.7240  12.4%     -    0s
+     0     0 41832.5932    0    2 47684.6035 41832.5932  12.3%     -    0s
+     0     0 41885.2424    0    3 47684.6035 41885.2424  12.2%     -    0s
+     0     0 41885.2424    0    3 47684.6035 41885.2424  12.2%     -    0s
+H    0     0                    47270.301766 41885.2424  11.4%     -    0s
+     0     2 41885.2424    0    3 47270.3018 41885.2424  11.4%     -    0s
+
+Cutting planes:
+  Implied bound: 59
+  MIR: 3
+  Flow cover: 1
+  Relax-and-lift: 3
+
+Explored 832 nodes (13357 simplex iterations) in 0.06 seconds (0.09 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 8: 47270.3 48301.9 78327.5 ... 2.34715e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.727030176575e+04, best bound 4.727030176575e+04, gap 0.0000%
+
+User-callback calls 1937, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:53 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x6203564b
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e+02, 1e+04]
+Found heuristic solution: objective 2380100.0000
+Presolve removed 24 rows and 625 columns
+Presolve time: 0.00s
+Presolved: 51 rows, 700 columns, 1350 nonzeros
+Variable types: 676 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.297822e+04, 82 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 52978.2236    0    9 2380100.00 52978.2236  97.8%     -    0s
+H    0     0                    104177.22359 52978.2236  49.1%     -    0s
+H    0     0                    77805.577670 52978.2236  31.9%     -    0s
+H    0     0                    70404.498835 52978.2236  24.8%     -    0s
+     0     0 55416.7699    0    8 70404.4988 55416.7699  21.3%     -    0s
+H    0     0                    62345.610159 55523.1591  10.9%     -    0s
+H    0     0                    61610.943959 55523.1591  9.88%     -    0s
+     0     0 55928.0308    0    8 61610.9440 55928.0308  9.22%     -    0s
+     0     0 56074.8244    0    8 61610.9440 56074.8244  8.99%     -    0s
+     0     0 56820.6948    0    8 61610.9440 56820.6948  7.77%     -    0s
+     0     0 57084.0551    0    8 61610.9440 57084.0551  7.35%     -    0s
+     0     0 57339.6623    0    7 61610.9440 57339.6623  6.93%     -    0s
+     0     0 57608.4394    0    8 61610.9440 57608.4394  6.50%     -    0s
+     0     0 57608.4394    0    8 61610.9440 57608.4394  6.50%     -    0s
+     0     0 57662.8245    0    8 61610.9440 57662.8245  6.41%     -    0s
+     0     0 58249.3809    0    1 61610.9440 58249.3809  5.46%     -    0s
+     0     0 58345.6668    0    2 61610.9440 58345.6668  5.30%     -    0s
+     0     0 58345.6668    0    2 61610.9440 58345.6668  5.30%     -    0s
+H    0     0                    61527.699190 58345.6668  5.17%     -    0s
+H    0     0                    61389.167106 58345.6668  4.96%     -    0s
+     0     2 58345.6668    0    2 61389.1671 58345.6668  4.96%     -    0s
+
+Cutting planes:
+  Implied bound: 134
+  MIR: 3
+  Flow cover: 1
+  Inf proof: 1
+  Relax-and-lift: 3
+
+Explored 493 nodes (8006 simplex iterations) in 0.07 seconds (0.12 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 6: 61389.2 62345.6 70404.5 ... 2.3801e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.138916710563e+04, best bound 6.138916710563e+04, gap 0.0000%
+
+User-callback calls 1275, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x38c11645
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [2e+03, 7e+03]
+Found heuristic solution: objective 2448850.0000
+Presolve removed 29 rows and 755 columns
+Presolve time: 0.00s
+Presolved: 46 rows, 570 columns, 1095 nonzeros
+Variable types: 546 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 2.242772e+04, 96 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 22427.7152    0   11 2448850.00 22427.7152  99.1%     -    0s
+H    0     0                    87939.215243 22427.7152  74.5%     -    0s
+H    0     0                    73974.015175 22427.7152  69.7%     -    0s
+H    0     0                    71512.229652 22427.7152  68.6%     -    0s
+H    0     0                    66217.847471 23992.2780  63.8%     -    0s
+     0     0 23992.2780    0    6 66217.8475 23992.2780  63.8%     -    0s
+H    0     0                    59503.778001 24030.5178  59.6%     -    0s
+H    0     0                    58931.776837 24030.5178  59.2%     -    0s
+H    0     0                    36878.467189 24030.5178  34.8%     -    0s
+     0     0 24030.5178    0    5 36878.4672 24030.5178  34.8%     -    0s
+     0     0 24278.0448    0    6 36878.4672 24278.0448  34.2%     -    0s
+H    0     0                    30206.040295 24314.0521  19.5%     -    0s
+     0     0 24338.4917    0    5 30206.0403 24338.4917  19.4%     -    0s
+H    0     0                    29693.731960 24338.4917  18.0%     -    0s
+     0     0 24347.9302    0    4 29693.7320 24347.9302  18.0%     -    0s
+     0     0 24528.5637    0    3 29693.7320 24528.5637  17.4%     -    0s
+H    0     0                    29686.221793 24529.2160  17.4%     -    0s
+     0     0 24580.9067    0    1 29686.2218 24580.9067  17.2%     -    0s
+     0     0 24591.1687    0    3 29686.2218 24591.1687  17.2%     -    0s
+     0     0 24591.1707    0    3 29686.2218 24591.1707  17.2%     -    0s
+     0     0 24592.0994    0    2 29686.2218 24592.0994  17.2%     -    0s
+     0     0 24594.6147    0    3 29686.2218 24594.6147  17.2%     -    0s
+     0     0 24600.5760    0    2 29686.2218 24600.5760  17.1%     -    0s
+     0     0 24630.9013    0    2 29686.2218 24630.9013  17.0%     -    0s
+     0     0 24635.4903    0    2 29686.2218 24635.4903  17.0%     -    0s
+H    0     0                    29675.557852 24635.4903  17.0%     -    0s
+     0     2 24635.4903    0    2 29675.5579 24635.4903  17.0%     -    0s
+H   36    62                    29657.907790 24661.4780  16.8%  14.6    0s
+H 1008   519                    29586.531764 25228.6181  14.7%  10.9    0s
+
+Cutting planes:
+  Implied bound: 47
+  MIR: 4
+  Flow cover: 1
+  Inf proof: 1
+  Relax-and-lift: 2
+
+Explored 3259 nodes (46082 simplex iterations) in 0.13 seconds (0.23 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 29586.5 29657.9 29675.6 ... 71512.2
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.958653176406e+04, best bound 2.958653176406e+04, gap 0.0000%
+
+User-callback calls 6843, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x0da092b1
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e+02, 2e+04]
+Found heuristic solution: objective 3065300.0000
+Presolve removed 26 rows and 677 columns
+Presolve time: 0.00s
+Presolved: 49 rows, 648 columns, 1248 nonzeros
+Variable types: 624 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 7.786773e+04, 76 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 77867.7330    0    8 3065300.00 77867.7330  97.5%     -    0s
+H    0     0                    122214.73298 77867.7330  36.3%     -    0s
+H    0     0                    99968.347144 77867.7330  22.1%     -    0s
+H    0     0                    95762.000216 77867.7330  18.7%     -    0s
+H    0     0                    95404.949216 77867.7330  18.4%     -    0s
+     0     0 80482.5231    0    7 95404.9492 80482.5231  15.6%     -    0s
+     0     0 80673.9054    0    2 95404.9492 80673.9054  15.4%     -    0s
+H    0     0                    87519.404949 80753.6615  7.73%     -    0s
+     0     0 80847.8916    0    2 87519.4049 80847.8916  7.62%     -    0s
+     0     0 81249.2303    0    3 87519.4049 81249.2303  7.16%     -    0s
+     0     0 81624.0638    0    3 87519.4049 81624.0638  6.74%     -    0s
+H    0     0                    87348.173674 81624.0638  6.55%     -    0s
+     0     0 81846.0189    0    3 87348.1737 81846.0189  6.30%     -    0s
+     0     0 82552.7753    0    1 87348.1737 82552.7753  5.49%     -    0s
+     0     0 82775.4464    0    1 87348.1737 82775.4464  5.24%     -    0s
+     0     0 82784.1251    0    1 87348.1737 82784.1251  5.23%     -    0s
+H    0     0                    86316.056708 82784.1251  4.09%     -    0s
+     0     2 82784.1251    0    1 86316.0567 82784.1251  4.09%     -    0s
+
+Cutting planes:
+  Implied bound: 87
+  MIR: 3
+  Flow cover: 2
+  Relax-and-lift: 1
+
+Explored 362 nodes (5758 simplex iterations) in 0.04 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 7: 86316.1 87348.2 95404.9 ... 3.0653e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 8.631605670806e+04, best bound 8.631605670806e+04, gap 0.0000%
+
+User-callback calls 988, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x72687910
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [8e+02, 7e+03]
+Found heuristic solution: objective 2389050.0000
+Presolve removed 25 rows and 651 columns
+Presolve time: 0.00s
+Presolved: 50 rows, 674 columns, 1299 nonzeros
+Variable types: 650 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 3.396239e+04, 85 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 33962.3870    0   11 2389050.00 33962.3870  98.6%     -    0s
+H    0     0                    100071.88700 33962.3870  66.1%     -    0s
+H    0     0                    93463.371825 33962.3870  63.7%     -    0s
+H    0     0                    79272.862561 33962.3870  57.2%     -    0s
+H    0     0                    70704.244562 37586.8294  46.8%     -    0s
+     0     0 37586.8294    0    4 70704.2446 37586.8294  46.8%     -    0s
+H    0     0                    58696.329356 37741.1855  35.7%     -    0s
+H    0     0                    45142.280966 37741.1855  16.4%     -    0s
+     0     0 37893.4831    0    2 45142.2810 37893.4831  16.1%     -    0s
+H    0     0                    44002.983129 38076.0810  13.5%     -    0s
+H    0     0                    44002.571961 38076.0810  13.5%     -    0s
+     0     0 38076.0810    0    2 44002.5720 38076.0810  13.5%     -    0s
+H    0     0                    43418.841438 38076.0810  12.3%     -    0s
+H    0     0                    43007.197185 38076.0810  11.5%     -    0s
+H    0     0                    42317.778967 38076.0810  10.0%     -    0s
+     0     0 38478.9286    0    3 42317.7790 38478.9286  9.07%     -    0s
+     0     0 38665.7195    0    3 42317.7790 38665.7195  8.63%     -    0s
+     0     0 38727.9805    0    5 42317.7790 38727.9805  8.48%     -    0s
+     0     0 38757.1675    0    5 42317.7790 38757.1675  8.41%     -    0s
+H    0     0                    42283.869103 38857.3488  8.10%     -    0s
+     0     2 38857.3488    0    5 42283.8691 38857.3488  8.10%     -    0s
+
+Cutting planes:
+  Implied bound: 18
+  MIR: 3
+  Relax-and-lift: 1
+
+Explored 274 nodes (3094 simplex iterations) in 0.04 seconds (0.05 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 9: 42283.9 43007.2 45142.3 ... 2.38905e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.228386910256e+04, best bound 4.228386910256e+04, gap 0.0000%
+
+User-callback calls 813, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x6d9945d7
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 6e+03]
+Found heuristic solution: objective 2066550.0000
+Presolve removed 27 rows and 703 columns
+Presolve time: 0.00s
+Presolved: 48 rows, 622 columns, 1197 nonzeros
+Variable types: 598 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 2.679626e+04, 68 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 26796.2576    0   11 2066550.00 26796.2576  98.7%     -    0s
+H    0     0                    96130.757583 26796.2576  72.1%     -    0s
+H    0     0                    61258.027773 26796.2576  56.3%     -    0s
+H    0     0                    48959.297735 26796.2576  45.3%     -    0s
+H    0     0                    41474.520622 26796.2576  35.4%     -    0s
+H    0     0                    31250.222737 26796.2576  14.3%     -    0s
+H    0     0                    30671.657458 28948.7464  5.62%     -    0s
+     0     0 28948.7464    0    5 30671.6575 28948.7464  5.62%     -    0s
+     0     0 29219.1823    0    4 30671.6575 29219.1823  4.74%     -    0s
+     0     0 29432.0023    0    6 30671.6575 29432.0023  4.04%     -    0s
+H    0     0                    30493.213443 29544.9848  3.11%     -    0s
+     0     0 29544.9848    0    6 30493.2134 29544.9848  3.11%     -    0s
+     0     0 29703.7876    0    4 30493.2134 29703.7876  2.59%     -    0s
+     0     0 29826.4668    0    4 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    5 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    5 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    5 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    5 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    6 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    4 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    5 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29826.4668    0    3 30493.2134 29826.4668  2.19%     -    0s
+     0     0 29989.9163    0    3 30493.2134 29989.9163  1.65%     -    0s
+     0     0 30493.2134    0    3 30493.2134 30493.2134  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 33
+  MIR: 3
+  Relax-and-lift: 1
+
+Explored 1 nodes (325 simplex iterations) in 0.02 seconds (0.02 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 8: 30493.2 30671.7 37220 ... 2.06655e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.049321344319e+04, best bound 3.049321344319e+04, gap 0.0000%
+
+User-callback calls 282, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xdf4d44ae
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [7e+02, 3e+03]
+Found heuristic solution: objective 1750650.0000
+Presolve removed 22 rows and 573 columns
+Presolve time: 0.00s
+Presolved: 53 rows, 752 columns, 1452 nonzeros
+Variable types: 728 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 1.573013e+04, 84 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 15730.1321    0   11 1750650.00 15730.1321  99.1%     -    0s
+H    0     0                    88223.632072 15730.1321  82.2%     -    0s
+H    0     0                    53769.069690 15730.1321  70.7%     -    0s
+H    0     0                    51191.055767 15730.1321  69.3%     -    0s
+H    0     0                    44179.166117 15730.1321  64.4%     -    0s
+H    0     0                    43854.738036 15922.6819  63.7%     -    0s
+     0     0 17215.7770    0   10 43854.7380 17215.7770  60.7%     -    0s
+H    0     0                    37019.985056 17278.7445  53.3%     -    0s
+H    0     0                    29822.880400 17278.7445  42.1%     -    0s
+     0     0 17278.7445    0   10 29822.8804 17278.7445  42.1%     -    0s
+H    0     0                    22804.831173 17278.7445  24.2%     -    0s
+     0     0 17784.2580    0   10 22804.8312 17784.2580  22.0%     -    0s
+     0     0 17899.9812    0    4 22804.8312 17899.9812  21.5%     -    0s
+H    0     0                    22711.832743 18000.2465  20.7%     -    0s
+     0     0 18000.2465    0    4 22711.8327 18000.2465  20.7%     -    0s
+H    0     0                    22674.681087 18003.5254  20.6%     -    0s
+     0     0 18200.5631    0    1 22674.6811 18200.5631  19.7%     -    0s
+     0     0 18203.2962    0    2 22674.6811 18203.2962  19.7%     -    0s
+     0     0 18203.8896    0    2 22674.6811 18203.8896  19.7%     -    0s
+H    0     0                    22649.232119 18203.8896  19.6%     -    0s
+     0     2 18203.8896    0    2 22649.2321 18203.8896  19.6%     -    0s
+*  168   118              12    22577.135259 18300.5641  18.9%  12.2    0s
+
+Cutting planes:
+  Implied bound: 74
+  MIR: 1
+  Relax-and-lift: 3
+
+Explored 532 nodes (9890 simplex iterations) in 0.06 seconds (0.10 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 22577.1 22649.2 22804.8 ... 88223.6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.257713525881e+04, best bound 2.257713525881e+04, gap 0.0000%
+
+User-callback calls 1344, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x9ffbf7b5
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [8e+02, 2e+04]
+Found heuristic solution: objective 3798900.0000
+Presolve removed 14 rows and 365 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 960 columns, 1860 nonzeros
+Variable types: 936 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 7.981982e+04, 85 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 79819.8156    0   16 3798900.00 79819.8156  97.9%     -    0s
+H    0     0                    176830.81560 79819.8156  54.9%     -    0s
+H    0     0                    149966.29449 79819.8156  46.8%     -    0s
+H    0     0                    148792.10801 79819.8156  46.4%     -    0s
+H    0     0                    144232.35068 79819.8156  44.7%     -    0s
+H    0     0                    112148.55207 79819.8156  28.8%     -    0s
+     0     0 84331.4402    0    9 112148.552 84331.4402  24.8%     -    0s
+     0     0 84395.3820    0    9 112148.552 84395.3820  24.7%     -    0s
+H    0     0                    106023.20600 84784.5516  20.0%     -    0s
+     0     0 84789.6408    0    5 106023.206 84789.6408  20.0%     -    0s
+H    0     0                    92419.947101 84789.6408  8.26%     -    0s
+H    0     0                    92338.849910 84789.6408  8.18%     -    0s
+H    0     0                    91967.788134 84789.6408  7.81%     -    0s
+H    0     0                    91930.720381 84789.6408  7.77%     -    0s
+     0     0 84789.6408    0    5 91930.7204 84789.6408  7.77%     -    0s
+     0     0 84889.8455    0    6 91930.7204 84889.8455  7.66%     -    0s
+     0     0 84913.8289    0    4 91930.7204 84913.8289  7.63%     -    0s
+H    0     0                    91903.386315 84913.8289  7.61%     -    0s
+     0     0 84931.1763    0    1 91903.3863 84931.1763  7.59%     -    0s
+H    0     0                    91850.005774 84932.0617  7.53%     -    0s
+H    0     0                    91846.491800 84932.0617  7.53%     -    0s
+H    0     0                    91804.003250 84932.0617  7.49%     -    0s
+     0     0 84950.2816    0    1 91804.0033 84950.2816  7.47%     -    0s
+     0     0 84950.2816    0    1 91804.0033 84950.2816  7.47%     -    0s
+H    0     0                    91304.903762 84950.2816  6.96%     -    0s
+H    0     0                    91034.116423 84950.2816  6.68%     -    0s
+H    0     0                    90807.490535 84950.2816  6.45%     -    0s
+     0     2 84950.3643    0    1 90807.4905 84950.3643  6.45%     -    0s
+H   26    55                    90648.077607 84963.6158  6.27%  16.0    0s
+H   36    55                    90637.179729 84986.7239  6.23%  13.0    0s
+H  880   380                    90611.620399 85565.3344  5.57%  12.9    0s
+H  898   380                    90601.735327 85573.6340  5.55%  12.9    0s
+
+Cutting planes:
+  Implied bound: 65
+  Flow cover: 2
+  Inf proof: 4
+  Relax-and-lift: 2
+
+Explored 3137 nodes (44189 simplex iterations) in 0.17 seconds (0.29 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 90601.7 91034.1 91804 ... 144232
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 9.060173532675e+04, best bound 9.060173532675e+04, gap 0.0000%
+
+User-callback calls 6600, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x23573465
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 1e+04]
+Found heuristic solution: objective 3040600.0000
+Presolve removed 27 rows and 703 columns
+Presolve time: 0.00s
+Presolved: 48 rows, 622 columns, 1197 nonzeros
+Variable types: 598 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 6.597117e+04, 72 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 65971.1742    0   12 3040600.00 65971.1742  97.8%     -    0s
+H    0     0                    133065.17416 65971.1742  50.4%     -    0s
+H    0     0                    110303.71846 65971.1742  40.2%     -    0s
+H    0     0                    110269.05998 65971.1742  40.2%     -    0s
+H    0     0                    104662.83469 65971.1742  37.0%     -    0s
+H    0     0                    98046.941180 69228.0852  29.4%     -    0s
+     0     0 69228.0852    0    7 98046.9412 69228.0852  29.4%     -    0s
+H    0     0                    98042.467550 69244.6079  29.4%     -    0s
+     0     0 69557.5522    0    8 98042.4676 69557.5522  29.1%     -    0s
+H    0     0                    91216.052115 69580.2687  23.7%     -    0s
+H    0     0                    84044.857324 69580.2687  17.2%     -    0s
+H    0     0                    77059.283796 69580.2687  9.71%     -    0s
+H    0     0                    75774.329474 69580.2687  8.17%     -    0s
+     0     0 69633.7323    0    9 75774.3295 69633.7323  8.10%     -    0s
+     0     0 69728.2798    0    8 75774.3295 69728.2798  7.98%     -    0s
+     0     0 69802.3309    0    8 75774.3295 69802.3309  7.88%     -    0s
+     0     0 69804.8239    0    7 75774.3295 69804.8239  7.88%     -    0s
+     0     0 69918.8952    0    8 75774.3295 69918.8952  7.73%     -    0s
+H    0     0                    75766.010659 69932.3750  7.70%     -    0s
+     0     0 69932.5516    0    9 75766.0107 69932.5516  7.70%     -    0s
+     0     0 69937.2364    0    8 75766.0107 69937.2364  7.69%     -    0s
+     0     0 70050.1417    0    3 75766.0107 70050.1417  7.54%     -    0s
+     0     0 70066.3606    0    3 75766.0107 70066.3606  7.52%     -    0s
+     0     0 70067.3667    0    3 75766.0107 70067.3667  7.52%     -    0s
+     0     0 70121.9148    0    5 75766.0107 70121.9148  7.45%     -    0s
+     0     0 70131.2319    0    5 75766.0107 70131.2319  7.44%     -    0s
+     0     2 70131.2319    0    5 75766.0107 70131.2319  7.44%     -    0s
+H  629     0                    75764.837149 70932.8813  6.38%  17.7    0s
+
+Cutting planes:
+  Implied bound: 60
+  MIR: 7
+  Flow cover: 4
+  Inf proof: 2
+  Relax-and-lift: 1
+
+Explored 674 nodes (12076 simplex iterations) in 0.08 seconds (0.12 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 75764.8 77059.3 84044.9 ... 3.0406e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.576483714856e+04, best bound 7.576483714856e+04, gap 0.0000%
+
+User-callback calls 1653, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xc031348c
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [8e+02, 6e+03]
+Found heuristic solution: objective 2582100.0000
+Presolve removed 22 rows and 573 columns
+Presolve time: 0.00s
+Presolved: 53 rows, 752 columns, 1452 nonzeros
+Variable types: 728 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 3.494391e+04, 108 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 34943.9071    0   15 2582100.00 34943.9071  98.6%     -    0s
+H    0     0                    129122.90715 34943.9071  72.9%     -    0s
+H    0     0                    87694.883884 34943.9071  60.2%     -    0s
+H    0     0                    84853.489080 34943.9071  58.8%     -    0s
+H    0     0                    77982.783732 38835.2146  50.2%     -    0s
+H    0     0                    42880.583731 38835.2146  9.43%     -    0s
+     0     0 38835.2146    0    5 42880.5837 38835.2146  9.43%     -    0s
+     0     0 39463.6491    0    3 42880.5837 39463.6491  7.97%     -    0s
+H    0     0                    42858.740386 39463.6491  7.92%     -    0s
+     0     0 39463.6491    0    3 42858.7404 39463.6491  7.92%     -    0s
+     0     0 39797.9785    0    5 42858.7404 39797.9785  7.14%     -    0s
+     0     0 40030.7954    0    1 42858.7404 40030.7954  6.60%     -    0s
+     0     0 40044.2749    0    1 42858.7404 40044.2749  6.57%     -    0s
+     0     0 40050.4121    0    3 42858.7404 40050.4121  6.55%     -    0s
+     0     0 40050.4121    0    3 42858.7404 40050.4121  6.55%     -    0s
+H    0     0                    42803.425649 40050.4121  6.43%     -    0s
+H    0     0                    42798.817360 40050.4121  6.42%     -    0s
+     0     2 40050.4121    0    3 42798.8174 40050.4121  6.42%     -    0s
+*  185    59               7    42678.480063 40537.7063  5.02%  13.1    0s
+
+Cutting planes:
+  Implied bound: 44
+  MIR: 5
+
+Explored 320 nodes (5275 simplex iterations) in 0.05 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 9: 42678.5 42798.8 42858.7 ... 2.5821e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.267848006337e+04, best bound 4.267848006337e+04, gap 0.0000%
+
+User-callback calls 906, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x5a2f0b51
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 2e+04]
+Found heuristic solution: objective 3471750.0000
+Presolve removed 20 rows and 521 columns
+Presolve time: 0.00s
+Presolved: 55 rows, 804 columns, 1554 nonzeros
+Variable types: 780 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 8.040423e+04, 95 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 80404.2347    0   12 3471750.00 80404.2347  97.7%     -    0s
+H    0     0                    150686.73468 80404.2347  46.6%     -    0s
+H    0     0                    136827.22775 80404.2347  41.2%     -    0s
+H    0     0                    135881.78361 80404.2347  40.8%     -    0s
+H    0     0                    131195.73321 80910.1765  38.3%     -    0s
+H    0     0                    121695.59566 84026.7361  31.0%     -    0s
+H    0     0                    114219.57388 84026.7361  26.4%     -    0s
+H    0     0                    109309.23614 84026.7361  23.1%     -    0s
+     0     0 84026.7361    0    4 109309.236 84026.7361  23.1%     -    0s
+H    0     0                    107901.33982 84045.2546  22.1%     -    0s
+H    0     0                    100557.19180 84045.2546  16.4%     -    0s
+     0     0 84154.5691    0    4 100557.192 84154.5691  16.3%     -    0s
+H    0     0                    93260.847164 84154.5691  9.76%     -    0s
+H    0     0                    87497.610853 84154.5691  3.82%     -    0s
+H    0     0                    87166.409283 84154.5691  3.46%     -    0s
+     0     0 84309.6800    0    4 87166.4093 84309.6800  3.28%     -    0s
+     0     0 84309.6800    0    4 87166.4093 84309.6800  3.28%     -    0s
+H    0     0                    86892.420861 84309.6800  2.97%     -    0s
+     0     0 84312.0538    0    6 86892.4209 84312.0538  2.97%     -    0s
+H    0     0                    86864.121444 84323.1224  2.93%     -    0s
+H    0     0                    86735.271059 84323.1224  2.78%     -    0s
+     0     0 84323.1224    0    6 86735.2711 84323.1224  2.78%     -    0s
+     0     0 84492.6025    0    2 86735.2711 84492.6025  2.59%     -    0s
+     0     0 84559.3688    0    2 86735.2711 84559.3688  2.51%     -    0s
+     0     0 84602.6732    0    2 86735.2711 84602.6732  2.46%     -    0s
+     0     0 84610.7832    0    4 86735.2711 84610.7832  2.45%     -    0s
+     0     0 84655.3740    0    4 86735.2711 84655.3740  2.40%     -    0s
+     0     2 84655.3740    0    4 86735.2711 84655.3740  2.40%     -    0s
+
+Cutting planes:
+  Implied bound: 56
+  MIR: 3
+  Flow cover: 1
+  Relax-and-lift: 3
+
+Explored 77 nodes (2143 simplex iterations) in 0.04 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 10: 86735.3 87166.4 87497.6 ... 131196
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 8.673527105906e+04, best bound 8.673527105906e+04, gap 0.0000%
+
+User-callback calls 436, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Sat Sep 27 11:08:54 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_true/L30/phase1/scenario_generation.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G222)
+
+CPU model: Apple M3
+Thread count: 8 physical cores, 8 logical processors, using up to 8 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x5fb9a9ca
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+03, 7e+03]
+Found heuristic solution: objective 2276550.0000
+Presolve removed 31 rows and 807 columns
+Presolve time: 0.00s
+Presolved: 44 rows, 518 columns, 993 nonzeros
+Variable types: 494 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 3.270961e+04, 98 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 32709.6149    0   10 2276550.00 32709.6149  98.6%     -    0s
+H    0     0                    92444.114911 32709.6149  64.6%     -    0s
+H    0     0                    79319.649524 32709.6149  58.8%     -    0s
+H    0     0                    63002.596508 35568.8540  43.5%     -    0s
+     0     0 35568.8540    0    2 63002.5965 35568.8540  43.5%     -    0s
+H    0     0                    42803.353965 35617.8834  16.8%     -    0s
+H    0     0                    42539.635478 35617.8834  16.3%     -    0s
+     0     0 35642.0084    0    2 42539.6355 35642.0084  16.2%     -    0s
+H    0     0                    42498.139479 35642.0084  16.1%     -    0s
+H    0     0                    41954.600368 35642.0084  15.0%     -    0s
+     0     0 35690.4623    0    1 41954.6004 35690.4623  14.9%     -    0s
+     0     0 35717.1268    0    1 41954.6004 35717.1268  14.9%     -    0s
+     0     0 35717.1268    0    1 41954.6004 35717.1268  14.9%     -    0s
+H    0     0                    41900.725172 35717.1268  14.8%     -    0s
+     0     2 35717.1268    0    1 41900.7252 35717.1268  14.8%     -    0s
+
+Cutting planes:
+  Implied bound: 16
+  MIR: 2
+
+Explored 566 nodes (6167 simplex iterations) in 0.04 seconds (0.06 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 7: 41900.7 42498.1 42539.6 ... 2.27655e+06
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.190072517225e+04, best bound 4.190072517225e+04, gap 0.0000%
+
+User-callback calls 1383, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 1: SCENARIO GENERATION (L30)
+============================================================
+Parameters:
+  bernoulli_case: true
+  nloc: 25
+  ncust: 50
+  nscen: 30
+
+Results:
+  total_scenarios: 30
+  unique_solutions: 30
+============================================================

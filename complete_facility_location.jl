@@ -360,7 +360,7 @@ function main()
     end
     unmet_pen = 50
     scaling_factor = 0.000015
-    bernoulli_case = false
+    bernoulli_case = true
     nscen_list = [30, 50, 100]  # List of nscen values to test
     nsamples = 100  # Number of online samples
     test_samples = 100  # Number of test samples
@@ -377,7 +377,9 @@ function main()
     
     # Create directory structure for common and nscen-specific logs
     base_log_path = "Logs/Facility Location Logs"
-    common_log_path = "$(base_log_path)/common"
+    bernoulli_suffix = bernoulli_case ? "bernoulli_true" : "bernoulli_false"
+    bernoulli_log_path = "$(base_log_path)/$(bernoulli_suffix)"
+    common_log_path = "$(bernoulli_log_path)/common"
     
     # Create common directory
     if !isdir(common_log_path)
@@ -386,7 +388,7 @@ function main()
     
     # Create nscen-specific directories
     for nscen in nscen_list
-        nscen_log_path = "$(base_log_path)/L$(nscen)"
+        nscen_log_path = "$(bernoulli_log_path)/L$(nscen)"
         for phase in ["phase1", "phase2", "phase3"]
             phase_dir = "$(nscen_log_path)/$(phase)"
             if !isdir(phase_dir)
@@ -471,7 +473,7 @@ function main()
         println("="^80)
         
         # Set up nscen-specific log files
-        nscen_log_path = "$(base_log_path)/L$(nscen)"
+        nscen_log_path = "$(bernoulli_log_path)/L$(nscen)"
         scenario_generation_log = "$(nscen_log_path)/phase1/scenario_generation.log"
         decoupling_calculations_log = "$(nscen_log_path)/phase2/decoupling_calculations.log"
         
@@ -646,7 +648,7 @@ function main()
     
     println("="^80)
     println("ALL EXPERIMENTS COMPLETED!")
-    println("Results saved in: Logs/Facility Location Logs/")
+    println("Results saved in: Logs/Facility Location Logs/$(bernoulli_suffix)/")
     println("="^80)
     
     return nothing
