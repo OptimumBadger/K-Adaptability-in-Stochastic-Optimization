@@ -16,6 +16,8 @@ using Distributions
 using DataFrames
 using PowerModels
 
+Random.seed!(1234)
+
 # =============================================================================
 # DATA READING FUNCTIONS
 # =============================================================================
@@ -283,21 +285,221 @@ function powerflow_compact(K::Int, S::Int, variance_type::String;
     end
 end
 
+### alternative compact formulation that follows Malaguti approach
+function powerflow_compact_2(K::Int, S::Int, variance_type::String; 
+                          file_path::String="case118Blumsack.m",
+                          demand_file::String="Random_Demands.xlsx",
+                          worksheet_name::String="case118")
+    
+    println("="^80)
+    println("COMPACT POWERFLOW FORMULATION")
+    println("="^80)
+    println("Instance: $(basename(file_path))")
+    println("K (candidate solutions): $K")
+    println("S (scenarios): $S")
+    println("Variance type: $variance_type")
+    
+    # Load network using PowerModels (TS1 style)
+    println("  Loading MATPOWER case via PowerModels...")
+    network = load_network(file_path)
+    B_ij, fbar_ij, p_max, p_min, A, c_i = parameters(network)
+    
+    nbus = length(network["bus"])
+    nbranch = length(network["branch"])
+    ngen = length(network["gen"])
+    
+    # Build fbus/tbus arrays for constraints
+    fbus = Vector{Int}(undef, nbranch)
+    tbus = Vector{Int}(undef, nbranch)
+    for (branch_id, branch) in network["branch"]
+        idx = parse(Int, branch_id)
+        fbus[idx] = branch["f_bus"]
+        tbus[idx] = branch["t_bus"]
+    end
+    
+    # Big-M and penalties
+    M_ij = -12.6 .* B_ij
+    unmet = 5000
+    rate_a = fbar_ij
+    
+    println("  Instance loaded: $nbus buses, $ngen generators, $nbranch branches")
+    
+    # Read demand data
+    println("  Reading demand data from Excel...")
+    demand_mean = load_demand_data(demand_file, worksheet_name)
+    println("  Demand data loaded: $(length(demand_mean)) values")
+    
+    # Generate scenarios
+    println("  Generating $S scenarios with variance type: $variance_type")
+    scenarios = []
+    for s in 1:S
+        scenario_demand = generate_demand_scenario(nbus, demand_mean, variance_type)
+        push!(scenarios, scenario_demand)
+    end
+    println("  Generated $(length(scenarios)) scenarios successfully")
+    
+    # Create model
+    model = Model(Gurobi.Optimizer)
+    set_optimizer_attribute(model, "OutputFlag", 1)
+    set_optimizer_attribute(model, "LogToConsole", 1)
+    set_optimizer_attribute(model, "WorkLimit", 10000)
+    
+    # Set log file
+    log_filename = "case118K$(K)S$(S)_$(variance_type).log"
+    set_optimizer_attribute(model, "LogFile", log_filename)
+    
+    # Decision Variables
+    @variable(model, p_g[1:K, 1:nbus, 1:S] >= 0)  # Power generation
+    @variable(model, lin_p_g[1:K, 1:nbus, 1:S] >= 0)  # Linearized Power generation
+	 
+    @variable(model, f_ij[1:K, 1:nbranch, 1:S])   # Power flow (free)
+    @variable(model, theta[1:K, 1:nbus, 1:S])     # Voltage angles (free)
+    @variable(model, s_i[1:K, 1:nbus, 1:S] >= 0)  # Load shedding
+	 @variable(model, lin_s_i[1:K, 1:nbus, 1:S] >= 0) # linearized load shedding
+
+    @variable(model, x_ij[1:nbranch, 1:K], Bin)  # Line status in candidate solutions
+   # @variable(model, q_ij[1:K, 1:nbranch, 1:S], Bin)  # Line status in scenarios
+    @variable(model, w_sk[1:S, 1:K], Bin)    # Scenario assignment
+    
+    # Objective function
+    @objective(model, Min, 
+        (1/S) * sum(c_i[i] * lin_p_g[k,i, s] for i in 1:nbus, s in 1:S, k in 1:K) +
+        (1/S) * 5000 * sum(lin_s_i[k,i, s] for i in 1:nbus, s in 1:S, k in 1:K)
+    )
+    
+    # Constraints
+    
+    # 1. Power balance constraint (TS1 style: outgoing - incoming)
+    for s in 1:S
+        for i in 1:nbus
+		  	 	for k in 1:K
+            	@constraint(model,
+                p_g[k, i, s] - scenarios[s][i] ==
+                (sum(f_ij[k,j, s] for j in 1:nbranch if fbus[j] == i) -
+                 sum(f_ij[k,j, s] for j in 1:nbranch if tbus[j] == i)) - s_i[k,i, s]
+            )
+				end
+        end
+    end
+    
+    # 2. Generator limits
+    @constraint(model, [k in 1:K, i in 1:nbus, s in 1:S], p_g[k,i, s] >= p_min[i])
+    @constraint(model, [k in 1:K, i in 1:nbus, s in 1:S], p_g[k, i, s] <= p_max[i])
+    
+    # 3. Line flow limits
+    @constraint(model, [k in 1:K, j in 1:nbranch, s in 1:S],
+        f_ij[k,j, s] >= -fbar_ij[j] * x_ij[j,k]
+    )
+    @constraint(model, [k in 1:K, j in 1:nbranch, s in 1:S],
+        f_ij[k, j, s] <= fbar_ij[j] * x_ij[j,k]
+    )
+    
+    # 4. DC power flow approximation with big-M
+    @constraint(model, [k in 1:K, j in 1:nbranch, s in 1:S],
+        f_ij[k,j, s] >= B_ij[j] * (theta[k, fbus[j], s] - theta[k, tbus[j], s]) - M_ij[j] * (1 - x_ij[j, k])
+    )
+    @constraint(model, [k in 1:K, j in 1:nbranch, s in 1:S],
+        f_ij[k, j, s] <= B_ij[j] * (theta[k, fbus[j], s] - theta[k, tbus[j], s]) + M_ij[j] * (1 - x_ij[j,k])
+    )
+    
+    # 5. Scenario assignment constraint
+    @constraint(model, [s in 1:S],
+        sum(w_sk[s, k] for k in 1:K) == 1
+    )
+    
+    # 6. Line status linking constraints (q_{ij}[k,j,s] not needed for this form bc x doesn't appear in objective)
+  #  @constraint(model, [j in 1:nbranch, k in 1:K, s in 1:S],
+   #     x_ij[j, k] - q_ij[k, j, s] <= 1 - w_sk[s, k]
+    #)
+   # @constraint(model, [j in 1:nbranch, k in 1:K, s in 1:S],
+   #     x_ij[j, k] - q_ij[k, j, s] >= w_sk[s, k] - 1
+   # )
+    
+	## power gen linearization constraints
+	@constraint(model, [k in 1:K, i in 1:nbus, s in 1:S],
+        lin_p_g[k,i, s] <= p_g[k,i,s] 
+	)
+	@constraint(model, [k in 1:K, i in 1:nbus, s in 1:S],
+        lin_p_g[k,i, s] <= p_max[i]*w_sk[s,k]  
+	)
+	@constraint(model, [k in 1:K, i in 1:nbus, s in 1:S],
+        lin_p_g[k,i, s] >= p_g[k,i,s] - p_max[i]*(1-w_sk[s,k] ) 
+	)
+
+	## shortfall linearization constraints
+	@constraint(model, [k in 1:K, i in 1:nbus, s in 1:S],
+        lin_s_i[k,i, s] <= s_i[k,i,s] 
+	)
+	@constraint(model, [k in 1:K, i in 1:nbus, s in 1:S],
+        lin_s_i[k,i, s] <= scenarios[s][i]*w_sk[s,k]  
+	)
+	@constraint(model, [k in 1:K, i in 1:nbus, s in 1:S],
+        lin_s_i[k,i, s] >= s_i[k,i,s] - scenarios[s][i]*(1-w_sk[s,k] ) 
+	)
+
+    # 7. Reference bus constraint
+    @constraint(model, [k in 1:K, s in 1:S],
+        theta[k, 1, s] == 0
+    )
+    
+    # Solve
+    println("\nBuilding and solving compact PowerFlow formulation...")
+    optimize!(model)
+    
+    # Results
+    status = termination_status(model)
+    
+    if status == JuMP.MOI.INFEASIBLE || status == JuMP.MOI.INFEASIBLE_OR_UNBOUNDED
+        println("Model is infeasible!")
+        return model, Dict{String,Any}(), nothing, nothing, nothing, nothing, nothing
+    end
+    
+    obj_val = objective_value(model)
+    
+    # Simple console output
+    println("Results: S=$S, K=$K, variance=$variance_type, buses=$nbus, generators=$ngen, branches=$nbranch")
+    println("Gap: See Gurobi log above")
+    println("Work units: See Gurobi log above") 
+    println("Nodes: See Gurobi log above")
+    println("Detailed log saved to: $log_filename")
+    
+    # Return solution variables
+    if primal_status(model) == JuMP.MOI.FEASIBLE_POINT
+        p_g_sol = value.(model[:p_g])
+        f_ij_sol = value.(model[:f_ij])
+        theta_sol = value.(model[:theta])
+        s_i_sol = value.(model[:s_i])
+        x_ij_sol = value.(model[:x_ij])
+        #q_ij_sol = value.(model[:q_ij])
+        w_sk_sol = value.(model[:w_sk])
+        return model, Dict{String,Any}(), p_g_sol, f_ij_sol, theta_sol, s_i_sol, x_ij_sol, w_sk_sol
+    else
+        return model, Dict{String,Any}(), nothing, nothing, nothing, nothing, nothing, nothing, nothing
+    end
+end
+
+
+
 # =============================================================================
 # MAIN EXECUTION
 # =============================================================================
 
 if abspath(PROGRAM_FILE) == @__FILE__
-    if length(ARGS) != 3
-        println("Usage: julia CompactTS1.jl <K> <S> <variance_type>")
-        println("Example: julia CompactTS1.jl 2 20 low")
+    if length(ARGS) != 4
+        println("Usage: julia CompactTS1.jl <K> <S> <variance_type> <method>")
+        println("Example: julia CompactTS1.jl 2 20 low 1")
         exit(1)
     end
     
     K = parse(Int, ARGS[1])
     S = parse(Int, ARGS[2])
     variance_type = ARGS[3]
+	 method = parse(Int, ARGS[4])
     
     # Run compact PowerFlow formulation
-    powerflow_compact(K, S, variance_type)
+	 if method == 1
+     	 powerflow_compact(K, S, variance_type)
+	 else
+	 	 powerflow_compact_2(K, S, variance_type)
+	 end
 end
