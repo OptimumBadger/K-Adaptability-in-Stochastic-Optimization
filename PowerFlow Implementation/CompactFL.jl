@@ -227,7 +227,7 @@ function facility_location_compact(K::Int, S::Int, variance_type::String;
     ))
 
     # Set WorkLimit here and solve
-    set_optimizer_attribute(model, "WorkLimit", 100)
+    set_optimizer_attribute(model, "WorkLimit", 30000)
     optimize!(model)
 
     obj_val = objective_value(model)
@@ -372,7 +372,7 @@ function facility_location_compact_2(K::Int, S::Int, variance_type::String;
     ))
 
     # Set WorkLimit here and solve
-    set_optimizer_attribute(model, "WorkLimit", 100)
+    set_optimizer_attribute(model, "WorkLimit", 30000)
     optimize!(model)
 
     obj_val = objective_value(model)
