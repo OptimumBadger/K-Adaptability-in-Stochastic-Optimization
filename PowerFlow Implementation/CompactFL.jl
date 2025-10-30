@@ -327,7 +327,7 @@ function facility_location_compact_2(K::Int, S::Int, variance_type::String;
     )
 
     @constraint(model, [k in 1:K, s in 1:num_scenarios, i in 1:num_facilities],
-        sum(y[k, s, i, j] for j in 1:num_customers) <= capacity[i] * q[k, s, i]
+        sum(y[k, s, i, j] for j in 1:num_customers) <= capacity[i] * x[k,  i]
     )
 
     @constraint(model, [s in 1:num_scenarios],
