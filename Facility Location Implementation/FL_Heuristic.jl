@@ -151,52 +151,40 @@ end
 # =============================================================================
 
 function generate_demand_scenario(ncust, demandmean, demandstdev=nothing, bernoulli_case=false, method="new", experiment_type="low")
-    """Generate a single demand scenario using specified method"""
-    demand = zeros(ncust)
+    """Generate a single demand scenario using PowerFlow-style formula"""
     
-    if method == "old"
-        # OLD METHOD: Additive structure with large global component
-        globaldem = round(max(rand(Normal(1000, 300)), 0), digits=0)
-    
-    for i in 1:ncust
-        if bernoulli_case
-            Bernoulli_demand = rand(Bernoulli(0.8))
-        else
-            Bernoulli_demand = 1
-        end
-        demand[i] = Bernoulli_demand * (globaldem + round(max(rand(Normal(demandmean[i], demandstdev[i])), 0), digits=0))
+    sigma_range = Dict(
+        "low" => (0.1, 0.2),
+        "high" => (0.2, 0.3),
+        "bernoulli" => (0.1, 0.2)
+    )
+
+    if !haskey(sigma_range, lowercase(experiment_type))
+        error("Invalid experiment_type: $experiment_type. Must be 'low', 'high', or 'bernoulli'.")
     end
+
+    min_sigma, max_sigma = sigma_range[lowercase(experiment_type)]
+    sigma = rand(Uniform(min_sigma, max_sigma))
+
+    scenario_demand = Vector{Float64}(undef, ncust)
+    global_noise = randn() # Global random variable
+
+    for j in 1:ncust
+        individual_noise = randn() # Individual random variable
         
-    else  # method == "new"
-        # NEW METHOD: PowerFlow-inspired multiplicative structure
-        # Set sigma based on experiment type
-        if experiment_type == "low"
-            sigma = rand(Uniform(0.1, 0.2))  # Low uncertainty
-        elseif experiment_type == "high"
-            sigma = rand(Uniform(0.2, 0.3))  # High uncertainty
-        else  # bernoulli
-            sigma = rand(Uniform(0.1, 0.2))  # Bernoulli uncertainty
-        end
+        # PowerFlow-style demand formula
+        demand_val = demandmean[j] + sigma * individual_noise * demandmean[j] + global_noise * sigma * demandmean[j]
         
-        # Generate global random variable (same for all customers)
-        global_random = rand(Normal(0, 1))
-        
-        for i in 1:ncust
-            # Generate individual random variable for each customer
-            individual_random = rand(Normal(0, 1))
-            
-            # Calculate demand using PowerFlow-inspired formula
-            demand[i] = max(demandmean[i] * (1 + sigma * (individual_random + global_random)), 0)
-            
-            # Apply Gaussian Bernoulli case if requested
-            if bernoulli_case
-                # Multiply by 2, then by Bernoulli(0.8)
-                demand[i] = demand[i] * 1.25 * rand(Bernoulli(0.8))
+        # Apply Bernoulli multiplier if experiment_type is "bernoulli"
+        if lowercase(experiment_type) == "bernoulli"
+            if rand(Bernoulli(0.5)) == 0
+                demand_val = 0.0 # Set to zero if Bernoulli is 0
             end
         end
+        
+        scenario_demand[j] = max(0.0, demand_val) # Ensure non-negativity
     end
-    
-    return demand
+    return scenario_demand
 end
 
 function sampling(nscen, nloc, demandmean, capacity, cost, fixedcost, unmet_pen, scaling_factor, demandstdev=nothing, bernoulli_case=false, method="new", experiment_type="low", log_file=nothing)
