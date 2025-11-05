@@ -1,0 +1,4614 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x60c80794
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.148661e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114866.12982 114866.130  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114866 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.148661298249e+05, best bound 1.148661298249e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa4705ea0
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.307050e+05, 13 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    130705.04174 130705.042  0.00%     -    0s
+
+Explored 1 nodes (13 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 130705 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.307050417352e+05, best bound 1.307050417352e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x94a65f3a
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.313054e+05, 5 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    131305.36813 131305.368  0.00%     -    0s
+
+Explored 1 nodes (5 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 131305 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.313053681294e+05, best bound 1.313053681294e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x02be7871
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.076110e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    107610.96218 107610.962  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 107611 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.076109621782e+05, best bound 1.076109621782e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa7ce32d3
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.234955e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    123495.49245 123495.492  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 123495 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.234954924506e+05, best bound 1.234954924506e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x847c07ab
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.140708e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114070.78510 114070.785  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114071 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.140707850999e+05, best bound 1.140707850999e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc67f8cf2
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.419302e+05, 17 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    141930.18278 141930.183  0.00%     -    0s
+
+Explored 1 nodes (17 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 141930 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.419301827756e+05, best bound 1.419301827756e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xe5f4a666
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.442469e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    144246.89712 144246.897  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 144247 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.442468971157e+05, best bound 1.442468971157e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xe1dbd44d
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.225865e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    122586.46728 122586.467  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 122586 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.225864672759e+05, best bound 1.225864672759e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x1ae3e662
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.148125e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114812.54372 114812.544  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114813 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.148125437163e+05, best bound 1.148125437163e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xaf62c725
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.046074e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    104607.37790 104607.378  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 104607 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.046073778980e+05, best bound 1.046073778980e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x2e12ec5e
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.378305e+05, 16 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    137830.50144 137830.501  0.00%     -    0s
+
+Explored 1 nodes (16 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 137831 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.378305014398e+05, best bound 1.378305014398e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x6bd68ca4
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.141387e+05, 13 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114138.71617 114138.716  0.00%     -    0s
+
+Explored 1 nodes (13 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114139 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.141387161697e+05, best bound 1.141387161697e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x465981c5
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.106988e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    110698.83105 110698.831  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 110699 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.106988310549e+05, best bound 1.106988310549e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x35266b06
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 3.520225e+05, 52 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    352022.47454 352022.475  0.00%     -    0s
+
+Explored 1 nodes (52 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 352022 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.520224745419e+05, best bound 3.520224745419e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc7016c4d
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.215007e+05, 15 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    121500.74566 121500.746  0.00%     -    0s
+
+Explored 1 nodes (15 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 121501 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.215007456582e+05, best bound 1.215007456582e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x2c236609
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.118266e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    111826.59481 111826.595  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 111827 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.118265948116e+05, best bound 1.118265948116e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xd5fb23a5
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.250295e+05, 16 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    125029.48023 125029.480  0.00%     -    0s
+
+Explored 1 nodes (16 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 125029 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.250294802287e+05, best bound 1.250294802287e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x740121e6
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.132684e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    113268.43238 113268.432  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 113268 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.132684323821e+05, best bound 1.132684323821e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xcb9be2c5
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.112683e+05, 8 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    111268.29247 111268.292  0.00%     -    0s
+
+Explored 1 nodes (8 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 111268 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.112682924705e+05, best bound 1.112682924705e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x50164bd7
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.439251e+05, 27 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    143925.09069 143925.091  0.00%     -    0s
+
+Explored 1 nodes (27 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 143925 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.439250906922e+05, best bound 1.439250906922e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x3d878b22
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.207548e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    120754.78126 120754.781  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 120755 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.207547812554e+05, best bound 1.207547812554e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x3b4fc4e8
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.166647e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    116664.67720 116664.677  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 116665 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.166646771979e+05, best bound 1.166646771979e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x1744d589
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.076525e+05, 17 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    107652.53778 107652.538  0.00%     -    0s
+
+Explored 1 nodes (17 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 107653 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.076525377809e+05, best bound 1.076525377809e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc335b3d4
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.415204e+05, 12 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    141520.44047 141520.440  0.00%     -    0s
+
+Explored 1 nodes (12 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 141520 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.415204404684e+05, best bound 1.415204404684e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xeb6846f1
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.094291e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    109429.06826 109429.068  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 109429 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.094290682604e+05, best bound 1.094290682604e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x92c872cd
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.185268e+05, 8 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    118526.75385 118526.754  0.00%     -    0s
+
+Explored 1 nodes (8 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 118527 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.185267538476e+05, best bound 1.185267538476e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x72c536b3
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.432869e+05, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    143286.85656 143286.857  0.00%     -    0s
+
+Explored 1 nodes (6 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 143287 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.432868565647e+05, best bound 1.432868565647e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x9bad6190
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.065604e+05, 5 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    106560.37314 106560.373  0.00%     -    0s
+
+Explored 1 nodes (5 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 106560 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.065603731408e+05, best bound 1.065603731407e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x64811d0d
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.377629e+05, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    137762.88455 137762.885  0.00%     -    0s
+
+Explored 1 nodes (6 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 137763 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.377628845514e+05, best bound 1.377628845514e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x5dca0526
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.384272e+05, 5 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    138427.19253 138427.193  0.00%     -    0s
+
+Explored 1 nodes (5 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 138427 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.384271925322e+05, best bound 1.384271925322e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x04f58a6c
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.181804e+05, 9 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    118180.37550 118180.375  0.00%     -    0s
+
+Explored 1 nodes (9 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 118180 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.181803754974e+05, best bound 1.181803754974e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x209020b7
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.084143e+05, 8 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    108414.26565 108414.266  0.00%     -    0s
+
+Explored 1 nodes (8 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 108414 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.084142656481e+05, best bound 1.084142656481e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc4f9c559
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.448187e+05, 13 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    144818.66466 144818.665  0.00%     -    0s
+
+Explored 1 nodes (13 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 144819 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.448186646551e+05, best bound 1.448186646551e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x8864e1cf
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.131820e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    113181.95331 113181.953  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 113182 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.131819533057e+05, best bound 1.131819533057e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa67071e0
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.270106e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    127010.63868 127010.639  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 127011 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.270106386772e+05, best bound 1.270106386772e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xb5e213f7
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.363581e+05, 25 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    136358.10558 136358.106  0.00%     -    0s
+
+Explored 1 nodes (25 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 136358 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.363581055804e+05, best bound 1.363581055804e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xaa8a230b
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.172130e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    117213.01162 117213.012  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 117213 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.172130116181e+05, best bound 1.172130116181e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x74957b49
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.256650e+05, 3 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    125665.04386 125665.044  0.00%     -    0s
+
+Explored 1 nodes (3 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 125665 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.256650438599e+05, best bound 1.256650438599e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x02013c05
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.583181e+05, 44 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    158318.11554 158318.116  0.00%     -    0s
+
+Explored 1 nodes (44 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 158318 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.583181155400e+05, best bound 1.583181155400e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x83850d72
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.175201e+05, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    117520.11618 117520.116  0.00%     -    0s
+
+Explored 1 nodes (6 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 117520 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.175201161834e+05, best bound 1.175201161834e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa119d869
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.512692e+05, 16 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    151269.15838 151269.158  0.00%     -    0s
+
+Explored 1 nodes (16 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 151269 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.512691583792e+05, best bound 1.512691583792e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa89f9a69
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.298149e+05, 19 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    129814.92946 129814.929  0.00%     -    0s
+
+Explored 1 nodes (19 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 129815 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.298149294601e+05, best bound 1.298149294601e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x28ce1595
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.225086e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    122508.64523 122508.645  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 122509 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.225086452316e+05, best bound 1.225086452316e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x9eee3577
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.343489e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    134348.91246 134348.912  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 134349 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.343489124559e+05, best bound 1.343489124559e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x60433af6
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.388859e+05, 15 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    138885.90485 138885.905  0.00%     -    0s
+
+Explored 1 nodes (15 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 138886 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.388859048542e+05, best bound 1.388859048542e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xfc6597ff
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.203940e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    120394.02675 120394.027  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 120394 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.203940267464e+05, best bound 1.203940267464e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x2c7267bd
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.315648e+05, 11 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    131564.79983 131564.800  0.00%     -    0s
+
+Explored 1 nodes (11 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 131565 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.315647998259e+05, best bound 1.315647998259e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x4441be7f
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.095348e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    109534.83598 109534.836  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 109535 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.095348359784e+05, best bound 1.095348359784e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x4b1f645d
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.156139e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    115613.85226 115613.852  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 115614 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.156138522586e+05, best bound 1.156138522586e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x3b6f5bc2
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.447989e+05, 15 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    144798.88014 144798.880  0.00%     -    0s
+
+Explored 1 nodes (15 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 144799 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.447988801400e+05, best bound 1.447988801400e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x86bf75f6
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.418675e+05, 19 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    141867.52483 141867.525  0.00%     -    0s
+
+Explored 1 nodes (19 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 141868 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.418675248281e+05, best bound 1.418675248281e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x5fd76c11
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.292877e+05, 11 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    129287.67843 129287.678  0.00%     -    0s
+
+Explored 1 nodes (11 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 129288 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.292876784330e+05, best bound 1.292876784330e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x250bfeb7
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.135205e+05, 9 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    113520.47082 113520.471  0.00%     -    0s
+
+Explored 1 nodes (9 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 113520 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.135204708245e+05, best bound 1.135204708245e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc2d79d1d
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.198285e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    119828.46699 119828.467  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 119828 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.198284669889e+05, best bound 1.198284669889e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x04286bce
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.216307e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    121630.65294 121630.653  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 121631 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.216306529396e+05, best bound 1.216306529396e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xef44c017
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.218339e+05, 17 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    121833.86477 121833.865  0.00%     -    0s
+
+Explored 1 nodes (17 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 121834 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.218338647704e+05, best bound 1.218338647704e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x24ae5e06
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.225502e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    122550.15066 122550.151  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 122550 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.225501506555e+05, best bound 1.225501506555e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xb548113f
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 9.649472e+04, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    96494.719708 96494.7197  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 96494.7 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 9.649471970775e+04, best bound 9.649471970775e+04, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x4b56963f
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.160652e+05, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    116065.18213 116065.182  0.00%     -    0s
+
+Explored 1 nodes (6 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 116065 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.160651821335e+05, best bound 1.160651821335e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x3d4a0a62
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.265505e+05, 12 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    126550.52304 126550.523  0.00%     -    0s
+
+Explored 1 nodes (12 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 126551 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.265505230421e+05, best bound 1.265505230421e+05, gap 0.0000%
+
+User-callback calls 184, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xda164214
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.140093e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114009.32129 114009.321  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114009 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.140093212895e+05, best bound 1.140093212895e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x0fc72a1b
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.218716e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    121871.56476 121871.565  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 121872 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.218715647585e+05, best bound 1.218715647585e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x4b0628dc
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.134046e+05, 3 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    113404.58341 113404.583  0.00%     -    0s
+
+Explored 1 nodes (3 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 113405 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.134045834051e+05, best bound 1.134045834051e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa1f17806
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.184059e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    118405.87586 118405.876  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 118406 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.184058758646e+05, best bound 1.184058758646e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x72e54dce
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.243484e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    124348.42576 124348.426  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 124348 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.243484257618e+05, best bound 1.243484257618e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x811f56df
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.355628e+05, 15 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    135562.80014 135562.800  0.00%     -    0s
+
+Explored 1 nodes (15 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 135563 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.355628001356e+05, best bound 1.355628001356e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x957714e7
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.174524e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    117452.41654 117452.417  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 117452 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.174524165422e+05, best bound 1.174524165422e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xe66f82e4
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.299935e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    129993.45793 129993.458  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 129993 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.299934579264e+05, best bound 1.299934579264e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x270f3584
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.129730e+05, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    112972.99118 112972.991  0.00%     -    0s
+
+Explored 1 nodes (6 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 112973 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.129729911756e+05, best bound 1.129729911756e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x193e0e2b
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.144178e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114417.76445 114417.764  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114418 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.144177644495e+05, best bound 1.144177644495e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x5b35cadf
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.433016e+05, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    143301.63202 143301.632  0.00%     -    0s
+
+Explored 1 nodes (6 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 143302 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.433016320154e+05, best bound 1.433016320154e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc0dd6df1
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.194141e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    119414.10742 119414.107  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 119414 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.194141074196e+05, best bound 1.194141074196e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x0c498352
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.239816e+05, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    123981.60531 123981.605  0.00%     -    0s
+
+Explored 1 nodes (2 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 123982 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.239816053063e+05, best bound 1.239816053062e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x408c2625
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.439759e+05, 13 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    143975.86888 143975.869  0.00%     -    0s
+
+Explored 1 nodes (13 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 143976 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.439758688756e+05, best bound 1.439758688756e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xcfababcb
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.386800e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    138680.02978 138680.030  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 138680 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.386800297839e+05, best bound 1.386800297839e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xccaed1c8
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 6e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.053795e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    105379.52534 105379.525  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 105380 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.053795253395e+05, best bound 1.053795253395e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x8d5fd209
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.400470e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    140047.00048 140047.000  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 140047 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.400470004784e+05, best bound 1.400470004784e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x8138cc4f
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.152502e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    115250.19896 115250.199  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 115250 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.152501989557e+05, best bound 1.152501989557e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xdef2b082
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.185654e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    118565.35564 118565.356  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 118565 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.185653556420e+05, best bound 1.185653556420e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa75fb75e
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.087914e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    108791.42077 108791.421  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 108791 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.087914207653e+05, best bound 1.087914207652e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x9c618734
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.251628e+05, 16 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    125162.80892 125162.809  0.00%     -    0s
+
+Explored 1 nodes (16 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 125163 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.251628089221e+05, best bound 1.251628089221e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x99d29829
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.185490e+05, 4 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    118549.01205 118549.012  0.00%     -    0s
+
+Explored 1 nodes (4 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 118549 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.185490120496e+05, best bound 1.185490120496e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x5e314551
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.172894e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    117289.35510 117289.355  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 117289 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.172893551030e+05, best bound 1.172893551030e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x1e8e6844
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.213152e+05, 3 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    121315.22441 121315.224  0.00%     -    0s
+
+Explored 1 nodes (3 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 121315 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.213152244142e+05, best bound 1.213152244142e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x31963498
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.465238e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    146523.75574 146523.756  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 146524 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.465237557401e+05, best bound 1.465237557401e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x4cb2d9d1
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.295549e+05, 10 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    129554.90682 129554.907  0.00%     -    0s
+
+Explored 1 nodes (10 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 129555 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.295549068194e+05, best bound 1.295549068194e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xff2775c2
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.206235e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    120623.50094 120623.501  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 120624 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.206235009380e+05, best bound 1.206235009380e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xe4bc685c
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 3e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.573585e+05, 22 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    157358.49570 157358.496  0.00%     -    0s
+
+Explored 1 nodes (22 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 157358 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.573584957000e+05, best bound 1.573584957000e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x0cb70409
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.142863e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    114286.32376 114286.324  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 114286 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.142863237644e+05, best bound 1.142863237644e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x6597782e
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 7e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.124884e+05, 3 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    112488.36661 112488.367  0.00%     -    0s
+
+Explored 1 nodes (3 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 112488 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.124883666103e+05, best bound 1.124883666103e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xd7a82517
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 5e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.020564e+05, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    102056.41778 102056.418  0.00%     -    0s
+
+Explored 1 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 102056 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.020564177836e+05, best bound 1.020564177836e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xdae7c709
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.071571e+05, 4 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    107157.13529 107157.135  0.00%     -    0s
+
+Explored 1 nodes (4 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 107157 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.071571352863e+05, best bound 1.071571352863e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x32fb638c
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.258689e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    125868.86786 125868.868  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 125869 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.258688678578e+05, best bound 1.258688678578e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xc3d0d163
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.400120e+05, 7 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    140011.95953 140011.960  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 140012 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.400119595349e+05, best bound 1.400119595349e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x285c5fa1
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.390192e+05, 13 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    139019.17524 139019.175  0.00%     -    0s
+
+Explored 1 nodes (13 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 139019 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.390191752441e+05, best bound 1.390191752441e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xa65901e5
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.381833e+05, 14 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    138183.29068 138183.291  0.00%     -    0s
+
+Explored 1 nodes (14 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 138183 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.381832906752e+05, best bound 1.381832906752e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0x28141884
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 9e+03]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.170710e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    117071.02604 117071.026  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 117071 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.170710260438e+05, best bound 1.170710260438e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xe7870407
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.153286e+05, 10 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    115328.64044 115328.640  0.00%     -    0s
+
+Explored 1 nodes (10 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 115329 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.153286404354e+05, best bound 1.153286404354e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Thu Oct 16 16:58:49 2025
+
+Set parameter LogFile to value "Logs/Facility Location Logs/bernoulli_false/L50/phase3/evaluation_K1.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+LogToConsole  0
+
+Optimize a model with 151 rows, 1375 columns and 3076 nonzeros
+Model fingerprint: 0xd5e9d58f
+Variable types: 1300 continuous, 75 integer (75 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+04]
+  Objective range  [8e-03, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Presolve removed 91 rows and 825 columns
+Presolve time: 0.00s
+Presolved: 60 rows, 550 columns, 1050 nonzeros
+Variable types: 550 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 1.221332e+05, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    122133.15671 122133.157  0.00%     -    0s
+
+Explored 1 nodes (1 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 122133 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.221331567121e+05, best bound 1.221331567121e+05, gap 0.0000%
+
+User-callback calls 183, time in user-callback 0.00 sec
+
+============================================================
+SUMMARY STATISTICS - PHASE 3B: EVALUATION (K=1)
+============================================================
+Parameters:
+  nloc: 25
+  ncust: 50
+  test_samples: 100
+
+Results:
+  scenarios_with_penalties: 1
+  average_model_cost: 126371.82808992936
+  performance_gap_percent: -22.67
+============================================================
