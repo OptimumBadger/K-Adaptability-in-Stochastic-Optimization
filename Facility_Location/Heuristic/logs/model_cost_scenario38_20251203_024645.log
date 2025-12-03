@@ -1,0 +1,57 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:46:47 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario38_20251203_024645.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:46:47 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario38_20251203_024645.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 104 rows, 1328 columns and 2631 nonzeros
+Model fingerprint: 0xe8d217b3
+Variable types: 1300 continuous, 28 integer (28 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Found heuristic solution: objective 487767.72381
+Presolve removed 67 rows and 1032 columns
+Presolve time: 0.00s
+Presolved: 37 rows, 296 columns, 578 nonzeros
+Variable types: 294 continuous, 2 integer (2 binary)
+
+Root relaxation: objective 1.478382e+05, 32 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 147838.210    0    2 487767.724 147838.210  69.7%     -    0s
+H    0     0                    167209.36746 147838.210  11.6%     -    0s
+H    0     0                    160010.53779 147838.210  7.61%     -    0s
+     0     0 160010.538    0    2 160010.538 160010.538  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Implied bound: 17
+  Flow cover: 3
+  Relax-and-lift: 1
+
+Explored 1 nodes (75 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 3: 160011 167209 487768 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.600105377850e+05, best bound 1.600105377850e+05, gap 0.0000%
+
+User-callback calls 281, time in user-callback 0.00 sec

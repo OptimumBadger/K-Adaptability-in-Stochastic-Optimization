@@ -1,0 +1,60 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 06:50:29 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/scenario10_20251203_065024.log"
+Set parameter LogToConsole to value 1
+Set parameter OutputFlag to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 06:50:29 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/scenario10_20251203_065024.log"
+Set parameter OutputFlag to value 1
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  120
+
+Optimize a model with 492 rows, 331 columns and 1349 nonzeros
+Model fingerprint: 0x42a125fc
+Variable types: 251 continuous, 80 integer (80 binary)
+Coefficient statistics:
+  Matrix range     [7e-01, 6e+02]
+  Objective range  [1e+02, 5e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e-02, 6e+02]
+Found heuristic solution: objective 27982.728811
+Presolve removed 120 rows and 111 columns
+Presolve time: 0.00s
+Presolved: 372 rows, 220 columns, 1105 nonzeros
+Variable types: 141 continuous, 79 integer (79 binary)
+
+Root relaxation: objective 8.770102e+02, 274 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  877.01017    0    4 27982.7288  877.01017  96.9%     -    0s
+H    0     0                    1537.1747623  877.01017  42.9%     -    0s
+     0     0  877.01017    0    3 1537.17476  877.01017  42.9%     -    0s
+H    0     0                     983.0232346  877.01017  10.8%     -    0s
+     0     0  877.01017    0    2  983.02323  877.01017  10.8%     -    0s
+H    0     0                     888.0462063  877.01017  1.24%     -    0s
+     0     0  877.01017    0    2  888.04621  877.01017  1.24%     -    0s
+H    0     0                     877.0101688  877.01017  0.00%     -    0s
+     0     0  877.01017    0    2  877.01017  877.01017  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 5
+
+Explored 1 nodes (503 simplex iterations) in 0.12 seconds (0.02 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 5: 877.01 888.046 983.023 ... 27982.7
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 8.770101688061e+02, best bound 8.770101688059e+02, gap 0.0000%
+
+User-callback calls 450, time in user-callback 0.00 sec

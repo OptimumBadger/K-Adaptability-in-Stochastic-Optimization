@@ -1,0 +1,49 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:16:50 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario23_20251203_021649.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:16:50 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario23_20251203_021649.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 104 rows, 1328 columns and 2631 nonzeros
+Model fingerprint: 0x4bdadcfd
+Variable types: 1300 continuous, 28 integer (28 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Found heuristic solution: objective 727491.45210
+Presolve removed 63 rows and 984 columns
+Presolve time: 0.00s
+Presolved: 41 rows, 344 columns, 670 nonzeros
+Variable types: 342 continuous, 2 integer (2 binary)
+
+Root relaxation: objective 2.070573e+05, 34 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 207057.293    0    1 727491.452 207057.293  71.5%     -    0s
+H    0     0                    212538.71065 207057.293  2.58%     -    0s
+
+Explored 1 nodes (34 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 2: 212539 727491 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.125387106540e+05, best bound 2.125387106540e+05, gap 0.0000%
+
+User-callback calls 267, time in user-callback 0.00 sec

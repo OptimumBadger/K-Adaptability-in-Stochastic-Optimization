@@ -1,0 +1,74 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 06:36:33 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Samples/TS/logs/wait_and_see_scenario5_20251203_063630.log"
+Set parameter LogToConsole to value 1
+Set parameter OutputFlag to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 06:36:33 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Samples/TS/logs/wait_and_see_scenario5_20251203_063630.log"
+Set parameter OutputFlag to value 1
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  120
+
+Optimize a model with 492 rows, 331 columns and 1349 nonzeros
+Model fingerprint: 0x68b0a0d6
+Variable types: 251 continuous, 80 integer (80 binary)
+Coefficient statistics:
+  Matrix range     [7e-01, 6e+02]
+  Objective range  [1e+02, 5e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [2e-02, 6e+02]
+Found heuristic solution: objective 56924.318384
+Presolve removed 120 rows and 111 columns
+Presolve time: 0.01s
+Presolved: 372 rows, 220 columns, 1105 nonzeros
+Variable types: 141 continuous, 79 integer (79 binary)
+
+Root relaxation: objective 2.452823e+03, 332 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 2452.82341    0    8 56924.3184 2452.82341  95.7%     -    0s
+H    0     0                    11061.573407 2452.82341  77.8%     -    0s
+H    0     0                    9717.1195929 2452.82341  74.8%     -    0s
+     0     0 2452.82341    0    8 9717.11959 2452.82341  74.8%     -    0s
+H    0     0                    4950.1767644 2452.82341  50.4%     -    0s
+     0     0 2452.82341    0    6 4950.17676 2452.82341  50.4%     -    0s
+H    0     0                    3776.1132072 2452.82341  35.0%     -    0s
+     0     0 2452.82341    0    7 3776.11321 2452.82341  35.0%     -    0s
+     0     0 2452.82341    0    8 3776.11321 2452.82341  35.0%     -    0s
+H    0     0                    3483.5280575 2452.82341  29.6%     -    0s
+     0     0 2452.82341    0    8 3483.52806 2452.82341  29.6%     -    0s
+H    0     0                    3104.4861010 2452.82341  21.0%     -    0s
+     0     0 2452.82341    0    6 3104.48610 2452.82341  21.0%     -    0s
+     0     0 2452.82341    0    2 3104.48610 2452.82341  21.0%     -    0s
+     0     0 2452.82341    0    2 3104.48610 2452.82341  21.0%     -    0s
+     0     0 2452.82341    0    2 3104.48610 2452.82341  21.0%     -    0s
+H    0     0                    3067.9094591 2452.82341  20.0%     -    0s
+     0     2 2452.82341    0    2 3067.90946 2452.82341  20.0%     -    0s
+H   37   121                    2473.0083685 2452.82341  0.82%   6.8    0s
+H  180   468                    2466.2979008 2452.82341  0.55%   6.0    0s
+H  279   468                    2452.8234066 2452.82341  0.00%   7.4    0s
+
+Cutting planes:
+  Gomory: 3
+  Implied bound: 2
+  MIR: 6
+
+Explored 500 nodes (5256 simplex iterations) in 0.34 seconds (0.07 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 10: 2452.82 2466.3 2473.01 ... 11061.6
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.452823406589e+03, best bound 2.452823406589e+03, gap 0.0000%
+
+User-callback calls 1628, time in user-callback 0.00 sec

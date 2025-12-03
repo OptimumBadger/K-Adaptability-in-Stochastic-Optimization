@@ -1,0 +1,80 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 19:40:35 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/scenario72_20251202_194032.log"
+Set parameter LogToConsole to value 1
+Set parameter OutputFlag to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 19:40:35 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/scenario72_20251202_194032.log"
+Set parameter OutputFlag to value 1
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  120
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x487ff357
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [3e+01, 3e+03]
+Found heuristic solution: objective 248289.66964
+Presolve removed 26 rows and 744 columns
+Presolve time: 0.00s
+Presolved: 49 rows, 581 columns, 1114 nonzeros
+Variable types: 557 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 5.536993e+04, 48 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 55369.9320    0   12 248289.670 55369.9320  77.7%     -    0s
+H    0     0                    123157.48296 55369.9320  55.0%     -    0s
+H    0     0                    93606.224229 55369.9320  40.8%     -    0s
+H    0     0                    93500.133457 55369.9320  40.8%     -    0s
+H    0     0                    85237.204527 57036.9350  33.1%     -    0s
+     0     0 62744.5853    0   10 85237.2045 62744.5853  26.4%     -    0s
+H    0     0                    70432.524974 63364.3166  10.0%     -    0s
+     0     0 65307.1155    0    9 70432.5250 65307.1155  7.28%     -    0s
+     0     0 66008.8323    0    8 70432.5250 66008.8323  6.28%     -    0s
+H    0     0                    68586.112218 66219.3229  3.45%     -    0s
+     0     0 66219.3229    0    7 68586.1122 66219.3229  3.45%     -    0s
+H    0     0                    67809.122837 66690.7905  1.65%     -    0s
+     0     0 66690.7905    0    6 67809.1228 66690.7905  1.65%     -    0s
+     0     0 66695.7576    0    7 67809.1228 66695.7576  1.64%     -    0s
+     0     0 66915.9507    0    2 67809.1228 66915.9507  1.32%     -    0s
+     0     0 66956.7490    0    2 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    9 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    9 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    7 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    7 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    6 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    3 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    2 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66956.7490    0    2 67809.1228 66956.7490  1.26%     -    0s
+     0     0 66966.2353    0    1 67809.1228 66966.2353  1.24%     -    0s
+     0     0 66969.9684    0    4 67809.1228 66969.9684  1.24%     -    0s
+     0     0 66995.5792    0    4 67809.1228 66995.5792  1.20%     -    0s
+
+Cutting planes:
+  Implied bound: 49
+  MIR: 8
+  Relax-and-lift: 1
+
+Explored 1 nodes (341 simplex iterations) in 0.02 seconds (0.02 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 8: 67809.1 68586.1 70432.5 ... 248290
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.780912283705e+04, best bound 6.780912283705e+04, gap 0.0000%
+
+User-callback calls 367, time in user-callback 0.00 sec

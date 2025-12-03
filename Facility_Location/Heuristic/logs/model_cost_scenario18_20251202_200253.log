@@ -1,0 +1,53 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 20:02:54 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario18_20251202_200253.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 20:02:54 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario18_20251202_200253.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 103 rows, 1327 columns and 2620 nonzeros
+Model fingerprint: 0xcc06d2ba
+Variable types: 1300 continuous, 27 integer (27 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 8e+03]
+Found heuristic solution: objective 406926.73576
+Presolve removed 67 rows and 1035 columns
+Presolve time: 0.00s
+Presolved: 36 rows, 292 columns, 567 nonzeros
+Variable types: 291 continuous, 1 integer (1 binary)
+
+Root relaxation: objective 1.167688e+05, 20 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 116768.753    0    1 406926.736 116768.753  71.3%     -    0s
+H    0     0                    130308.86147 116768.753  10.4%     -    0s
+H    0     0                    125909.45645 116768.753  7.26%     -    0s
+
+Cutting planes:
+  Gomory: 1
+
+Explored 1 nodes (20 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 2: 125909 130309 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.259094564507e+05, best bound 1.259094564507e+05, gap 0.0000%
+
+User-callback calls 264, time in user-callback 0.00 sec

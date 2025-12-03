@@ -1,0 +1,49 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:45:09 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario7_20251203_024508.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:45:09 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario7_20251203_024508.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 103 rows, 1327 columns and 2620 nonzeros
+Model fingerprint: 0x8157ef0d
+Variable types: 1300 continuous, 27 integer (27 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 6e+03]
+Found heuristic solution: objective 570149.50204
+Presolve removed 65 rows and 1010 columns
+Presolve time: 0.00s
+Presolved: 38 rows, 317 columns, 616 nonzeros
+Variable types: 316 continuous, 1 integer (1 binary)
+
+Root relaxation: objective 1.686597e+05, 31 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 168659.745    0    1 570149.502 168659.745  70.4%     -    0s
+H    0     0                    183523.86307 168659.745  8.10%     -    0s
+
+Explored 1 nodes (31 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 2: 183524 570150 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.835238630733e+05, best bound 1.835238630733e+05, gap 0.0000%
+
+User-callback calls 260, time in user-callback 0.00 sec

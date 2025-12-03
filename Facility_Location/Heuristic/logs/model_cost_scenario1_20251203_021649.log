@@ -1,0 +1,58 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:16:49 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario1_20251203_021649.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:16:49 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario1_20251203_021649.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 104 rows, 1328 columns and 2631 nonzeros
+Model fingerprint: 0xf89229c4
+Variable types: 1300 continuous, 28 integer (28 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 5e+03]
+Found heuristic solution: objective 427211.53655
+Presolve removed 68 rows and 1062 columns
+Presolve time: 0.00s
+Presolved: 36 rows, 266 columns, 520 nonzeros
+Found heuristic solution: objective 409497.00969
+Variable types: 264 continuous, 2 integer (2 binary)
+
+Root relaxation: objective 1.017177e+05, 20 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 101717.706    0    2 409497.010 101717.706  75.2%     -    0s
+H    0     0                    130996.54503 101717.706  22.4%     -    0s
+H    0     0                    120427.89511 101717.706  15.5%     -    0s
+H    0     0                    114251.30335 101717.706  11.0%     -    0s
+     0     0 114251.303    0    2 114251.303 114251.303  0.00%     -    0s
+
+Cutting planes:
+  Implied bound: 15
+  MIR: 3
+  Relax-and-lift: 3
+
+Explored 1 nodes (52 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 4: 114251 120428 130997 427212 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.142513033469e+05, best bound 1.142513033469e+05, gap 0.0000%
+
+User-callback calls 359, time in user-callback 0.00 sec

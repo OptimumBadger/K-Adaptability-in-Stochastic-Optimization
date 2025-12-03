@@ -1,0 +1,50 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:46:47 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario37_20251203_024645.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:46:47 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario37_20251203_024645.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 104 rows, 1328 columns and 2631 nonzeros
+Model fingerprint: 0xcfde0e32
+Variable types: 1300 continuous, 28 integer (28 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Found heuristic solution: objective 458563.52267
+Presolve removed 70 rows and 1065 columns
+Presolve time: 0.00s
+Presolved: 34 rows, 263 columns, 514 nonzeros
+Variable types: 261 continuous, 2 integer (2 binary)
+
+Root relaxation: objective 1.180498e+05, 23 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 118049.823    0    2 458563.523 118049.823  74.3%     -    0s
+H    0     0                    140455.36031 118049.823  16.0%     -    0s
+H    0     0                    121074.72512 118049.823  2.50%     -    0s
+
+Explored 1 nodes (23 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 3: 121075 140455 458564 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.210747251169e+05, best bound 1.210747251169e+05, gap 0.0000%
+
+User-callback calls 271, time in user-callback 0.00 sec

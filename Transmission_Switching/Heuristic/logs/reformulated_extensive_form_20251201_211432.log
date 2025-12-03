@@ -1,0 +1,40 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 21:14:33 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/reformulated_extensive_form_20251201_211432.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 21:14:33 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/reformulated_extensive_form_20251201_211432.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 31 rows, 22 columns and 62 nonzeros
+Model fingerprint: 0xc552c9f6
+Variable types: 0 continuous, 22 integer (22 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+02, 4e+02]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+00]
+Found heuristic solution: objective 2061.2439155
+Presolve removed 31 rows and 22 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 10 available processors)
+
+Solution count 2: 2035.99 2061.24 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.035986733367e+03, best bound 2.035986733367e+03, gap 0.0000%
+
+User-callback calls 203, time in user-callback 0.00 sec

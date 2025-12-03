@@ -1,0 +1,81 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 23:27:06 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/wait_and_see_scenario47_20251201_232704.log"
+Set parameter LogToConsole to value 1
+Set parameter OutputFlag to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 23:27:06 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/wait_and_see_scenario47_20251201_232704.log"
+Set parameter OutputFlag to value 1
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  120
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0x829105d3
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [2e+01, 1e+04]
+Found heuristic solution: objective 629812.97437
+Presolve removed 0 rows and 150 columns
+Presolve time: 0.00s
+Presolved: 75 rows, 1175 columns, 2276 nonzeros
+Variable types: 1151 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 1.601247e+05, 54 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 160124.719    0   20 629812.974 160124.719  74.6%     -    0s
+H    0     0                    270145.49956 160124.719  40.7%     -    0s
+H    0     0                    241146.68286 160124.719  33.6%     -    0s
+H    0     0                    235239.10770 160124.719  31.9%     -    0s
+H    0     0                    229322.31333 160124.719  30.2%     -    0s
+H    0     0                    224730.87244 160124.719  28.7%     -    0s
+H    0     0                    222099.88953 160124.719  27.9%     -    0s
+H    0     0                    196370.13017 160124.719  18.5%     -    0s
+H    0     0                    186015.08545 160124.719  13.9%     -    0s
+H    0     0                    185689.07474 160124.719  13.8%     -    0s
+H    0     0                    184431.78338 175431.852  4.88%     -    0s
+     0     0 175431.852    0   14 184431.783 175431.852  4.88%     -    0s
+     0     0 179158.617    0   11 184431.783 179158.617  2.86%     -    0s
+     0     0 179454.790    0   12 184431.783 179454.790  2.70%     -    0s
+     0     0 180270.463    0   11 184431.783 180270.463  2.26%     -    0s
+     0     0 180415.382    0   10 184431.783 180415.382  2.18%     -    0s
+     0     0 180425.334    0    9 184431.783 180425.334  2.17%     -    0s
+     0     0 180435.177    0    9 184431.783 180435.177  2.17%     -    0s
+     0     0 180927.673    0   15 184431.783 180927.673  1.90%     -    0s
+     0     0 180998.269    0   11 184431.783 180998.269  1.86%     -    0s
+     0     0 181390.006    0    7 184431.783 181390.006  1.65%     -    0s
+     0     0 181429.294    0    5 184431.783 181429.294  1.63%     -    0s
+     0     0 181437.456    0    8 184431.783 181437.456  1.62%     -    0s
+     0     0 181442.901    0    8 184431.783 181442.901  1.62%     -    0s
+     0     0 181442.901    0    8 184431.783 181442.901  1.62%     -    0s
+     0     2 181442.901    0    8 184431.783 181442.901  1.62%     -    0s
+H  391   105                    184318.84285 182490.267  0.99%  11.8    0s
+
+Cutting planes:
+  Implied bound: 122
+  MIR: 16
+  Flow cover: 9
+  Relax-and-lift: 2
+
+Explored 596 nodes (6920 simplex iterations) in 0.07 seconds (0.11 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 10: 184319 184432 196370 ... 629813
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.843188428468e+05, best bound 1.843188428468e+05, gap 0.0000%
+
+User-callback calls 1545, time in user-callback 0.00 sec

@@ -1,0 +1,86 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 19:38:23 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/scenario97_20251202_193819.log"
+Set parameter LogToConsole to value 1
+Set parameter OutputFlag to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 19:38:23 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/scenario97_20251202_193819.log"
+Set parameter OutputFlag to value 1
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  120
+
+Optimize a model with 75 rows, 1325 columns and 2575 nonzeros
+Model fingerprint: 0xecfd8c38
+Variable types: 1300 continuous, 25 integer (25 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [4e+01, 2e+04]
+Found heuristic solution: objective 628772.81027
+Presolve removed 21 rows and 628 columns
+Presolve time: 0.00s
+Presolved: 54 rows, 697 columns, 1341 nonzeros
+Variable types: 673 continuous, 24 integer (24 binary)
+
+Root relaxation: objective 1.846412e+05, 54 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 184641.152    0   12 628772.810 184641.152  70.6%     -    0s
+H    0     0                    249777.50604 184641.152  26.1%     -    0s
+H    0     0                    231531.96909 184641.152  20.3%     -    0s
+H    0     0                    223332.96499 184641.152  17.3%     -    0s
+H    0     0                    216397.75881 184641.152  14.7%     -    0s
+     0     0 191241.220    0   11 216397.759 191241.220  11.6%     -    0s
+H    0     0                    210989.49459 191597.679  9.19%     -    0s
+H    0     0                    203162.42427 191597.679  5.69%     -    0s
+H    0     0                    202477.64509 191597.679  5.37%     -    0s
+     0     0 193908.068    0    9 202477.645 193908.068  4.23%     -    0s
+     0     0 194029.184    0    9 202477.645 194029.184  4.17%     -    0s
+H    0     0                    201944.11274 194836.895  3.52%     -    0s
+H    0     0                    201009.22496 194836.895  3.07%     -    0s
+     0     0 194836.895    0    7 201009.225 194836.895  3.07%     -    0s
+     0     0 194997.086    0    8 201009.225 194997.086  2.99%     -    0s
+H    0     0                    200437.34638 194998.990  2.71%     -    0s
+H    0     0                    198660.98401 194998.990  1.84%     -    0s
+     0     0 194998.990    0    7 198660.984 194998.990  1.84%     -    0s
+     0     0 195364.174    0    8 198660.984 195364.174  1.66%     -    0s
+     0     0 195420.944    0    6 198660.984 195420.944  1.63%     -    0s
+     0     0 195426.650    0    7 198660.984 195426.650  1.63%     -    0s
+     0     0 195461.343    0    4 198660.984 195461.343  1.61%     -    0s
+     0     0 195489.677    0    4 198660.984 195489.677  1.60%     -    0s
+     0     0 195505.077    0    6 198660.984 195505.077  1.59%     -    0s
+     0     0 195545.847    0    8 198660.984 195545.847  1.57%     -    0s
+     0     0 195658.090    0    7 198660.984 195658.090  1.51%     -    0s
+     0     0 195659.573    0    7 198660.984 195659.573  1.51%     -    0s
+     0     0 195686.029    0    6 198660.984 195686.029  1.50%     -    0s
+     0     0 195687.910    0    6 198660.984 195687.910  1.50%     -    0s
+     0     0 195712.046    0    7 198660.984 195712.046  1.48%     -    0s
+     0     0 195712.046    0    7 198660.984 195712.046  1.48%     -    0s
+     0     2 195764.126    0    7 198660.984 195764.126  1.46%     -    0s
+
+Cutting planes:
+  Implied bound: 71
+  MIR: 10
+  Flow cover: 6
+  Relax-and-lift: 1
+
+Explored 176 nodes (2198 simplex iterations) in 0.04 seconds (0.06 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 10: 198661 200437 201009 ... 231532
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.986609840114e+05, best bound 1.986609840114e+05, gap 0.0000%
+
+User-callback calls 724, time in user-callback 0.00 sec

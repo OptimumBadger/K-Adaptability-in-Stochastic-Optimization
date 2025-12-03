@@ -1,0 +1,49 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:17:32 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario4_20251203_021731.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:17:32 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario4_20251203_021731.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 105 rows, 1329 columns and 2637 nonzeros
+Model fingerprint: 0x5f596cb2
+Variable types: 1300 continuous, 29 integer (29 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Found heuristic solution: objective 692540.55251
+Presolve removed 59 rows and 932 columns
+Presolve time: 0.00s
+Presolved: 46 rows, 397 columns, 778 nonzeros
+Variable types: 391 continuous, 6 integer (6 binary)
+
+Root relaxation: objective 1.955524e+05, 46 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 195552.402    0    5 692540.553 195552.402  71.8%     -    0s
+H    0     0                    199090.59905 195552.402  1.78%     -    0s
+
+Explored 1 nodes (46 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 2: 199091 692541 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.990905990470e+05, best bound 1.990905990470e+05, gap 0.0000%
+
+User-callback calls 276, time in user-callback 0.00 sec

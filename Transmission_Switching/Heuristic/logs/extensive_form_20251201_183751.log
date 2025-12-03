@@ -1,0 +1,37 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 18:37:52 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/extensive_form_20251201_183751.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 18:37:52 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/extensive_form_20251201_183751.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0x38e28060
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.683629e+01   0.000000e+00      0s
+      53    1.8080003e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 53 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.808000327e+03
+
+User-callback calls 135, time in user-callback 0.00 sec

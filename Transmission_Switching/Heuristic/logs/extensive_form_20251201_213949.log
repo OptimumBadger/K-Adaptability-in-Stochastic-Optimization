@@ -1,0 +1,849 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 21:39:49 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/extensive_form_20251201_213949.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 21:39:49 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Transmission_Switching/Heuristic/logs/extensive_form_20251201_213949.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x7b2f1f7c
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 185 columns, 362 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.957258e+01   0.000000e+00      0s
+      59    2.0569983e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 59 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  2.056998269e+03
+
+User-callback calls 144, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0xb97fa1c5
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.697437e+01   0.000000e+00      0s
+      51    2.1431830e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 51 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  2.143182956e+03
+
+User-callback calls 133, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0xc1709ec3
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.238031e+02   0.000000e+00      0s
+      54    2.1342113e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 54 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  2.134211290e+03
+
+User-callback calls 137, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x6086ec8b
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 356 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 184 columns, 361 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.928938e+01   0.000000e+00      0s
+      51    1.7585969e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 51 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.758596886e+03
+
+User-callback calls 136, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0x8da0a451
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.658601e+01   0.000000e+00      0s
+      51    1.7139473e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 51 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.713947329e+03
+
+User-callback calls 133, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0xfa4c5a6c
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.248209e+02   0.000000e+00      0s
+      57    1.7623039e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 57 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.762303903e+03
+
+User-callback calls 140, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x7b40e9c7
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 185 columns, 362 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   9.002576e+01   0.000000e+00      0s
+      51    2.5473291e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 51 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  2.547329065e+03
+
+User-callback calls 136, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0x2cc8a0ac
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.699174e+01   0.000000e+00      0s
+      51    2.4311179e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 51 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  2.431117884e+03
+
+User-callback calls 133, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x1970490f
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.253915e+02   0.000000e+00      0s
+      59    2.4163553e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 59 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  2.416355332e+03
+
+User-callback calls 141, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x711b7c32
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 356 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 184 columns, 361 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.909241e+01   0.000000e+00      0s
+      57    1.7085557e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 57 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.708555660e+03
+
+User-callback calls 142, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0xd61a295c
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.642263e+01   0.000000e+00      0s
+      54    1.6756953e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 54 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.675695321e+03
+
+User-callback calls 136, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0xa276feb2
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.244457e+02   0.000000e+00      0s
+      57    1.7182629e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 57 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.718262919e+03
+
+User-callback calls 140, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x6fccc9e8
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 185 columns, 362 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   9.050016e+01   0.000000e+00      0s
+      52    3.9212304e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 52 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  3.921230413e+03
+
+User-callback calls 137, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0xa82b17db
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.732226e+01   0.000000e+00      0s
+      54    4.4367918e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 54 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  4.436791822e+03
+
+User-callback calls 136, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x450f52b1
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [6e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.249350e+02   0.000000e+00      0s
+      57    4.1630439e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 57 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  4.163043870e+03
+
+User-callback calls 140, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0xfc69ccba
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 185 columns, 362 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.909674e+01   0.000000e+00      0s
+      51    1.5860390e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 51 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.586038961e+03
+
+User-callback calls 136, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0xcfd9d7f8
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.647569e+01   0.000000e+00      0s
+      54    1.5639563e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 54 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.563956314e+03
+
+User-callback calls 136, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0xae4bc014
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.247770e+02   0.000000e+00      0s
+      56    1.5855771e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 56 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.585577055e+03
+
+User-callback calls 139, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x230f0701
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 356 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 184 columns, 361 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.878687e+01   0.000000e+00      0s
+      49    1.4750903e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 49 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.475090304e+03
+
+User-callback calls 133, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0xb3238fbd
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.629713e+01   0.000000e+00      0s
+      48    1.4493358e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 48 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.449335777e+03
+
+User-callback calls 130, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x387449cc
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.235338e+02   0.000000e+00      0s
+      55    1.4785623e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 55 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.478562274e+03
+
+User-callback calls 138, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x4465533c
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 356 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 184 columns, 361 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.910984e+01   0.000000e+00      0s
+      56    1.7373438e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 56 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.737343839e+03
+
+User-callback calls 141, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0x0141e800
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.627599e+01   0.000000e+00      0s
+      52    1.7024083e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 52 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.702408341e+03
+
+User-callback calls 134, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x9b8032fc
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.237014e+02   0.000000e+00      0s
+      56    1.7679637e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 56 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.767963680e+03
+
+User-callback calls 139, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x7ba18a13
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 356 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 184 columns, 361 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.909644e+01   0.000000e+00      0s
+      53    1.8236760e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 53 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.823675983e+03
+
+User-callback calls 138, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0x4882e03e
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.656163e+01   0.000000e+00      0s
+      49    1.8201278e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 49 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.820127823e+03
+
+User-callback calls 131, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0xa067546c
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.245148e+02   0.000000e+00      0s
+      56    1.8724974e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 56 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.872497371e+03
+
+User-callback calls 139, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x0f1fd061
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 356 columns
+Presolve time: 0.00s
+Presolved: 90 rows, 184 columns, 361 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.933140e+01   0.000000e+00      0s
+      53    1.7450080e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 53 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.745007953e+03
+
+User-callback calls 138, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 819 rows, 540 columns and 1587 nonzeros
+Model fingerprint: 0xae3b7050
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 725 rows and 347 columns
+Presolve time: 0.00s
+Presolved: 94 rows, 193 columns, 396 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   7.651227e+01   0.000000e+00      0s
+      55    1.6758756e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 55 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.675875588e+03
+
+User-callback calls 137, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  1800
+LogToConsole  0
+
+Optimize a model with 815 rows, 540 columns and 1579 nonzeros
+Model fingerprint: 0x70256aff
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e+01, 1e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [5e-02, 1e+02]
+Presolve removed 726 rows and 355 columns
+Presolve time: 0.00s
+Presolved: 89 rows, 185 columns, 375 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.244787e+02   0.000000e+00      0s
+      56    1.7000402e+03   0.000000e+00   0.000000e+00      0s
+
+Solved in 56 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  1.700040165e+03
+
+User-callback calls 139, time in user-callback 0.00 sec

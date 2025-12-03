@@ -1,0 +1,363 @@
+================================================================================
+COLUMN GENERATION SF - MASTER PROBLEM LOGS
+================================================================================
+Instance: ../Facility_Location/instances/cap91.txt
+K: 2, S: 6
+Pricing Type: 2
+Started: 2025-12-03T01:34:41.920
+================================================================================
+
+================================================================================
+MASTER PROBLEM - ITERATION 0
+================================================================================
+Timestamp: 2025-12-03T01:34:43.330
+Problem size: 6 scenarios, 2 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 01:34:43 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/CCG/logs/CG_SF_FL_cap91_K2_S6_master_20251203_013441.log"
+Set parameter LogToConsole to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 01:34:43 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/CCG/logs/CG_SF_FL_cap91_K2_S6_master_20251203_013441.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 2 columns and 8 nonzeros
+Model fingerprint: 0x25434c44
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [4e+05, 4e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+Presolve removed 7 rows and 2 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 0 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 32, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 1
+================================================================================
+Timestamp: 2025-12-03T01:34:43.370
+Problem size: 6 scenarios, 2 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 2 columns and 8 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [4e+05, 4e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+
+Solved in 0 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 15, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 2
+================================================================================
+Timestamp: 2025-12-03T01:34:45.070
+Problem size: 6 scenarios, 12 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 12 columns and 38 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+05, 4e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0   -3.9837726e+06   5.800000e+01   0.000000e+00      0s
+       1    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 23, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 3
+================================================================================
+Timestamp: 2025-12-03T01:34:45.918
+Problem size: 6 scenarios, 22 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 22 columns and 68 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+05, 4e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0   -4.5397872e+06   7.700000e+01   0.000000e+00      0s
+       1    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 23, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 4
+================================================================================
+Timestamp: 2025-12-03T01:34:47.319
+Problem size: 6 scenarios, 32 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 32 columns and 108 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [3e+05, 5e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0   -1.1699230e+06   6.100000e+01   0.000000e+00      0s
+       1    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 23, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 5
+================================================================================
+Timestamp: 2025-12-03T01:34:48.860
+Problem size: 6 scenarios, 42 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 42 columns and 138 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 5e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0   -1.1825150e+05   3.600000e+01   0.000000e+00      0s
+       1    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 23, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 6
+================================================================================
+Timestamp: 2025-12-03T01:34:50.178
+Problem size: 6 scenarios, 52 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 52 columns and 168 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 5e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    2.1277295e+05   4.700000e+01   0.000000e+00      0s
+       1    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 23, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 7
+================================================================================
+Timestamp: 2025-12-03T01:34:52.107
+Problem size: 6 scenarios, 62 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 62 columns and 204 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 7e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    5.9745235e+05   1.400000e+01   0.000000e+00      0s
+       1    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 23, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 8
+================================================================================
+Timestamp: 2025-12-03T01:34:54.893
+Problem size: 6 scenarios, 72 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 72 columns and 244 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 7e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    6.3023087e+05   4.600000e+01   0.000000e+00      0s
+       6    7.5891948e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 6 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589194807e+05
+
+User-callback calls 28, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION 9
+================================================================================
+Timestamp: 2025-12-03T01:34:56.879
+Problem size: 6 scenarios, 79 subsets, K=2
+Type: LINEAR RELAXATION
+================================================================================
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 79 columns and 272 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 7e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+LP warm-start: use basis
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    7.5202288e+05   1.800000e+01   0.000000e+00      0s
+       3    7.5890278e+05   0.000000e+00   0.000000e+00      0s
+
+Solved in 3 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589027836e+05
+
+User-callback calls 25, time in user-callback 0.00 sec
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 79 columns and 272 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 7e+05]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+00]
+
+Solved in 0 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  7.589027836e+05
+
+User-callback calls 15, time in user-callback 0.00 sec
+
+================================================================================
+MASTER PROBLEM - ITERATION FINAL_IP
+================================================================================
+Timestamp: 2025-12-03T01:34:58.371
+Problem size: 6 scenarios, 79 subsets, K=2
+Type: INTEGER
+================================================================================
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 01:34:58 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/CCG/logs/CG_SF_FL_cap91_K2_S6_master_20251203_013441.log"
+Set parameter LogToConsole to value 1
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 01:34:58 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/CCG/logs/CG_SF_FL_cap91_K2_S6_master_20251203_013441.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Optimize a model with 7 rows, 79 columns and 272 nonzeros
+Model fingerprint: 0x058b1769
+Variable types: 0 continuous, 79 integer (79 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+05, 7e+05]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+00]
+Found heuristic solution: objective 758902.78356
+Presolve removed 7 rows and 79 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 10 available processors)
+
+Solution count 1: 758903 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.589027835631e+05, best bound 7.589027835631e+05, gap 0.0000%
+
+User-callback calls 199, time in user-callback 0.00 sec

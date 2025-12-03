@@ -1,0 +1,47 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 19:46:53 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/reformulated_extensive_form_20251202_194649.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Tue Dec  2 19:46:53 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/reformulated_extensive_form_20251202_194649.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 2526 rows, 2600 columns and 7600 nonzeros
+Model fingerprint: 0xdefaa31b
+Variable types: 0 continuous, 2600 integer (2600 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e+03, 2e+04]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+00]
+Presolve time: 0.01s
+Presolved: 2526 rows, 2600 columns, 7600 nonzeros
+Variable types: 0 continuous, 2600 integer (2600 binary)
+Found heuristic solution: objective 146149.96802
+
+Root relaxation: objective 1.365743e+05, 712 iterations, 0.01 seconds (0.02 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    136574.30725 136574.307  0.00%     -    0s
+
+Explored 1 nodes (712 simplex iterations) in 0.02 seconds (0.04 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 2: 136574 146150 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.365743072452e+05, best bound 1.365743072452e+05, gap 0.0000%
+
+User-callback calls 153, time in user-callback 0.00 sec

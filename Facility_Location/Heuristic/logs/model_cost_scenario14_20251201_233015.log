@@ -1,0 +1,49 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 23:30:15 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario14_20251201_233015.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Mon Dec  1 23:30:15 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario14_20251201_233015.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 103 rows, 1327 columns and 2634 nonzeros
+Model fingerprint: 0x4100eb86
+Variable types: 1300 continuous, 27 integer (27 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 2e+04]
+Presolve removed 35 rows and 466 columns
+Presolve time: 0.00s
+Presolved: 68 rows, 861 columns, 1676 nonzeros
+Variable types: 860 continuous, 1 integer (1 binary)
+Found heuristic solution: objective 308356.69727
+
+Root relaxation: objective 3.058062e+05, 83 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 305806.217    0    1 308356.697 305806.217  0.83%     -    0s
+     0     0          -    0      308356.697 308350.701  0.00%     -    0s
+
+Explored 1 nodes (96 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 1: 308357 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.083566972694e+05, best bound 3.083507013195e+05, gap 0.0019%
+
+User-callback calls 244, time in user-callback 0.00 sec

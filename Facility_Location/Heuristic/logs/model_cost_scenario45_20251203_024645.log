@@ -1,0 +1,49 @@
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:46:47 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario45_20251203_024645.log"
+Set parameter LogToConsole to value 0
+
+Gurobi 12.0.3 (mac64[arm]) logging started Wed Dec  3 02:46:47 2025
+
+Set parameter LogFile to value "/Users/arnav/projects/Candidate-Selection-via-Stochastic-IP/Facility_Location/Heuristic/logs/model_cost_scenario45_20251203_024645.log"
+Gurobi Optimizer version 12.0.3 build v12.0.3rc0 (mac64[arm] - Darwin 24.6.0 24G84)
+
+CPU model: Apple M4
+Thread count: 10 physical cores, 10 logical processors, using up to 10 threads
+
+Non-default parameters:
+TimeLimit  3600
+LogToConsole  0
+
+Optimize a model with 104 rows, 1328 columns and 2631 nonzeros
+Model fingerprint: 0x6a148a74
+Variable types: 1300 continuous, 28 integer (28 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+03]
+  Objective range  [3e-01, 8e+03]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+04]
+Found heuristic solution: objective 368661.80132
+Presolve removed 78 rows and 1166 columns
+Presolve time: 0.00s
+Presolved: 26 rows, 162 columns, 321 nonzeros
+Variable types: 160 continuous, 2 integer (2 binary)
+
+Root relaxation: objective 1.220451e+05, 12 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 122045.089    0    2 368661.801 122045.089  66.9%     -    0s
+H    0     0                    125412.21333 122045.089  2.68%     -    0s
+
+Explored 1 nodes (12 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 10 (of 10 available processors)
+
+Solution count 2: 125412 368662 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.254122133299e+05, best bound 1.254122133299e+05, gap 0.0000%
+
+User-callback calls 269, time in user-callback 0.00 sec
