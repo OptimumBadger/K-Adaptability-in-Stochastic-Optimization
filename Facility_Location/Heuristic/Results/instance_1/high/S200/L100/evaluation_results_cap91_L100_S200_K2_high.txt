@@ -1,0 +1,643 @@
+================================================================================
+EVALUATION PHASE RESULTS - FACILITY LOCATION
+================================================================================
+
+Instance: cap91.txt
+Total samples: 200
+Valid samples (evaluated): 200
+Selected policies (K): 2
+
+--------------------------------------------------------------------------------
+WAIT-AND-SEE COST
+--------------------------------------------------------------------------------
+Average wait-and-see cost: 253917.85
+Successful solves: 200
+Failed solves: 0
+Total work units: 12.87
+
+--------------------------------------------------------------------------------
+MODEL COST
+--------------------------------------------------------------------------------
+Average model cost: 266575.05
+Successful solves: 200
+Failed solves: 0
+Total work units: 1.31
+Average work units per scenario: 0.01
+
+--------------------------------------------------------------------------------
+PERFORMANCE METRICS
+--------------------------------------------------------------------------------
+Model gap: 0.0498
+
+--------------------------------------------------------------------------------
+DETAILED COSTS
+--------------------------------------------------------------------------------
+Wait-and-see costs (one per line):
+  Scenario 1: 309459.22
+  Scenario 2: 306236.12
+  Scenario 3: 194376.6
+  Scenario 4: 316206.14
+  Scenario 5: 266307.9
+  Scenario 6: 247592.07
+  Scenario 7: 216018.25
+  Scenario 8: 248374.11
+  Scenario 9: 318776.43
+  Scenario 10: 245600.42
+  Scenario 11: 228771.79
+  Scenario 12: 217789.07
+  Scenario 13: 181613.95
+  Scenario 14: 353751.35
+  Scenario 15: 285455.34
+  Scenario 16: 232590.0
+  Scenario 17: 266345.8
+  Scenario 18: 147414.33
+  Scenario 19: 222883.98
+  Scenario 20: 217451.87
+  Scenario 21: 297952.89
+  Scenario 22: 249525.22
+  Scenario 23: 258192.15
+  Scenario 24: 248688.91
+  Scenario 25: 313258.75
+  Scenario 26: 405819.19
+  Scenario 27: 154445.32
+  Scenario 28: 268458.03
+  Scenario 29: 215449.43
+  Scenario 30: 355485.32
+  Scenario 31: 248561.97
+  Scenario 32: 297703.16
+  Scenario 33: 171371.59
+  Scenario 34: 297024.8
+  Scenario 35: 199359.33
+  Scenario 36: 209891.93
+  Scenario 37: 158602.11
+  Scenario 38: 340872.67
+  Scenario 39: 321968.76
+  Scenario 40: 279623.68
+  Scenario 41: 236673.78
+  Scenario 42: 266709.63
+  Scenario 43: 265551.94
+  Scenario 44: 281066.89
+  Scenario 45: 262840.14
+  Scenario 46: 325763.14
+  Scenario 47: 139980.62
+  Scenario 48: 360962.27
+  Scenario 49: 216848.14
+  Scenario 50: 280162.7
+  Scenario 51: 187427.17
+  Scenario 52: 260815.93
+  Scenario 53: 307570.87
+  Scenario 54: 295969.89
+  Scenario 55: 255093.69
+  Scenario 56: 200948.65
+  Scenario 57: 245503.29
+  Scenario 58: 317086.36
+  Scenario 59: 154229.56
+  Scenario 60: 222888.53
+  Scenario 61: 223378.22
+  Scenario 62: 144838.48
+  Scenario 63: 305492.07
+  Scenario 64: 77253.95
+  Scenario 65: 319407.21
+  Scenario 66: 296173.16
+  Scenario 67: 235828.07
+  Scenario 68: 257826.48
+  Scenario 69: 258158.74
+  Scenario 70: 291902.8
+  Scenario 71: 234172.3
+  Scenario 72: 183759.23
+  Scenario 73: 225206.86
+  Scenario 74: 120714.84
+  Scenario 75: 274605.64
+  Scenario 76: 217468.4
+  Scenario 77: 250134.71
+  Scenario 78: 338473.59
+  Scenario 79: 150913.53
+  Scenario 80: 271843.62
+  Scenario 81: 312608.84
+  Scenario 82: 319094.58
+  Scenario 83: 244530.46
+  Scenario 84: 360739.7
+  Scenario 85: 229805.59
+  Scenario 86: 229418.79
+  Scenario 87: 277630.96
+  Scenario 88: 304173.33
+  Scenario 89: 341414.12
+  Scenario 90: 264101.64
+  Scenario 91: 249808.96
+  Scenario 92: 267624.93
+  Scenario 93: 202055.33
+  Scenario 94: 300376.92
+  Scenario 95: 198090.28
+  Scenario 96: 321860.32
+  Scenario 97: 240154.06
+  Scenario 98: 165220.6
+  Scenario 99: 314059.23
+  Scenario 100: 311063.05
+  Scenario 101: 324735.3
+  Scenario 102: 167560.51
+  Scenario 103: 328693.98
+  Scenario 104: 262870.04
+  Scenario 105: 264071.18
+  Scenario 106: 220999.33
+  Scenario 107: 212927.98
+  Scenario 108: 232714.87
+  Scenario 109: 209482.48
+  Scenario 110: 291815.05
+  Scenario 111: 245306.82
+  Scenario 112: 273539.29
+  Scenario 113: 254517.1
+  Scenario 114: 275931.38
+  Scenario 115: 221239.0
+  Scenario 116: 281722.9
+  Scenario 117: 278731.7
+  Scenario 118: 196573.78
+  Scenario 119: 272828.66
+  Scenario 120: 244869.3
+  Scenario 121: 256377.64
+  Scenario 122: 266295.34
+  Scenario 123: 206703.2
+  Scenario 124: 251875.49
+  Scenario 125: 304866.6
+  Scenario 126: 240341.89
+  Scenario 127: 263691.21
+  Scenario 128: 188038.73
+  Scenario 129: 243390.07
+  Scenario 130: 343695.32
+  Scenario 131: 313142.29
+  Scenario 132: 189037.34
+  Scenario 133: 287763.98
+  Scenario 134: 284343.16
+  Scenario 135: 297685.26
+  Scenario 136: 289692.24
+  Scenario 137: 279545.69
+  Scenario 138: 414611.08
+  Scenario 139: 301443.2
+  Scenario 140: 174626.72
+  Scenario 141: 253096.45
+  Scenario 142: 339197.25
+  Scenario 143: 130201.52
+  Scenario 144: 227840.98
+  Scenario 145: 188949.54
+  Scenario 146: 139208.01
+  Scenario 147: 294324.9
+  Scenario 148: 224548.28
+  Scenario 149: 184135.45
+  Scenario 150: 155247.68
+  Scenario 151: 324930.02
+  Scenario 152: 233157.49
+  Scenario 153: 208058.85
+  Scenario 154: 294968.7
+  Scenario 155: 150221.16
+  Scenario 156: 178866.88
+  Scenario 157: 241412.07
+  Scenario 158: 312172.88
+  Scenario 159: 248669.27
+  Scenario 160: 193392.54
+  Scenario 161: 201036.95
+  Scenario 162: 299720.43
+  Scenario 163: 346446.49
+  Scenario 164: 214300.29
+  Scenario 165: 273371.7
+  Scenario 166: 178288.55
+  Scenario 167: 195473.52
+  Scenario 168: 308543.91
+  Scenario 169: 227834.21
+  Scenario 170: 156029.76
+  Scenario 171: 292606.57
+  Scenario 172: 312122.05
+  Scenario 173: 256123.08
+  Scenario 174: 244232.35
+  Scenario 175: 276094.18
+  Scenario 176: 279068.15
+  Scenario 177: 237121.74
+  Scenario 178: 261411.33
+  Scenario 179: 102002.03
+  Scenario 180: 305058.79
+  Scenario 181: 423386.52
+  Scenario 182: 131583.71
+  Scenario 183: 250032.9
+  Scenario 184: 256030.55
+  Scenario 185: 354767.72
+  Scenario 186: 381710.35
+  Scenario 187: 226062.65
+  Scenario 188: 246280.5
+  Scenario 189: 250712.39
+  Scenario 190: 209911.89
+  Scenario 191: 244660.06
+  Scenario 192: 239347.2
+  Scenario 193: 316170.01
+  Scenario 194: 241286.03
+  Scenario 195: 340085.99
+  Scenario 196: 213070.8
+  Scenario 197: 251065.75
+  Scenario 198: 242009.4
+  Scenario 199: 273509.9
+  Scenario 200: 213355.16
+
+Model costs (one per line, only for valid samples):
+  Valid sample 1: 315526.88
+  Valid sample 2: 315977.46
+  Valid sample 3: 209120.86
+  Valid sample 4: 322023.22
+  Valid sample 5: 282400.47
+  Valid sample 6: 255889.6
+  Valid sample 7: 224417.05
+  Valid sample 8: 249990.97
+  Valid sample 9: 321622.12
+  Valid sample 10: 245600.42
+  Valid sample 11: 232300.57
+  Valid sample 12: 229132.53
+  Valid sample 13: 199841.83
+  Valid sample 14: 365971.9
+  Valid sample 15: 297491.88
+  Valid sample 16: 239104.42
+  Valid sample 17: 282733.5
+  Valid sample 18: 177786.99
+  Valid sample 19: 235225.28
+  Valid sample 20: 223261.04
+  Valid sample 21: 304845.54
+  Valid sample 22: 256112.6
+  Valid sample 23: 274685.71
+  Valid sample 24: 250127.37
+  Valid sample 25: 320430.29
+  Valid sample 26: 481857.57
+  Valid sample 27: 184227.85
+  Valid sample 28: 285926.07
+  Valid sample 29: 226006.55
+  Valid sample 30: 385814.44
+  Valid sample 31: 258085.91
+  Valid sample 32: 308839.45
+  Valid sample 33: 193439.4
+  Valid sample 34: 306800.58
+  Valid sample 35: 212157.0
+  Valid sample 36: 219192.14
+  Valid sample 37: 183303.92
+  Valid sample 38: 342519.74
+  Valid sample 39: 328567.74
+  Valid sample 40: 293514.32
+  Valid sample 41: 239492.95
+  Valid sample 42: 284135.35
+  Valid sample 43: 278398.24
+  Valid sample 44: 291329.22
+  Valid sample 45: 263620.53
+  Valid sample 46: 330106.37
+  Valid sample 47: 174123.25
+  Valid sample 48: 396028.9
+  Valid sample 49: 227242.69
+  Valid sample 50: 298452.4
+  Valid sample 51: 203384.4
+  Valid sample 52: 278719.63
+  Valid sample 53: 316930.01
+  Valid sample 54: 306027.36
+  Valid sample 55: 262214.63
+  Valid sample 56: 212080.69
+  Valid sample 57: 247495.44
+  Valid sample 58: 323052.79
+  Valid sample 59: 176341.23
+  Valid sample 60: 229264.35
+  Valid sample 61: 230359.06
+  Valid sample 62: 172500.74
+  Valid sample 63: 312808.37
+  Valid sample 64: 132020.41
+  Valid sample 65: 321764.49
+  Valid sample 66: 305506.93
+  Valid sample 67: 241006.89
+  Valid sample 68: 275082.76
+  Valid sample 69: 268552.95
+  Valid sample 70: 303940.32
+  Valid sample 71: 237597.59
+  Valid sample 72: 201704.9
+  Valid sample 73: 231913.32
+  Valid sample 74: 160198.87
+  Valid sample 75: 290987.28
+  Valid sample 76: 222233.25
+  Valid sample 77: 271024.57
+  Valid sample 78: 338473.59
+  Valid sample 79: 178663.85
+  Valid sample 80: 289005.71
+  Valid sample 81: 314079.06
+  Valid sample 82: 323485.15
+  Valid sample 83: 254754.79
+  Valid sample 84: 371310.79
+  Valid sample 85: 232096.32
+  Valid sample 86: 243243.29
+  Valid sample 87: 292449.07
+  Valid sample 88: 307628.62
+  Valid sample 89: 348731.02
+  Valid sample 90: 269235.06
+  Valid sample 91: 261107.01
+  Valid sample 92: 286419.93
+  Valid sample 93: 219703.5
+  Valid sample 94: 312440.61
+  Valid sample 95: 207071.38
+  Valid sample 96: 326437.53
+  Valid sample 97: 240757.51
+  Valid sample 98: 189997.59
+  Valid sample 99: 319941.23
+  Valid sample 100: 315683.08
+  Valid sample 101: 328125.49
+  Valid sample 102: 192041.07
+  Valid sample 103: 331006.6
+  Valid sample 104: 281579.49
+  Valid sample 105: 282718.06
+  Valid sample 106: 232188.56
+  Valid sample 107: 221989.35
+  Valid sample 108: 233198.63
+  Valid sample 109: 218294.65
+  Valid sample 110: 303306.03
+  Valid sample 111: 246736.24
+  Valid sample 112: 286632.71
+  Valid sample 113: 259485.47
+  Valid sample 114: 292871.6
+  Valid sample 115: 236962.68
+  Valid sample 116: 295509.11
+  Valid sample 117: 289064.07
+  Valid sample 118: 207220.82
+  Valid sample 119: 275976.62
+  Valid sample 120: 246195.55
+  Valid sample 121: 267384.11
+  Valid sample 122: 275594.54
+  Valid sample 123: 217594.41
+  Valid sample 124: 252959.39
+  Valid sample 125: 310325.72
+  Valid sample 126: 243081.43
+  Valid sample 127: 281764.86
+  Valid sample 128: 202501.4
+  Valid sample 129: 245403.66
+  Valid sample 130: 355204.77
+  Valid sample 131: 320587.05
+  Valid sample 132: 204323.52
+  Valid sample 133: 296323.53
+  Valid sample 134: 293828.12
+  Valid sample 135: 304319.74
+  Valid sample 136: 301460.98
+  Valid sample 137: 293320.22
+  Valid sample 138: 476043.31
+  Valid sample 139: 310810.66
+  Valid sample 140: 195167.22
+  Valid sample 141: 254684.98
+  Valid sample 142: 342061.04
+  Valid sample 143: 168358.66
+  Valid sample 144: 230509.44
+  Valid sample 145: 206262.86
+  Valid sample 146: 171321.81
+  Valid sample 147: 302743.28
+  Valid sample 148: 230796.95
+  Valid sample 149: 206132.35
+  Valid sample 150: 184128.59
+  Valid sample 151: 325697.94
+  Valid sample 152: 235913.7
+  Valid sample 153: 217724.98
+  Valid sample 154: 305488.69
+  Valid sample 155: 177559.77
+  Valid sample 156: 202338.92
+  Valid sample 157: 242479.49
+  Valid sample 158: 319270.07
+  Valid sample 159: 249737.3
+  Valid sample 160: 206133.05
+  Valid sample 161: 212190.67
+  Valid sample 162: 305627.63
+  Valid sample 163: 349717.0
+  Valid sample 164: 221079.47
+  Valid sample 165: 292881.95
+  Valid sample 166: 196397.32
+  Valid sample 167: 210082.32
+  Valid sample 168: 318675.88
+  Valid sample 169: 238454.74
+  Valid sample 170: 188133.66
+  Valid sample 171: 305847.72
+  Valid sample 172: 314099.49
+  Valid sample 173: 270763.72
+  Valid sample 174: 247890.09
+  Valid sample 175: 289066.79
+  Valid sample 176: 294583.5
+  Valid sample 177: 239020.28
+  Valid sample 178: 280016.19
+  Valid sample 179: 148931.5
+  Valid sample 180: 305674.62
+  Valid sample 181: 503407.78
+  Valid sample 182: 168996.78
+  Valid sample 183: 264216.93
+  Valid sample 184: 273575.51
+  Valid sample 185: 384460.96
+  Valid sample 186: 419736.27
+  Valid sample 187: 228162.7
+  Valid sample 188: 247643.75
+  Valid sample 189: 252558.79
+  Valid sample 190: 216735.43
+  Valid sample 191: 245109.6
+  Valid sample 192: 239629.19
+  Valid sample 193: 320761.45
+  Valid sample 194: 248193.16
+  Valid sample 195: 345672.83
+  Valid sample 196: 225463.19
+  Valid sample 197: 252021.81
+  Valid sample 198: 245865.15
+  Valid sample 199: 288135.05
+  Valid sample 200: 224850.97
+
+Second-stage work units per valid sample:
+  Valid sample 1: 0.01
+  Valid sample 2: 0.01
+  Valid sample 3: 0.01
+  Valid sample 4: 0.01
+  Valid sample 5: 0.01
+  Valid sample 6: 0.01
+  Valid sample 7: 0.01
+  Valid sample 8: 0.01
+  Valid sample 9: 0.01
+  Valid sample 10: 0.01
+  Valid sample 11: 0.01
+  Valid sample 12: 0.01
+  Valid sample 13: 0.01
+  Valid sample 14: 0.01
+  Valid sample 15: 0.01
+  Valid sample 16: 0.01
+  Valid sample 17: 0.01
+  Valid sample 18: 0.01
+  Valid sample 19: 0.01
+  Valid sample 20: 0.01
+  Valid sample 21: 0.01
+  Valid sample 22: 0.01
+  Valid sample 23: 0.01
+  Valid sample 24: 0.01
+  Valid sample 25: 0.01
+  Valid sample 26: 0.01
+  Valid sample 27: 0.01
+  Valid sample 28: 0.01
+  Valid sample 29: 0.01
+  Valid sample 30: 0.01
+  Valid sample 31: 0.01
+  Valid sample 32: 0.01
+  Valid sample 33: 0.01
+  Valid sample 34: 0.01
+  Valid sample 35: 0.01
+  Valid sample 36: 0.01
+  Valid sample 37: 0.01
+  Valid sample 38: 0.01
+  Valid sample 39: 0.01
+  Valid sample 40: 0.01
+  Valid sample 41: 0.01
+  Valid sample 42: 0.01
+  Valid sample 43: 0.01
+  Valid sample 44: 0.01
+  Valid sample 45: 0.01
+  Valid sample 46: 0.01
+  Valid sample 47: 0.01
+  Valid sample 48: 0.01
+  Valid sample 49: 0.01
+  Valid sample 50: 0.01
+  Valid sample 51: 0.01
+  Valid sample 52: 0.01
+  Valid sample 53: 0.01
+  Valid sample 54: 0.01
+  Valid sample 55: 0.01
+  Valid sample 56: 0.01
+  Valid sample 57: 0.01
+  Valid sample 58: 0.01
+  Valid sample 59: 0.01
+  Valid sample 60: 0.01
+  Valid sample 61: 0.01
+  Valid sample 62: 0.01
+  Valid sample 63: 0.01
+  Valid sample 64: 0.01
+  Valid sample 65: 0.01
+  Valid sample 66: 0.01
+  Valid sample 67: 0.01
+  Valid sample 68: 0.01
+  Valid sample 69: 0.01
+  Valid sample 70: 0.01
+  Valid sample 71: 0.01
+  Valid sample 72: 0.01
+  Valid sample 73: 0.01
+  Valid sample 74: 0.01
+  Valid sample 75: 0.01
+  Valid sample 76: 0.01
+  Valid sample 77: 0.01
+  Valid sample 78: 0.01
+  Valid sample 79: 0.01
+  Valid sample 80: 0.01
+  Valid sample 81: 0.01
+  Valid sample 82: 0.01
+  Valid sample 83: 0.01
+  Valid sample 84: 0.01
+  Valid sample 85: 0.01
+  Valid sample 86: 0.01
+  Valid sample 87: 0.01
+  Valid sample 88: 0.01
+  Valid sample 89: 0.01
+  Valid sample 90: 0.01
+  Valid sample 91: 0.01
+  Valid sample 92: 0.01
+  Valid sample 93: 0.01
+  Valid sample 94: 0.01
+  Valid sample 95: 0.01
+  Valid sample 96: 0.01
+  Valid sample 97: 0.01
+  Valid sample 98: 0.01
+  Valid sample 99: 0.01
+  Valid sample 100: 0.01
+  Valid sample 101: 0.01
+  Valid sample 102: 0.01
+  Valid sample 103: 0.01
+  Valid sample 104: 0.01
+  Valid sample 105: 0.01
+  Valid sample 106: 0.01
+  Valid sample 107: 0.01
+  Valid sample 108: 0.01
+  Valid sample 109: 0.01
+  Valid sample 110: 0.01
+  Valid sample 111: 0.01
+  Valid sample 112: 0.01
+  Valid sample 113: 0.01
+  Valid sample 114: 0.01
+  Valid sample 115: 0.01
+  Valid sample 116: 0.01
+  Valid sample 117: 0.01
+  Valid sample 118: 0.01
+  Valid sample 119: 0.01
+  Valid sample 120: 0.01
+  Valid sample 121: 0.01
+  Valid sample 122: 0.01
+  Valid sample 123: 0.01
+  Valid sample 124: 0.01
+  Valid sample 125: 0.01
+  Valid sample 126: 0.01
+  Valid sample 127: 0.01
+  Valid sample 128: 0.01
+  Valid sample 129: 0.01
+  Valid sample 130: 0.01
+  Valid sample 131: 0.01
+  Valid sample 132: 0.01
+  Valid sample 133: 0.01
+  Valid sample 134: 0.01
+  Valid sample 135: 0.01
+  Valid sample 136: 0.01
+  Valid sample 137: 0.01
+  Valid sample 138: 0.01
+  Valid sample 139: 0.01
+  Valid sample 140: 0.01
+  Valid sample 141: 0.01
+  Valid sample 142: 0.01
+  Valid sample 143: 0.01
+  Valid sample 144: 0.01
+  Valid sample 145: 0.01
+  Valid sample 146: 0.01
+  Valid sample 147: 0.01
+  Valid sample 148: 0.01
+  Valid sample 149: 0.01
+  Valid sample 150: 0.01
+  Valid sample 151: 0.01
+  Valid sample 152: 0.01
+  Valid sample 153: 0.01
+  Valid sample 154: 0.01
+  Valid sample 155: 0.01
+  Valid sample 156: 0.01
+  Valid sample 157: 0.01
+  Valid sample 158: 0.01
+  Valid sample 159: 0.01
+  Valid sample 160: 0.01
+  Valid sample 161: 0.01
+  Valid sample 162: 0.01
+  Valid sample 163: 0.01
+  Valid sample 164: 0.01
+  Valid sample 165: 0.01
+  Valid sample 166: 0.01
+  Valid sample 167: 0.01
+  Valid sample 168: 0.01
+  Valid sample 169: 0.01
+  Valid sample 170: 0.01
+  Valid sample 171: 0.01
+  Valid sample 172: 0.01
+  Valid sample 173: 0.01
+  Valid sample 174: 0.01
+  Valid sample 175: 0.01
+  Valid sample 176: 0.01
+  Valid sample 177: 0.01
+  Valid sample 178: 0.01
+  Valid sample 179: 0.01
+  Valid sample 180: 0.01
+  Valid sample 181: 0.01
+  Valid sample 182: 0.01
+  Valid sample 183: 0.01
+  Valid sample 184: 0.01
+  Valid sample 185: 0.01
+  Valid sample 186: 0.01
+  Valid sample 187: 0.01
+  Valid sample 188: 0.01
+  Valid sample 189: 0.01
+  Valid sample 190: 0.01
+  Valid sample 191: 0.01
+  Valid sample 192: 0.01
+  Valid sample 193: 0.01
+  Valid sample 194: 0.01
+  Valid sample 195: 0.01
+  Valid sample 196: 0.01
+  Valid sample 197: 0.01
+  Valid sample 198: 0.01
+  Valid sample 199: 0.01
+  Valid sample 200: 0.01
+
+================================================================================
+Results saved on: 2026-01-19 10:54:16
+================================================================================

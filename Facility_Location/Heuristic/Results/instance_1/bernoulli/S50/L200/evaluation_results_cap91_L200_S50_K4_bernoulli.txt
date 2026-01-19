@@ -1,0 +1,193 @@
+================================================================================
+EVALUATION PHASE RESULTS - FACILITY LOCATION
+================================================================================
+
+Instance: cap91.txt
+Total samples: 50
+Valid samples (evaluated): 50
+Selected policies (K): 4
+
+--------------------------------------------------------------------------------
+WAIT-AND-SEE COST
+--------------------------------------------------------------------------------
+Average wait-and-see cost: 130924.37
+Successful solves: 50
+Failed solves: 0
+Total work units: 8.9
+
+--------------------------------------------------------------------------------
+MODEL COST
+--------------------------------------------------------------------------------
+Average model cost: 143613.07
+Successful solves: 50
+Failed solves: 0
+Total work units: 0.34
+Average work units per scenario: 0.01
+
+--------------------------------------------------------------------------------
+PERFORMANCE METRICS
+--------------------------------------------------------------------------------
+Model gap: 0.0969
+
+--------------------------------------------------------------------------------
+DETAILED COSTS
+--------------------------------------------------------------------------------
+Wait-and-see costs (one per line):
+  Scenario 1: 90544.52
+  Scenario 2: 163806.0
+  Scenario 3: 104550.47
+  Scenario 4: 191488.61
+  Scenario 5: 72006.99
+  Scenario 6: 61713.77
+  Scenario 7: 158911.68
+  Scenario 8: 126742.78
+  Scenario 9: 73786.36
+  Scenario 10: 91423.57
+  Scenario 11: 53532.35
+  Scenario 12: 140349.0
+  Scenario 13: 154767.08
+  Scenario 14: 163136.92
+  Scenario 15: 82333.77
+  Scenario 16: 143736.99
+  Scenario 17: 101833.7
+  Scenario 18: 104386.33
+  Scenario 19: 122726.78
+  Scenario 20: 116701.19
+  Scenario 21: 88588.24
+  Scenario 22: 134662.44
+  Scenario 23: 196553.79
+  Scenario 24: 114631.74
+  Scenario 25: 160998.57
+  Scenario 26: 196496.96
+  Scenario 27: 185412.99
+  Scenario 28: 119330.44
+  Scenario 29: 152466.64
+  Scenario 30: 122089.26
+  Scenario 31: 128768.76
+  Scenario 32: 145702.69
+  Scenario 33: 166269.03
+  Scenario 34: 130840.56
+  Scenario 35: 105184.06
+  Scenario 36: 174525.57
+  Scenario 37: 111619.01
+  Scenario 38: 139428.95
+  Scenario 39: 112428.12
+  Scenario 40: 85914.27
+  Scenario 41: 115278.97
+  Scenario 42: 121407.33
+  Scenario 43: 142122.16
+  Scenario 44: 152373.57
+  Scenario 45: 111957.36
+  Scenario 46: 186014.78
+  Scenario 47: 251805.96
+  Scenario 48: 158280.27
+  Scenario 49: 131546.49
+  Scenario 50: 85040.53
+
+Model costs (one per line, only for valid samples):
+  Valid sample 1: 114251.3
+  Valid sample 2: 186279.67
+  Valid sample 3: 110458.62
+  Valid sample 4: 204519.95
+  Valid sample 5: 83793.69
+  Valid sample 6: 73378.17
+  Valid sample 7: 180087.11
+  Valid sample 8: 134503.57
+  Valid sample 9: 79285.3
+  Valid sample 10: 101697.81
+  Valid sample 11: 65243.36
+  Valid sample 12: 143793.5
+  Valid sample 13: 167779.52
+  Valid sample 14: 178866.94
+  Valid sample 15: 92210.49
+  Valid sample 16: 156279.11
+  Valid sample 17: 115047.32
+  Valid sample 18: 116546.05
+  Valid sample 19: 142288.31
+  Valid sample 20: 125958.46
+  Valid sample 21: 96714.96
+  Valid sample 22: 140240.05
+  Valid sample 23: 209022.96
+  Valid sample 24: 122445.67
+  Valid sample 25: 160998.57
+  Valid sample 26: 236849.0
+  Valid sample 27: 204321.71
+  Valid sample 28: 128061.95
+  Valid sample 29: 172111.27
+  Valid sample 30: 137379.21
+  Valid sample 31: 137104.32
+  Valid sample 32: 159477.32
+  Valid sample 33: 177909.91
+  Valid sample 34: 134988.05
+  Valid sample 35: 110606.86
+  Valid sample 36: 185768.5
+  Valid sample 37: 124817.24
+  Valid sample 38: 149327.73
+  Valid sample 39: 124904.48
+  Valid sample 40: 91436.61
+  Valid sample 41: 121379.63
+  Valid sample 42: 134563.34
+  Valid sample 43: 146225.48
+  Valid sample 44: 163547.18
+  Valid sample 45: 135083.7
+  Valid sample 46: 195103.87
+  Valid sample 47: 277639.18
+  Valid sample 48: 173325.58
+  Valid sample 49: 159404.12
+  Valid sample 50: 97626.84
+
+Second-stage work units per valid sample:
+  Valid sample 1: 0.01
+  Valid sample 2: 0.01
+  Valid sample 3: 0.01
+  Valid sample 4: 0.01
+  Valid sample 5: 0.01
+  Valid sample 6: 0.01
+  Valid sample 7: 0.01
+  Valid sample 8: 0.01
+  Valid sample 9: 0.01
+  Valid sample 10: 0.01
+  Valid sample 11: 0.01
+  Valid sample 12: 0.01
+  Valid sample 13: 0.01
+  Valid sample 14: 0.01
+  Valid sample 15: 0.01
+  Valid sample 16: 0.01
+  Valid sample 17: 0.01
+  Valid sample 18: 0.01
+  Valid sample 19: 0.01
+  Valid sample 20: 0.01
+  Valid sample 21: 0.01
+  Valid sample 22: 0.01
+  Valid sample 23: 0.01
+  Valid sample 24: 0.01
+  Valid sample 25: 0.01
+  Valid sample 26: 0.01
+  Valid sample 27: 0.01
+  Valid sample 28: 0.01
+  Valid sample 29: 0.01
+  Valid sample 30: 0.01
+  Valid sample 31: 0.01
+  Valid sample 32: 0.01
+  Valid sample 33: 0.01
+  Valid sample 34: 0.01
+  Valid sample 35: 0.01
+  Valid sample 36: 0.01
+  Valid sample 37: 0.01
+  Valid sample 38: 0.01
+  Valid sample 39: 0.01
+  Valid sample 40: 0.01
+  Valid sample 41: 0.01
+  Valid sample 42: 0.01
+  Valid sample 43: 0.01
+  Valid sample 44: 0.01
+  Valid sample 45: 0.01
+  Valid sample 46: 0.01
+  Valid sample 47: 0.01
+  Valid sample 48: 0.01
+  Valid sample 49: 0.01
+  Valid sample 50: 0.01
+
+================================================================================
+Results saved on: 2026-01-18 20:21:05
+================================================================================

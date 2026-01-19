@@ -1,11 +1,11 @@
 # Evaluation_Phase.jl
 # Phase 3: Evaluation Phase for Facility Location
 # This file handles:
-#   - Loading samples from SAA_samples.txt
-#   - Loading selected K policies from file
-#   - Loading wait-and-see costs from file (computed by Samples/FL/WS_Samples.jl)
-#   - Computing model cost (select best policy from K for each scenario using Second_Stage_Cost)
-#   - Computing performance metrics
+#   - Loading scenarios from a master file and slicing the first S scenarios
+#   - Loading selected K policies from the heuristic output file
+#   - Loading wait-and-see costs (computed by Samples/FL/WS_Samples.jl)
+#   - Computing model cost by solving K LPs per scenario and taking the best policy
+#   - Computing performance metrics and work-unit summaries
 
 using JuMP, Gurobi
 using MathOptInterface
@@ -41,13 +41,62 @@ include("Assignment_Phase.jl")
 # Note: The actual WS computation is now in Samples/FL/WS_Samples.jl
 include("WS_SAA_Samples.jl")  # Keep for load_wait_and_see_costs_from_file function
 
+function extract_params_from_selected_policies_file(file_path::String)
+    """Extract L, S, K from filename like selected_candidates_L10_S30_K2_bernoulli.txt.
+    
+    Returns (L, S, K) as Union{Int, Nothing}.
+    """
+    filename = basename(file_path)
+    m = match(r"selected_candidates_L(\d+)_S(\d+)_K(\d+)(?:_(low|high|bernoulli))?\.txt", filename)
+    if m === nothing
+        return nothing, nothing, nothing
+    end
+    return parse(Int, m.captures[1]), parse(Int, m.captures[2]), parse(Int, m.captures[3])
+end
+
+function json_escape(value::String)
+    escaped = replace(value, "\\" => "\\\\", "\"" => "\\\"", "\n" => "\\n", "\r" => "\\r", "\t" => "\\t")
+    return "\"" * escaped * "\""
+end
+
+function json_value(value)
+    if value === nothing
+        return "null"
+    elseif value isa String
+        return json_escape(value)
+    elseif value isa Bool
+        return value ? "true" : "false"
+    elseif value isa Number
+        return string(value)
+    elseif value isa Vector
+        return "[" * join([json_value(v) for v in value], ", ") * "]"
+    elseif value isa Dict
+        keys_sorted = sort(collect(keys(value)))
+        entries = [json_escape(string(k)) * ": " * json_value(value[k]) for k in keys_sorted]
+        return "{" * join(entries, ", ") * "}"
+    else
+        return json_escape(string(value))
+    end
+end
+
+function write_json_file(file_path::String, data::Dict)
+    dir = dirname(file_path)
+    if !isempty(dir) && !isdir(dir)
+        mkpath(dir)
+    end
+    open(file_path, "w") do file
+        println(file, json_value(data))
+    end
+end
+
+
 # =============================================================================
 # SECOND STAGE COST FUNCTION
 # =============================================================================
 
 function Second_Stage_Cost_direct(nloc, ncust, cost, capacity, demand, xsolutions, z, 
                                   fixedcost, unmet_pen, scaling_factor, log_file=nothing)
-    """Calculate second stage cost for evaluation - Direct implementation from FL1.jl
+    """Calculate second stage cost for evaluation by solving K LPs (one per candidate policy)
     
     Args:
         nloc: Number of facilities
@@ -56,16 +105,16 @@ function Second_Stage_Cost_direct(nloc, ncust, cost, capacity, demand, xsolution
         capacity: Capacity of each facility
         demand: Demand scenario
         xsolutions: Matrix of K solutions (K x nloc), each row is a binary vector
-        z: Binary vector indicating available policies (should be all 1s for K policies)
+        z: Binary vector indicating available policies (1 = available)
         fixedcost: Fixed cost for opening each facility
         unmet_pen: Penalty for unmet demand
         scaling_factor: Scaling factor for transportation cost
         log_file: Optional log file path
     
     Returns:
-        objective_value: Objective value
-        penalty_cost: Penalty cost
-        work_units: Work units used
+        objective_value: Best objective value across K LPs
+        penalty_cost: Penalty cost for the best policy
+        work_units: Total work units used across K LPs
     """
     model = Model(Gurobi.Optimizer)
     MOI.set(model, MOI.TimeLimitSec(), 3600.0)
@@ -81,18 +130,14 @@ function Second_Stage_Cost_direct(nloc, ncust, cost, capacity, demand, xsolution
         set_optimizer_attribute(model, "OutputFlag", 0)
     end
     
-    # Decision Variables
+    # Decision Variables (x will be fixed to each candidate)
     @variable(model, x[1:nloc], Bin)
     @variable(model, y[1:nloc, 1:ncust] >= 0)
     @variable(model, shortfall[1:ncust] >= 0)
-    @variable(model, w[1:length(z)], Bin)
 
     # Constraints
     @constraint(model, [j in 1:ncust], sum(y[i, j] for i in 1:nloc) + shortfall[j] == demand[j])
     @constraint(model, [i in 1:nloc], sum(y[i, j] for j in 1:ncust) - capacity[i]*x[i] <= 0)
-    @constraint(model, [i in 1:length(z)], w[i] <= z[i])
-    @constraint(model, sum(w[i] for i in 1:length(z)) == 1)
-    @constraint(model, x .== sum(w[i] * xsolutions[i, :] for i in 1:length(z)))
 
     # Objective function
     @objective(model, Min, 
@@ -100,16 +145,49 @@ function Second_Stage_Cost_direct(nloc, ncust, cost, capacity, demand, xsolution
         scaling_factor * sum(cost[i, j]*y[i, j] for i in 1:nloc for j in 1:ncust) + 
         sum(unmet_pen*shortfall[j] for j in 1:ncust))
 
-    optimize!(model)
-    
-    # Get work units
-    work_units = solve_time(model)
-    
-    if termination_status(model) == MOI.OPTIMAL
-        penalty_cost = sum(unmet_pen * value(shortfall[j]) for j in 1:ncust)
-        return objective_value(model), penalty_cost, work_units
+    best_obj = Inf
+    best_penalty = Inf
+    total_work_units = 0.0
+
+    # Solve K LPs (one per candidate policy)
+    for k in 1:size(xsolutions, 1)
+        if k <= length(z) && z[k] == 0
+            continue
+        end
+        
+        # Fix x to candidate k
+        for i in 1:nloc
+            fix(x[i], xsolutions[k, i]; force=true)
+        end
+
+        optimize!(model)
+
+        # Track work units (Gurobi Work units)
+        try
+            total_work_units += MOI.get(backend(model), Gurobi.ModelAttribute("Work"))
+        catch
+        end
+
+        if termination_status(model) == MOI.OPTIMAL
+            obj_val = objective_value(model)
+            if obj_val < best_obj
+                best_obj = obj_val
+                best_penalty = sum(unmet_pen * value(shortfall[j]) for j in 1:ncust)
+            end
+        end
+
+        # Unfix x for next candidate
+        for i in 1:nloc
+            if is_fixed(x[i])
+                unfix(x[i])
+            end
+        end
+    end
+
+    if isfinite(best_obj)
+        return best_obj, best_penalty, total_work_units
     else
-        return -1, -1, work_units
+        return -1, -1, total_work_units
     end
 end
 
@@ -165,11 +243,14 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
     # Construct file paths
     instance_path = joinpath(project_root, "Facility_Location", "instances", instance_file)
     
-    # Create log directory if it doesn't exist
+    # Create log directories if they don't exist
     log_path = joinpath(script_dir, log_dir)
-    if !isdir(log_path)
-        mkpath(log_path)
-        println("Created log directory: $log_path")
+    second_stage_log_dir = joinpath(log_path, "second_stage")
+    for dir in (log_path, second_stage_log_dir)
+        if !isdir(dir)
+            mkpath(dir)
+            println("Created log directory: $dir")
+        end
     end
     
     # Check if files exist
@@ -213,15 +294,17 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
         println("⚠️  Warning: Expected $K policies, but loaded $(length(selected_policies))")
     end
     
-    # Load samples
+    # Load scenarios and slice first S
     println("\nLoading samples from: $samples_file")
-    samples = load_samples_from_file(samples_file)
-    println("✅ Loaded $(length(samples)) samples")
+    all_samples = load_samples_from_file(samples_file)
+    println("✅ Loaded $(length(all_samples)) samples")
     
-    if length(samples) != S
-        println("⚠️  Warning: Expected $S samples, but loaded $(length(samples))")
-        S = length(samples)  # Update S to match loaded samples
+    if length(all_samples) < S
+        error("❌ Error: Requested S = $S samples, but samples_file contains only $(length(all_samples)) samples.")
     end
+    # Slice first S samples
+    samples = all_samples[1:S]
+    println("✅ Using first S = $S samples for evaluation")
     
     println("\n" * "="^40)
     println("STEP 2: LOADING WAIT-AND-SEE COSTS")
@@ -232,12 +315,25 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
         wait_and_see_costs_file
     )
     
+    # Slice wait-and-see costs to first S to match scenario subset
+    if length(wait_and_see_costs) < S
+        error("❌ Error: Requested S = $S scenarios, but wait-and-see file contains only $(length(wait_and_see_costs)) costs.")
+    end
+    wait_and_see_costs = wait_and_see_costs[1:S]
+    wait_and_see_successful = count(isfinite, wait_and_see_costs)
+    wait_and_see_failed = S - wait_and_see_successful
+    wait_and_see_cost = wait_and_see_successful > 0 ? mean(filter(isfinite, wait_and_see_costs)) : Inf
+    # Scale total work units to S using average per-scenario work units from file
+    avg_ws_work_units = length(wait_and_see_costs) > 0 ? (wait_and_see_work_units / length(wait_and_see_costs)) : 0.0
+    wait_and_see_work_units = avg_ws_work_units * S
+    
     println("✅ Wait-and-see costs loaded from file")
     println("   File: $wait_and_see_costs_file")
+    println("   Using first S = $S wait-and-see costs")
     println("   Successful solves: $wait_and_see_successful")
     println("   Failed solves: $wait_and_see_failed")
     println("   Average wait-and-see cost: $(round(wait_and_see_cost, digits=2))")
-    println("   Total work units: $(round(wait_and_see_work_units, digits=2))")
+    println("   Total work units (scaled to S): $(round(wait_and_see_work_units, digits=2))")
     
     # Filter out samples with Inf wait-and-see costs
     valid_indices = findall(c -> isfinite(c), wait_and_see_costs)
@@ -259,8 +355,9 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
     println("="^40)
     println("Selecting best policy from K candidates for each valid scenario...")
     
-    # Generate timestamp for this run
+    # Generate timestamp and experiment tag for this run
     timestamp = Dates.format(now(), "YYYYmmdd_HHMMSS")
+    exp_tag = experiment_type
     
     # Convert selected policies to matrix format (K x nloc)
     xsolutions = zeros(Int, K, nloc)
@@ -274,15 +371,26 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
     # z should be all 1s (all K policies are available)
     z = ones(Int, K)
     
-    # Compute model cost: use Second_Stage_Cost_direct for each valid scenario
+    # Prepare tags for filenames
+    instance_tag = splitext(basename(instance_file))[1]
+    L_file, S_file, K_file = extract_params_from_selected_policies_file(selected_policies_file)
+    L_str = L_file === nothing ? "?" : string(L_file)
+    S_str = string(S)
+    K_str = string(K)
+    
+    # Compute model cost: solve K LPs per scenario and select best policy
     model_costs = Float64[]
     model_work_units = 0.0
+    model_work_units_per_scenario = Float64[]
     model_successful = 0
     model_failed = 0
     
     for (idx, sample) in enumerate(valid_samples)
         original_idx = valid_indices[idx]
-        log_file = joinpath(log_path, "model_cost_scenario$(original_idx)_$(timestamp).log")
+        log_file = joinpath(
+            second_stage_log_dir,
+            "model_cost_L$(L_str)_S$(S_str)_K$(K_str)_$(exp_tag)_scenario$(original_idx)_$(timestamp).log"
+        )
         
         obj_value, penalty_cost, work_units = Second_Stage_Cost_direct(
             nloc, ncust, cost, capacity, sample, xsolutions, z,
@@ -291,10 +399,12 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
         
         if obj_value != -1
             push!(model_costs, obj_value)
+            push!(model_work_units_per_scenario, work_units)
             model_work_units += work_units
             model_successful += 1
         else
             push!(model_costs, Inf)  # Mark as failed
+            push!(model_work_units_per_scenario, work_units)
             model_failed += 1
         end
         
@@ -307,11 +417,14 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
     successful_model = [c for c in model_costs if isfinite(c)]
     model_cost = length(successful_model) > 0 ? mean(successful_model) : Inf
     
+    avg_model_work_units = length(model_work_units_per_scenario) > 0 ? mean(model_work_units_per_scenario) : 0.0
+    
     println("✅ Model cost computed")
     println("   Successful solves: $model_successful")
     println("   Failed solves: $model_failed")
     println("   Average model cost: $(round(model_cost, digits=2))")
     println("   Total work units: $(round(model_work_units, digits=2))")
+    println("   Average work units per scenario: $(round(avg_model_work_units, digits=2))")
     
     println("\n" * "="^40)
     println("STEP 4: COMPUTING PERFORMANCE METRICS")
@@ -342,7 +455,8 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
     println("\n✅ Evaluation phase completed!")
     
     # Save results to file
-    results_file = joinpath(script_dir, "results.txt")
+    results_filename = "evaluation_results_$(instance_tag)_L$(L_str)_S$(S_str)_K$(K_str)_$(exp_tag).txt"
+    results_file = joinpath(script_dir, "Results", results_filename)
     open(results_file, "w") do file
         println(file, "="^80)
         println(file, "EVALUATION PHASE RESULTS - FACILITY LOCATION")
@@ -368,6 +482,7 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
         println(file, "Successful solves: $model_successful")
         println(file, "Failed solves: $model_failed")
         println(file, "Total work units: $(round(model_work_units, digits=2))")
+        println(file, "Average work units per scenario: $(round(avg_model_work_units, digits=2))")
         println(file, "")
         println(file, "-"^80)
         println(file, "PERFORMANCE METRICS")
@@ -401,12 +516,37 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
             end
         end
         println(file, "")
+        println(file, "Second-stage work units per valid sample:")
+        for (idx, wu) in enumerate(model_work_units_per_scenario)
+            original_scenario_idx = valid_indices[idx]
+            println(file, "  Valid sample $original_scenario_idx: $(round(wu, digits=2))")
+        end
+        println(file, "")
         println(file, "="^80)
         println(file, "Results saved on: $(Dates.format(now(), "YYYY-mm-dd HH:MM:SS"))")
         println(file, "="^80)
     end
     
     println("📁 Results saved to: $results_file")
+    
+    # JSON output (evaluation metrics only)
+    model_gap_pct = isfinite(model_gap) ? model_gap * 100.0 : nothing
+    results_dir = joinpath(project_root, "Results", "Facility_Location")
+    eval_json_file = joinpath(results_dir, "evaluation_results_$(instance_tag)_L$(L_str)_S$(S_str)_K$(K_str)_$(exp_tag).json")
+    eval_json = Dict(
+        "instance" => instance_file,
+        "L" => L_str == "?" ? nothing : parse(Int, L_str),
+        "S" => S,
+        "K" => K,
+        "experiment" => exp_tag,
+        "avg_wait_and_see_cost" => wait_and_see_cost,
+        "avg_model_cost" => model_cost,
+        "total_ws_work_units" => wait_and_see_work_units,
+        "total_second_stage_work_units" => model_work_units,
+        "model_gap_pct" => model_gap_pct
+    )
+    write_json_file(eval_json_file, eval_json)
+    println("📁 Evaluation JSON saved to: $eval_json_file")
     
     # Return results
     results = Dict(
@@ -417,6 +557,8 @@ function evaluation_phase(instance_file::String, S::Int, K::Int,
         "model_costs" => model_costs,
         "wait_and_see_work_units" => wait_and_see_work_units,
         "model_work_units" => model_work_units,
+        "model_work_units_per_scenario" => model_work_units_per_scenario,
+        "avg_model_work_units" => avg_model_work_units,
         "wait_and_see_successful" => wait_and_see_successful,
         "wait_and_see_failed" => wait_and_see_failed,
         "model_successful" => model_successful,
@@ -439,7 +581,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println("  instance_file: Instance file name (e.g., cap91.txt)")
         println("  S: Number of samples (should match samples in file)")
         println("  K: Number of selected policies")
-        println("  selected_policies_file: Path to file containing K selected binary vectors")
+        println("  selected_policies_file: Path to file containing K selected binary vectors (e.g., Samples/FL/Selected_Candidates/selected_candidates_L50_S25_K2.txt)")
         println("  samples_file: Path to file containing S samples")
         println("  wait_and_see_costs_file: Path to file containing wait-and-see costs (from Samples/FL/WS_Samples.jl)")
         println("  experiment_type: 'low', 'high', or 'bernoulli' (default: 'low')")
@@ -447,7 +589,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println("  scaling_factor: Scaling factor for transportation cost (default: 0.2)")
         println("  capacity_factor: Factor to scale facility capacities (default: 0.3)")
         println("\nExample:")
-        println("  julia Evaluation_Phase.jl cap91.txt 25 2 Samples/FL/selected_candidates_S25_K2.txt Samples/FL/Scenarios/S25_bernoulli.txt Samples/FL/Scenarios/wait_and_see_costs_S25_bernoulli.txt")
+        println("  julia Evaluation_Phase.jl cap91.txt 25 2 Samples/FL/Selected_Candidates/selected_candidates_L50_S25_K2.txt Samples/FL/Scenarios/S25_bernoulli.txt Samples/FL/Scenarios/wait_and_see_costs_S25_bernoulli.txt")
         exit(1)
     end
     
