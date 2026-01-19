@@ -159,13 +159,21 @@ function wait_and_see_cost(instance_file::String, samples_file::String;
     S = length(samples)
     println("✅ Loaded $S samples")
     
-    # Extract experiment type from samples filename (e.g., S10_bernoulli.txt -> bernoulli)
+    # Extract experiment type from samples filename
+    # Supports:
+    #   - S10_bernoulli.txt                  -> bernoulli
+    #   - S10_case57_bernoulli.txt          -> bernoulli
+    #   - S10_case118Blumsack_bernoulli.txt -> bernoulli
+    # Falls back to "low" if pattern not matched.
     samples_basename = basename(samples_file)
-    # Pattern: S<S>_<experiment_type>.txt or S<S>.txt
+    # Pattern 1: S<S>_<experiment_type>.txt
+    # Pattern 2: S<S>_<case_name>_<experiment_type>.txt
     experiment_type = "low"  # default
-    if occursin(r"^S\d+_(.+)\.txt$", samples_basename)
-        match_result = match(r"^S\d+_(.+)\.txt$", samples_basename)
-        if match_result !== nothing
+    # Try to capture the last underscore-separated token before .txt as experiment type
+    if occursin(r"^S\d+_.+\.txt$", samples_basename)
+        # This regex captures everything after the last underscore up to .txt
+        match_result = match(r"^S\d+_(?:.+_)?([^_]+)\.txt$", samples_basename)
+        if match_result !== nothing && length(match_result.captures) == 1
             experiment_type = match_result.captures[1]
         end
     end
@@ -179,7 +187,8 @@ function wait_and_see_cost(instance_file::String, samples_file::String;
     # Timestamp for this run
     timestamp = Dates.format(now(), "YYYYmmdd_HHMMSS")
     
-    costs = Float64[]
+    costs = Float64[]                     # wait-and-see cost per scenario (may contain Inf)
+    work_units_per_scenario = Float64[]   # work units per scenario (Inf for failed solves)
     binary_vectors = Vector{Vector{Int}}()  # store binary vectors from each scenario
     total_work_units = 0.0
     successful_solves = 0
@@ -192,13 +201,17 @@ function wait_and_see_cost(instance_file::String, samples_file::String;
             offline_calc_direct(network, sample, log_file)
         
         if obj_value != -1
+            # Successful solve
             push!(costs, obj_value)
+            push!(work_units_per_scenario, work_units)
             # store binary vector (convert to Int if needed)
             push!(binary_vectors, round.(Int, binary_vector))
             total_work_units += work_units
             successful_solves += 1
         else
+            # Failed solve: mark cost and work units as Inf
             push!(costs, Inf)
+            push!(work_units_per_scenario, Inf)
             # for failed solves, store empty vector placeholder
             push!(binary_vectors, Int[])
             failed_solves += 1
@@ -221,7 +234,7 @@ function wait_and_see_cost(instance_file::String, samples_file::String;
     println("   Total work units: $(round(total_work_units, digits=2))")
     println("   Log files stored in: $log_path")
     
-    # Save wait-and-see costs to file: WS<S>_<experiment_type>.txt in Samples/TS/Scenarios
+    # Save per-scenario wait-and-see results to file: WS<S>_<experiment_type>.txt in Samples/TS/Scenarios
     scenarios_dir = joinpath(script_dir, "Scenarios")
     if !isdir(scenarios_dir)
         mkpath(scenarios_dir)
@@ -229,19 +242,16 @@ function wait_and_see_cost(instance_file::String, samples_file::String;
     costs_file = joinpath(scenarios_dir, "WS$(S)_$(experiment_type).txt")
     
     open(costs_file, "w") do file
-        println(file, "# Wait-and-See Costs (TS)")
-        println(file, "# Average cost: $average_cost")
-        println(file, "# Successful solves: $successful_solves")
-        println(file, "# Failed solves: $failed_solves")
-        println(file, "# Total work units: $total_work_units")
-        println(file, "#")
-        for cost in costs
-            if isfinite(cost)
-                println(file, cost)
-            else
-                println(file, "Inf")
-            end
+        println(file, "# scenario_index wait_and_see_cost work_units")
+        for (i, cost) in enumerate(costs)
+            wu = work_units_per_scenario[i]
+            # Use \"Inf\" for infinite cost or work units (failed solves)
+            cost_str = isfinite(cost) ? string(cost) : \"Inf\"
+            wu_str = isfinite(wu) ? string(wu) : \"Inf\"
+            println(file, \"$(i) $cost_str $wu_str\")
         end
+        println(file, \"# summary: total_scenarios=$(S) successful=$(successful_solves) failed=$(failed_solves) total_work_units=$(total_work_units)\")
+        println(file, \"# average_wait_and_see_cost=$(average_cost)\")
     end
     
     println("📁 Wait-and-see costs saved to: $costs_file")

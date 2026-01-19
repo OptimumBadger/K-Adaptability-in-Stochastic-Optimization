@@ -81,10 +81,15 @@ function generate_ts_samples(instance_file::String, S::Int;
     
     # Choose experiment type label (for filename) similar to FL pattern
     expt_type = use_bernoulli ? "bernoulli" : "gaussian"
+
+    # Derive a short case name from the instance file (e.g., "case57" or "case118Blumsack")
+    case_name = extract_case_name(instance_file)
     
-    # Default output file if not provided
+    # Default output file if not provided.
+    # Include the case name in the filename so we can distinguish instances:
+    #   S<S>_<case_name>_<expt_type>.txt, e.g. S10_case57_bernoulli.txt
     if output_file === nothing
-        output_file = joinpath(script_dir, "Scenarios", "S$(S)_$(expt_type).txt")
+        output_file = joinpath(script_dir, "Scenarios", "S$(S)_$(case_name)_$(expt_type).txt")
     end
     
     # Ensure directory exists
