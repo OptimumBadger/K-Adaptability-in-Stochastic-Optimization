@@ -83,12 +83,13 @@ if abspath(PROGRAM_FILE) == @__FILE__
     
     # Load scenarios from file
     println("Loading scenarios from file...")
-    scenarios = load_scenarios_from_file(scenarios_file)
-    if length(scenarios) != S
-        println("⚠️  Warning: Expected $S scenarios, but loaded $(length(scenarios))")
-        S = length(scenarios)  # Update S to match loaded scenarios
+    all_scenarios = load_scenarios_from_file(scenarios_file)
+    if length(all_scenarios) < S
+        error("❌ Error: Requested S = $S scenarios, but scenarios_file contains only $(length(all_scenarios)) scenarios.")
     end
-    println("✅ Loaded $(length(scenarios)) scenarios")
+    # Slice first S scenarios
+    scenarios = all_scenarios[1:S]
+    println("✅ Loaded $(length(all_scenarios)) scenarios from file, using first S = $S scenarios")
     println()
     
     # Load initial subsets from file (required)
@@ -97,8 +98,11 @@ if abspath(PROGRAM_FILE) == @__FILE__
     if isfile(initial_subsets_file)
         # Load subset vectors from file (one line per subset, space-separated scenario indices)
         # Convert scenario indices (1-based) to binary vectors of length S
+        line_num_ref = Ref(0)
+        skipped_indices_ref = Ref(0)
         open(initial_subsets_file, "r") do io
             for line in eachline(io)
+                line_num_ref[] += 1
                 if !isempty(strip(line))
                     scenario_indices = [parse(Int, x) for x in split(strip(line))]
                     # Convert to binary vector: 1 if scenario is in subset, 0 otherwise
@@ -107,7 +111,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
                         if 1 <= idx <= S
                             binary_vec[idx] = 1
                         else
-                            println("⚠️  Warning: Scenario index $idx is out of range [1, $S], ignoring")
+                            skipped_indices_ref[] += 1
+                            println("⚠️  Warning: Line $(line_num_ref[]), scenario index $idx is out of range [1, $S], ignoring")
                         end
                     end
                     push!(initial_subsets, binary_vec)
@@ -115,6 +120,29 @@ if abspath(PROGRAM_FILE) == @__FILE__
             end
         end
         println("✅ Loaded $(length(initial_subsets)) initial subsets")
+        if skipped_indices_ref[] > 0
+            println("⚠️  Warning: Skipped $(skipped_indices_ref[]) scenario indices that were out of range")
+        end
+        
+        # Diagnostic: Check if all scenarios are covered
+        if length(initial_subsets) > 0
+            coverage = zeros(Int, S)
+            for subset in initial_subsets
+                for s in 1:S
+                    if subset[s] == 1
+                        coverage[s] += 1
+                    end
+                end
+            end
+            uncovered = [s for s in 1:S if coverage[s] == 0]
+            if !isempty(uncovered)
+                println("⚠️  WARNING: The following scenarios are NOT covered by any initial subset:")
+                println("   Uncovered scenarios: $uncovered")
+                println("   This will cause the master problem to be INFEASIBLE!")
+            else
+                println("✅ All $S scenarios are covered by at least one initial subset")
+            end
+        end
     else
         println("❌ Error: Initial subsets file not found: $initial_subsets_file")
         exit(1)

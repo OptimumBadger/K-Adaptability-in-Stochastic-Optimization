@@ -86,6 +86,37 @@ function solve_sf_master_problem(cost_vector, z_matrix, K; integer_vars=false, l
     if termination_status(model) == MOI.OPTIMAL
         return model, v_variables, objective_value(model), partition_constraints, k_constraint, work_units
     else
+        # Diagnostic output for infeasibility
+        term_status = termination_status(model)
+        println("❌ Master problem termination status: $term_status")
+        
+        if term_status == MOI.INFEASIBLE || term_status == MOI.INFEASIBLE_OR_UNBOUNDED
+            println("   Problem is INFEASIBLE")
+            println("   Checking constraint violations...")
+            
+            # Check if any scenario is not covered
+            uncovered_scenarios = Int[]
+            for s in 1:nscen
+                if sum(z_matrix[s, :]) == 0
+                    push!(uncovered_scenarios, s)
+                end
+            end
+            
+            if !isempty(uncovered_scenarios)
+                println("   ❌ CAUSE IDENTIFIED: Scenarios $uncovered_scenarios are not covered by any subset")
+                println("      Partition constraint for these scenarios: ∑_{A∈F} z_matrix[s, A] * v_A = 1")
+                println("      Since z_matrix[s, :] is all zeros, this constraint cannot be satisfied.")
+            else
+                println("   All scenarios are covered, but problem is still infeasible.")
+                println("   This may be due to:")
+                println("      - The combination of partition constraints and K=$K being too restrictive")
+                println("      - Numerical issues in the solver")
+                println("   z_matrix dimensions: $(size(z_matrix))")
+                println("   Number of subsets: $(size(z_matrix, 2))")
+                println("   K (cardinality limit): $K")
+            end
+        end
+        
         return model, v_variables, Inf, partition_constraints, k_constraint, work_units
     end
 end
@@ -148,6 +179,25 @@ function build_cost_vector(scenarios::Vector{Vector{Float64}},
     end
     
     println("Cost vector built successfully")
+    
+    # Diagnostic: Check scenario coverage
+    uncovered_scenarios = Int[]
+    for s in 1:nscen
+        if sum(z_matrix[s, :]) == 0
+            push!(uncovered_scenarios, s)
+        end
+    end
+    
+    if !isempty(uncovered_scenarios)
+        println("⚠️  WARNING: The following scenarios are NOT covered by any subset:")
+        println("   Uncovered scenarios: $uncovered_scenarios")
+        println("   This will cause the master problem to be INFEASIBLE!")
+        println("   Partition constraint for scenario s requires: ∑_{A∈F} z_matrix[s, A] * v_A = 1")
+        println("   If z_matrix[s, :] is all zeros, this constraint cannot be satisfied.")
+    else
+        println("✅ All $nscen scenarios are covered by at least one subset")
+    end
+    
     return cost_vector, z_matrix, total_work_units
 end
 

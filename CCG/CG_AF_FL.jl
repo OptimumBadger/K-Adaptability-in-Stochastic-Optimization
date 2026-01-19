@@ -1,6 +1,6 @@
 # CG_AF_FL.jl
 # Entry point for Facility Location Column Generation
-# Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <K> <S> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor]
+# Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor]
 
 using Printf
 using Dates
@@ -15,21 +15,22 @@ include("FacilityLocationAF.jl")
 # =============================================================================
 
 if abspath(PROGRAM_FILE) == @__FILE__
-    if length(ARGS) < 5
+    if length(ARGS) < 6
         println("❌ Error: Incorrect number of arguments!")
-        println("Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <K> <S> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor]")
+        println("Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor]")
         println("\nArguments:")
         println("  instance_file: Instance file path (e.g., Facility_Location/instances/cap91.txt)")
-        println("  scenarios_file: File containing SAA samples (e.g., Samples/FL/Scenarios/S25_bernoulli.txt)")
-        println("  binary_vectors_file: File containing initial binary vectors (e.g., Samples/FL/Binary_vectors/B25_bernoulli.txt)")
+        println("  scenarios_file: File containing SAA samples (e.g., Samples/FL/Scenarios/S300_bernoulli.txt)")
+        println("  binary_vectors_file: File containing binary vectors (e.g., Samples/FL/Binary_vectors/B300_bernoulli.txt)")
+        println("  L: Number of candidate policies to use (first L from binary_vectors_file)")
+        println("  S: Number of scenarios to use (first S from scenarios_file)")
         println("  K: Number of solutions to select")
-        println("  S: Number of scenarios (should match scenarios_file)")
         println("  pricing_type: 1 or 2 (default: 2)")
         println("  unmet_pen: Unmet demand penalty (default: 15.0)")
         println("  scaling_factor: Scaling factor for transportation cost (default: 0.2)")
         println("  capacity_factor: Capacity factor (default: 0.3)")
         println("\nExample:")
-        println("  julia CG_AF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S25_bernoulli.txt Samples/FL/Binary_vectors/B25_bernoulli.txt 2 25")
+        println("  julia CG_AF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt Samples/FL/Binary_vectors/B300_bernoulli.txt 50 30 2")
         exit(1)
     end
     
@@ -37,14 +38,51 @@ if abspath(PROGRAM_FILE) == @__FILE__
     instance_file = ARGS[1]
     scenarios_file = ARGS[2]
     binary_vectors_file = ARGS[3]
-    K = parse(Int, ARGS[4])
-    S = parse(Int, ARGS[5])
+    
+    # Parse L (number of candidate policies to use)
+    L = try
+        parsed = parse(Int, ARGS[4])
+        if parsed <= 0
+            throw(ArgumentError("L must be positive"))
+        end
+        parsed
+    catch
+        println("❌ Error: L must be a positive integer!")
+        println("You provided: '$(ARGS[4])'")
+        exit(1)
+    end
+    
+    # Parse S (number of scenarios to use)
+    S = try
+        parsed = parse(Int, ARGS[5])
+        if parsed <= 0
+            throw(ArgumentError("S must be positive"))
+        end
+        parsed
+    catch
+        println("❌ Error: S must be a positive integer!")
+        println("You provided: '$(ARGS[5])'")
+        exit(1)
+    end
+    
+    # Parse K (number of solutions to select)
+    K = try
+        parsed = parse(Int, ARGS[6])
+        if parsed <= 0
+            throw(ArgumentError("K must be positive"))
+        end
+        parsed
+    catch
+        println("❌ Error: K must be a positive integer!")
+        println("You provided: '$(ARGS[6])'")
+        exit(1)
+    end
     
     # Parse optional arguments
-    pricing_type = length(ARGS) > 5 ? parse(Int, ARGS[6]) : 2
-    unmet_pen = length(ARGS) > 6 ? parse(Float64, ARGS[7]) : 15.0
-    scaling_factor = length(ARGS) > 7 ? parse(Float64, ARGS[8]) : 0.2
-    capacity_factor = length(ARGS) > 8 ? parse(Float64, ARGS[9]) : 0.3
+    pricing_type = length(ARGS) > 6 ? parse(Int, ARGS[7]) : 2
+    unmet_pen = length(ARGS) > 7 ? parse(Float64, ARGS[8]) : 15.0
+    scaling_factor = length(ARGS) > 8 ? parse(Float64, ARGS[9]) : 0.2
+    capacity_factor = length(ARGS) > 9 ? parse(Float64, ARGS[10]) : 0.3
     
     # Validate pricing_type
     if !(pricing_type in [1, 2])
@@ -58,7 +96,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("Instance: $instance_file")
     println("Scenarios file: $scenarios_file")
     println("Binary vectors file: $binary_vectors_file")
-    println("Parameters: K=$K, S=$S, pricing_type=$pricing_type")
+    println("Parameters: L=$L, S=$S, K=$K, pricing_type=$pricing_type")
     println("Problem parameters: unmet_pen=$unmet_pen, scaling_factor=$scaling_factor, capacity_factor=$capacity_factor")
     println("="^80)
     println()
@@ -71,18 +109,28 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("✅ Instance loaded: $(fl_data["nloc"]) facilities, $(fl_data["ncust"]) customers")
     println()
     
-    # Load scenarios from file
+    # Load scenarios from file and slice first S
     println("Loading scenarios from file...")
-    scenarios = load_scenarios_from_file(scenarios_file)
-    if length(scenarios) != S
-        println("⚠️  Warning: Expected $S scenarios, but loaded $(length(scenarios))")
-        S = length(scenarios)  # Update S to match loaded scenarios
+    all_scenarios = load_scenarios_from_file(scenarios_file)
+    
+    # Validate S and slice first S scenarios
+    if S > length(all_scenarios)
+        error("❌ Error: Requested S = $S scenarios, but scenarios_file contains only $(length(all_scenarios)) scenarios.")
     end
+    scenarios = all_scenarios[1:S]
+    println("✅ Loaded $(length(scenarios)) scenarios (first S from file)")
     println()
     
-    # Load initial binary vectors from file
-    println("Loading initial binary vectors from file...")
-    initial_binary_vectors = load_binary_vectors_from_file(binary_vectors_file)
+    # Load binary vectors from file and slice first L
+    println("Loading binary vectors from file...")
+    all_binary_vectors = load_binary_vectors_from_file(binary_vectors_file)
+    
+    # Validate L and slice first L vectors
+    if L > length(all_binary_vectors)
+        error("❌ Error: Requested L = $L candidate policies, but binary_vectors_file contains only $(length(all_binary_vectors)) vectors.")
+    end
+    initial_binary_vectors = all_binary_vectors[1:L]
+    println("✅ Loaded $(length(initial_binary_vectors)) binary vectors (first L from file)")
     println()
     
     # Create logs directory
@@ -96,8 +144,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
     # Generate log file names with timestamp
     timestamp = Dates.format(now(), "YYYYmmdd_HHMMSS")
     instance_name = replace(splitext(basename(instance_file))[1], "." => "_")
-    master_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_K$(K)_S$(S)_master_$(timestamp).log")
-    pricing_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_K$(K)_S$(S)_pricing_$(timestamp).log")
+    master_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_master_$(timestamp).log")
+    pricing_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_pricing_$(timestamp).log")
     
     # Initialize log files with headers
     open(master_log_file, "w") do file
@@ -105,7 +153,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println(file, "COLUMN GENERATION - MASTER PROBLEM LOGS")
         println(file, "="^80)
         println(file, "Instance: $instance_file")
-        println(file, "K: $K, S: $S")
+        println(file, "L: $L, S: $S, K: $K")
         println(file, "Pricing Type: $pricing_type")
         println(file, "Started: $(now())")
         println(file, "="^80)
@@ -116,7 +164,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println(file, "COLUMN GENERATION - PRICING SUBPROBLEM LOGS")
         println(file, "="^80)
         println(file, "Instance: $instance_file")
-        println(file, "K: $K, S: $S")
+        println(file, "L: $L, S: $S, K: $K")
         println(file, "Pricing Type: $pricing_type")
         println(file, "Started: $(now())")
         println(file, "="^80)
@@ -140,6 +188,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         evaluate_cost = evaluate_cost_FL,
         build_pricing_model = build_pricing_model_AF_FL,
         calculate_m_values = calculate_m_values_FL,
+        evaluate_cost_batch = evaluate_cost_batch_template_FL,  # Use optimized batch evaluation
         pricing_type = pricing_type,
         use_solution_pool = true,
         total_work_budget = 30000.0,

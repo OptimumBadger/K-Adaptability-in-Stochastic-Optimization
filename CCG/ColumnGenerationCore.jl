@@ -116,6 +116,8 @@ function column_generation_algorithm(
     evaluate_cost::Function,              # (solution, scenario, problem_data) -> (cost, work_units)
     build_pricing_model::Function,         # (scenarios, dual_lambda, dual_mu, problem_data, pricing_type, work_limit) -> (solutions, objectives, work_units)
     calculate_m_values::Function,          # (scenarios, dual_lambda, problem_data) -> m_values (for Type 1 pricing)
+    # Optional batch evaluation function (for optimization):
+    evaluate_cost_batch::Union{Function, Nothing}=nothing,  # (solutions, scenarios, problem_data) -> (cost_matrix, total_work_units)
     # Algorithm parameters:
     pricing_type::Int=2,
     use_solution_pool::Bool=true,
@@ -180,7 +182,8 @@ function column_generation_algorithm(
     
     # Build initial cost matrix
     cost_matrix, initial_matrix_work_units = build_cost_matrix(
-        scenarios, binary_vectors, evaluate_cost, problem_data
+        scenarios, binary_vectors, evaluate_cost, problem_data;
+        evaluate_cost_batch=evaluate_cost_batch
     )
     total_update_work_units += initial_matrix_work_units
     
@@ -359,39 +362,76 @@ function column_generation_algorithm(
             local_added = 0
             local_update_work_units = 0.0
             
-            for x_new in new_solutions
-                # Convert solution to Int vector (pricing returns Float64, but evaluate_cost expects Int)
-                x_new_int = round.(Int, x_new)
+            # Convert all solutions to Int vectors
+            all_new_solutions_int = [round.(Int, x_new) for x_new in new_solutions]
+            
+            # Use batch evaluation if available, otherwise use individual evaluation
+            if evaluate_cost_batch !== nothing
+                # OPTIMIZED: Use batch evaluation (builds model once, reuses for all solution-scenario pairs)
+                println("  Using batch cost evaluation (template model optimization)")
+                new_column_costs_matrix, local_update_work_units = 
+                    evaluate_cost_batch(all_new_solutions_int, scenarios, problem_data)
                 
-                # Calculate costs for all scenarios
-                new_column_costs = zeros(nscen)
-                for s in 1:nscen
-                    cost_val, work_units = evaluate_cost(x_new_int, scenarios[s], problem_data)
-                    new_column_costs[s] = cost_val
-                    local_update_work_units += work_units
+                # new_column_costs_matrix is [nscen × nsolutions] matrix
+                # Extract each column (solution) and add to master problem
+                for (sol_idx, x_new_int) in enumerate(all_new_solutions_int)
+                    new_column_costs = new_column_costs_matrix[:, sol_idx]  # Extract column for this solution
+                    
+                    # Add new variables
+                    new_sigma = @variable(model, lower_bound = 0)
+                    new_rho = [@variable(model, lower_bound = 0) for s in 1:nscen]
+                    push!(sigma, new_sigma)
+                    for s in 1:nscen
+                        push!(rho[s], new_rho[s])
+                    end
+                    
+                    # Update objective and constraints
+                    for s in 1:nscen
+                        set_objective_coefficient(model, new_rho[s], new_column_costs[s])
+                        set_normalized_coefficient(assignment_constraints[s], new_rho[s], 1.0)
+                        @constraint(model, new_rho[s] <= new_sigma)
+                    end
+                    set_normalized_coefficient(k_constraint, new_sigma, 1.0)
+                    
+                    # Update cost matrix and binary vectors
+                    cost_matrix = hcat(cost_matrix, new_column_costs)
+                    push!(binary_vectors, x_new_int)
+                    nsol += 1
+                    local_added += 1
                 end
-                
-                # Add new variables
-                new_sigma = @variable(model, lower_bound = 0)
-                new_rho = [@variable(model, lower_bound = 0) for s in 1:nscen]
-                push!(sigma, new_sigma)
-                for s in 1:nscen
-                    push!(rho[s], new_rho[s])
+            else
+                # FALLBACK: Individual evaluation (original approach)
+                for x_new_int in all_new_solutions_int
+                    # Calculate costs for all scenarios
+                    new_column_costs = zeros(nscen)
+                    for s in 1:nscen
+                        cost_val, work_units = evaluate_cost(x_new_int, scenarios[s], problem_data)
+                        new_column_costs[s] = cost_val
+                        local_update_work_units += work_units
+                    end
+                    
+                    # Add new variables
+                    new_sigma = @variable(model, lower_bound = 0)
+                    new_rho = [@variable(model, lower_bound = 0) for s in 1:nscen]
+                    push!(sigma, new_sigma)
+                    for s in 1:nscen
+                        push!(rho[s], new_rho[s])
+                    end
+                    
+                    # Update objective and constraints
+                    for s in 1:nscen
+                        set_objective_coefficient(model, new_rho[s], new_column_costs[s])
+                        set_normalized_coefficient(assignment_constraints[s], new_rho[s], 1.0)
+                        @constraint(model, new_rho[s] <= new_sigma)
+                    end
+                    set_normalized_coefficient(k_constraint, new_sigma, 1.0)
+                    
+                    # Update cost matrix and binary vectors
+                    cost_matrix = hcat(cost_matrix, new_column_costs)
+                    push!(binary_vectors, x_new_int)
+                    nsol += 1
+                    local_added += 1
                 end
-                
-                # Update objective and constraints
-                for s in 1:nscen
-                    set_objective_coefficient(model, new_rho[s], new_column_costs[s])
-                    set_normalized_coefficient(assignment_constraints[s], new_rho[s], 1.0)
-                    @constraint(model, new_rho[s] <= new_sigma)
-                end
-                set_normalized_coefficient(k_constraint, new_sigma, 1.0)
-                
-                # Update cost matrix and binary vectors
-                cost_matrix = hcat(cost_matrix, new_column_costs)
-                push!(binary_vectors, x_new_int)
-                nsol += 1
-                local_added += 1
             end
             
             total_update_work_units += local_update_work_units

@@ -100,10 +100,13 @@ end
 # COST MATRIX BUILDING
 # =============================================================================
 
-function build_cost_matrix(scenarios::Vector{Vector{Float64}}, 
-                          binary_vectors::Vector{Vector{Int}},
-                          evaluate_cost::Function,
-                          problem_data)
+function build_cost_matrix(
+    scenarios::Vector{Vector{Float64}},
+    binary_vectors::Vector{Vector{Int}},
+    evaluate_cost::Function,
+    problem_data;
+    evaluate_cost_batch::Union{Function, Nothing}=nothing,
+)
     """Build the cost matrix r_s(x) for Assignment Formulation
     
     This is problem-independent - it just calls the problem-specific evaluate_cost function.
@@ -113,6 +116,8 @@ function build_cost_matrix(scenarios::Vector{Vector{Float64}},
         binary_vectors: List of l binary solution vectors
         evaluate_cost: Problem-specific function: (solution, scenario, problem_data) -> (cost, work_units)
         problem_data: Problem-specific data structure
+        evaluate_cost_batch: Optional batch evaluation function:
+            (solutions, scenarios, problem_data) -> (cost_matrix, total_work_units)
     
     Returns:
         cost_matrix: S x l matrix where cost_matrix[s, x] = r_s(x)
@@ -123,6 +128,15 @@ function build_cost_matrix(scenarios::Vector{Vector{Float64}},
     
     println("Building cost matrix r_s(x) for $nscen scenarios and $nsol solutions...")
     
+    # If a batch evaluation function is provided, use it (more efficient)
+    if evaluate_cost_batch !== nothing
+        println("  Using batch cost evaluation (template model optimization)")
+        cost_matrix, total_work_units = evaluate_cost_batch(binary_vectors, scenarios, problem_data)
+        println("Cost matrix built successfully (batch)")
+        return cost_matrix, total_work_units
+    end
+    
+    # Fallback: original per-(solution, scenario) evaluation
     cost_matrix = zeros(nscen, nsol)
     total_work_units = 0.0
     
