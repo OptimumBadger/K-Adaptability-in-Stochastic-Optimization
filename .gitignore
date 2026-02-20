@@ -3,6 +3,16 @@
 CCG/logs/
 **/*.log
 
+# Sample data files - exclude large data files
+Samples/FL/Binary_vectors/
+Samples/FL/Scenarios/
+Samples/TS/Binary_vectors/
+Samples/TS/Scenarios/
+Samples/TS/Feasible_Solutions/
+Samples/FL/Feasible_Solutions/
+Samples/FL/Selected_Candidates/
+Samples/TS/Selected_Candidates/
+
 # Julia compiled files
 *.jl.cov
 *.jl.*.cov
