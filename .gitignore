@@ -1,0 +1,20 @@
+# Log files - exclude from repository
+*.log
+CCG/logs/
+**/*.log
+
+# Julia compiled files
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -1,6 +1,6 @@
-# CG_SF_FL.jl
-# Entry point for Facility Location Column Generation - Subset Formulation (SF)
-# Usage: julia CG_SF_FL.jl <instance_file> <scenarios_file> <initial_subsets_file> <K> <S> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor]
+# CG_SF_TS.jl
+# Entry point for Transmission Switching Column Generation - Subset Formulation (SF)
+# Usage: julia CG_SF_TS.jl <instance_file> <scenarios_file> <initial_subsets_file> <K> <S> [pricing_type] [line_capacity_factor]
 
 using Printf
 using Dates
@@ -63,7 +63,8 @@ end
 # Include required files
 include("CGUtilities.jl")
 include("SubsetFormulation.jl")
-include("FacilityLocationSF.jl")
+include("TransmissionSwitchingSF.jl")  # Includes PowerModels
+include("../Samples/TS/TSUtilities.jl")  # For extract_case_name
 
 # =============================================================================
 # COMMAND-LINE INTERFACE
@@ -72,19 +73,17 @@ include("FacilityLocationSF.jl")
 if abspath(PROGRAM_FILE) == @__FILE__
     if length(ARGS) < 5
         println("❌ Error: Incorrect number of arguments!")
-        println("Usage: julia CG_SF_FL.jl <instance_file> <scenarios_file> <initial_subsets_file> <K> <S> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor]")
+        println("Usage: julia CG_SF_TS.jl <instance_file> <scenarios_file> <initial_subsets_file> <K> <S> [pricing_type] [line_capacity_factor]")
         println("\nArguments:")
-        println("  instance_file: Instance file path (e.g., Facility_Location/instances/cap91.txt)")
-        println("  scenarios_file: File containing SAA samples (e.g., Samples/FL/Scenarios/S25_bernoulli.txt)")
+        println("  instance_file: Instance file path (e.g., Transmission_Switching/instances/case118.m)")
+        println("  scenarios_file: File containing scenarios (e.g., Samples/TS/Scenarios/instance_1/S300_bernoulli.txt)")
         println("  initial_subsets_file: File containing initial subset vectors (π vectors) - required")
         println("  K: Number of subsets to select")
         println("  S: Number of scenarios (should match scenarios_file)")
         println("  pricing_type: 1 or 2 (default: 2)")
-        println("  unmet_pen: Unmet demand penalty (default: 15.0)")
-        println("  scaling_factor: Scaling factor for transportation cost (default: 0.2)")
-        println("  capacity_factor: Capacity factor (default: 0.3)")
+        println("  line_capacity_factor: Line capacity factor (default: 1.0)")
         println("\nExample:")
-        println("  julia CG_SF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S25_bernoulli.txt Samples/FL/SubsetS25_K2_FL.txt 2 25 2 15.0 0.2 0.3")
+        println("  julia CG_SF_TS.jl Transmission_Switching/instances/case118.m Samples/TS/Scenarios/instance_1/S300_bernoulli.txt Samples/TS/Subsets/initial_subsets.txt 2 300 2 1.0")
         exit(1)
     end
     
@@ -97,9 +96,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
     
     # Parse optional arguments
     pricing_type = length(ARGS) > 5 ? parse(Int, ARGS[6]) : 2
-    unmet_pen = length(ARGS) > 6 ? parse(Float64, ARGS[7]) : 15.0
-    scaling_factor = length(ARGS) > 7 ? parse(Float64, ARGS[8]) : 0.2
-    capacity_factor = length(ARGS) > 8 ? parse(Float64, ARGS[9]) : 0.3
+    line_capacity_factor = length(ARGS) > 6 ? parse(Float64, ARGS[7]) : 1.0
     
     # Validate pricing_type
     if !(pricing_type in [1, 2])
@@ -108,36 +105,46 @@ if abspath(PROGRAM_FILE) == @__FILE__
     end
     
     println("="^80)
-    println("COLUMN GENERATION SF - FACILITY LOCATION")
+    println("COLUMN GENERATION SF - TRANSMISSION SWITCHING")
     println("="^80)
     println("Instance: $instance_file")
     println("Scenarios file: $scenarios_file")
-    # Use provided initial subsets file, but enforce L300 in the path/filename
-    if !occursin("L300", initial_subsets_file)
-        error("❌ Error: initial_subsets_file must be the L300 file. Got: $initial_subsets_file")
-    end
     println("Initial subsets file: $initial_subsets_file")
     println("Parameters: K=$K, S=$S, pricing_type=$pricing_type")
-    println("Problem parameters: unmet_pen=$unmet_pen, scaling_factor=$scaling_factor, capacity_factor=$capacity_factor")
+    println("Problem parameters: line_capacity_factor=$line_capacity_factor")
     println("="^80)
     println()
     
     # Load instance data
     println("Loading instance data...")
-    capacity, fixedcost, cost, demandmean = read_orlib_cap(instance_file)
-    capacity = capacity .* capacity_factor
+    if !isfile(instance_file)
+        error("❌ Error: Instance file not found! Expected: $instance_file")
+    end
+    ts_data = parse_file_silent(instance_file)
     
-    fl_data = Dict(
-        "capacity" => capacity,
-        "fixedcost" => fixedcost,
-        "cost" => cost,
-        "demandmean" => demandmean,
-        "nloc" => length(capacity),
-        "ncust" => length(demandmean),
-        "unmet_pen" => unmet_pen,
-        "scaling_factor" => scaling_factor
-    )
-    println("✅ Instance loaded: $(fl_data["nloc"]) facilities, $(fl_data["ncust"]) customers")
+    # Store instance path for downstream use (e.g., fixed lines reading)
+    ts_data["instance_file"] = instance_file
+    ts_data["line_capacity_factor"] = line_capacity_factor
+    
+    # Extract case name and set num_lines_fixed for case118.m (always 110 lines fixed)
+    case_name = extract_case_name(instance_file)
+    if case_name == "case118"
+        ts_data["num_lines_fixed"] = 110
+        println("✅ Detected case118.m: Setting 110 lines fixed ON")
+    end
+    
+    # Apply line capacity factor if needed
+    if line_capacity_factor != 1.0
+        for (branch_id, branch) in ts_data["branch"]
+            if haskey(branch, "rate_a")
+                branch["rate_a"] = branch["rate_a"] * line_capacity_factor
+            end
+        end
+    end
+    
+    nb = length(ts_data["bus"])
+    nl = length(ts_data["branch"])
+    println("✅ Instance loaded: $nb buses, $nl lines")
     println()
     
     # Load scenarios from file
@@ -149,6 +156,12 @@ if abspath(PROGRAM_FILE) == @__FILE__
     # Slice first S scenarios
     scenarios = all_scenarios[1:S]
     println("✅ Loaded $(length(all_scenarios)) scenarios from file, using first S = $S scenarios")
+    
+    # Apply demand multiplier for consistency with heuristic
+    case_name = extract_case_name(instance_file)
+    demand_mult = get_demand_multiplier(instance_file=instance_file, case_name=case_name)
+    println("Applying demand multiplier: $demand_mult (for consistency with heuristic)")
+    scenarios = [scenario .* demand_mult for scenario in scenarios]
     println()
     
     # Load initial subsets from file (required)
@@ -219,8 +232,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
     # Generate log file names with timestamp
     timestamp = Dates.format(now(), "YYYYmmdd_HHMMSS")
     instance_name = replace(splitext(basename(instance_file))[1], "." => "_")
-    master_log_file = joinpath(logs_dir, "CG_SF_FL_$(instance_name)_K$(K)_S$(S)_master_$(timestamp).log")
-    pricing_log_file = joinpath(logs_dir, "CG_SF_FL_$(instance_name)_K$(K)_S$(S)_pricing_$(timestamp).log")
+    master_log_file = joinpath(logs_dir, "CG_SF_TS_$(instance_name)_K$(K)_S$(S)_master_$(timestamp).log")
+    pricing_log_file = joinpath(logs_dir, "CG_SF_TS_$(instance_name)_K$(K)_S$(S)_pricing_$(timestamp).log")
     
     # Initialize log files with headers
     open(master_log_file, "w") do file
@@ -257,12 +270,12 @@ if abspath(PROGRAM_FILE) == @__FILE__
     results = sf_column_generation_algorithm(
         scenarios,
         initial_subsets,
-        fl_data,
+        ts_data,
         K,
         500;  # max_iterations
-        evaluate_subset_cost = evaluate_subset_cost_FL,
-        evaluate_subset_cost_batch = evaluate_subset_cost_batch_template_FL,
-        build_pricing_model = build_pricing_model_SF_FL,
+        evaluate_subset_cost = evaluate_subset_cost_TS,
+        evaluate_subset_cost_batch = evaluate_subset_cost_batch_template_TS,
+        build_pricing_model = build_pricing_model_SF_TS,
         pricing_type = pricing_type,
         use_solution_pool = true,
         total_work_budget = 30000.0,
@@ -278,7 +291,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
     
     # Write JSON outputs (summary + iterations)
     project_root = dirname(@__DIR__)
-    results_dir = joinpath(project_root, "Results", "Facility_Location", "CG")
+    results_dir = joinpath(project_root, "Results", "Transmission_Switching", "CG")
     if !isdir(results_dir)
         mkpath(results_dir)
     end
@@ -286,6 +299,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
     experiment = extract_experiment_type(scenarios_file)
     instance_tag = replace(splitext(basename(instance_file))[1], "." => "_")
     
+    # Extract T from initial_subsets_file if present (similar to FL)
     t_match = match(r"_T(\d+)_", initial_subsets_file)
     T = t_match === nothing ? nothing : parse(Int, t_match.captures[1])
     t_str = T === nothing ? "Tunknown" : "T$(T)"
@@ -367,4 +381,3 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("Total update work units: $(round(results["total_update_work_units"], digits=2))")
     println("="^80)
 end
-

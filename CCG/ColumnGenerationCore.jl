@@ -81,7 +81,7 @@ function collect_pool_rc_cap10(model, x, dual_mu, use_solution_pool, formulation
     return kept_solutions, kept_objs
 end
 
-function return_pricing_payload(kept_solutions, kept_objs, pricing_work_units, return_nodes, model)
+function return_pricing_payload(kept_solutions, kept_objs, pricing_work_units, return_nodes, model; analysis::Union{Dict, Nothing}=nothing)
     """Return pricing results in the correct format"""
     if return_nodes
         nodes = 0
@@ -89,9 +89,15 @@ function return_pricing_payload(kept_solutions, kept_objs, pricing_work_units, r
             nodes = MOI.get(backend(model), Gurobi.ModelAttribute("NodeCount"))
         catch
         end
-        return kept_solutions, kept_objs, pricing_work_units, nodes
+        if analysis === nothing
+            return kept_solutions, kept_objs, pricing_work_units, nodes
+        end
+        return kept_solutions, kept_objs, pricing_work_units, nodes, analysis
     else
-        return kept_solutions, kept_objs, pricing_work_units
+        if analysis === nothing
+            return kept_solutions, kept_objs, pricing_work_units
+        end
+        return kept_solutions, kept_objs, pricing_work_units, analysis
     end
 end
 
@@ -169,7 +175,10 @@ function column_generation_algorithm(
     iteration_pricing_data = []
     iteration_columns_data = []
     pricing_iteration_analysis = []
+    iteration_details = Vector{Dict{String, Any}}()
+    phase2_iterations = 0
     actual_iterations = 0
+    termination_iteration = 0
     total_solutions_added = 0
     
     # Stage 1: Initialization (NO solving from scratch - vectors already loaded!)
@@ -200,7 +209,9 @@ function column_generation_algorithm(
             "total_master_work_units" => 0.0,
             "total_pricing_work_units" => 0.0,
             "total_update_work_units" => 0.0,
-            "total_solutions_added" => 0
+            "total_solutions_added" => 0,
+            "phase2_iterations" => 0,
+            "iteration_details" => Vector{Dict{String, Any}}()
         )
     end
     
@@ -211,6 +222,7 @@ function column_generation_algorithm(
     
     # Column Generation Loop
     for iteration in 1:max_iterations
+        actual_iterations = iteration
         println("\033[34m================ ITERATION $iteration ===================\033[0m")
         
         # Print available work units
@@ -285,6 +297,14 @@ function column_generation_algorithm(
         # Stage 4: Pricing Subproblem
         println("Stage 4: Solving Pricing Subproblem")
         
+        # Initialize pricing metrics in case we early-exit
+        pricing_work_units = 0.0
+        pricing_nodes = 0
+        pricing_analysis = Dict{Symbol,Any}()
+        decomp_iterations = nothing
+        decomp_work_units = nothing
+        use_partial_cuts = nothing
+
         # Compute remaining work budget
         used_work = total_master_work_units + total_pricing_work_units + total_update_work_units
         remaining_work = max(0.0, total_work_budget - used_work)
@@ -292,18 +312,40 @@ function column_generation_algorithm(
         
         if remaining_work <= 0.0
             println("  Global work budget exhausted. Terminating.")
+            termination_iteration = iteration
+            iteration_total_work = master_work_units + pricing_work_units
+            push!(iteration_details, Dict(
+                "iteration" => iteration,
+                "solutions_added" => 0,
+                "master_work_units" => master_work_units,
+                "pricing_work_units" => pricing_work_units,
+                "update_work_units" => 0.0,
+                "total_work_units" => iteration_total_work,
+                "branch_and_bound_nodes" => pricing_nodes,
+                "phase1_status" => "unknown",
+                "phase2" => "unknown",
+                "decomp_iterations" => decomp_iterations,
+                "decomp_work_units" => decomp_work_units
+            ))
             break
         end
         
         # Solve pricing subproblem using specified pricing type
         new_solutions = Vector{Vector{Float64}}()
         pool_objs = Float64[]
-        pricing_work_units = 0.0
         
         try
-            new_solutions, pool_objs, pricing_work_units = 
-                build_pricing_model(scenarios, dual_lambda, dual_mu, problem_data, pricing_type, 
-                                 remaining_work, opt_worklimit, use_solution_pool, false, pricing_log_file, iteration)
+            pricing_result = build_pricing_model(
+                scenarios, dual_lambda, dual_mu, problem_data, pricing_type,
+                remaining_work, opt_worklimit, use_solution_pool, true, pricing_log_file, iteration
+            )
+            if length(pricing_result) == 5
+                new_solutions, pool_objs, pricing_work_units, pricing_nodes, pricing_analysis = pricing_result
+            elseif length(pricing_result) == 4
+                new_solutions, pool_objs, pricing_work_units, pricing_nodes = pricing_result
+            else
+                new_solutions, pool_objs, pricing_work_units = pricing_result
+            end
             
             total_pricing_work_units += pricing_work_units
             println("  Pricing work units: $(round(pricing_work_units, digits=2))")
@@ -313,9 +355,28 @@ function column_generation_algorithm(
             break
         end
         
+        phase1_optimal = get(pricing_analysis, :phase1_optimal, nothing)
+        went_phase2 = get(pricing_analysis, :went_phase2, nothing)
+        if went_phase2 === true
+            phase2_iterations += 1
+        end
+        
         # Terminate if pricing found no improving solutions
         if isempty(new_solutions)
             println("  No improving solutions from pricing. Terminating algorithm.")
+            termination_iteration = iteration
+            iteration_total_work = master_work_units + pricing_work_units
+            push!(iteration_details, Dict(
+                "iteration" => iteration,
+                "solutions_added" => 0,
+                "master_work_units" => master_work_units,
+                "pricing_work_units" => pricing_work_units,
+                "update_work_units" => 0.0,
+                "total_work_units" => iteration_total_work,
+                "branch_and_bound_nodes" => pricing_nodes,
+                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
+                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            ))
             break
         end
         
@@ -323,6 +384,19 @@ function column_generation_algorithm(
         rc_ok_indices = [idx for idx in 1:length(pool_objs) if pool_objs[idx] + dual_mu > 1]
         if isempty(rc_ok_indices)
             println("  No RC-improving solutions from pricing. Terminating algorithm.")
+            termination_iteration = iteration
+            iteration_total_work = master_work_units + pricing_work_units
+            push!(iteration_details, Dict(
+                "iteration" => iteration,
+                "solutions_added" => 0,
+                "master_work_units" => master_work_units,
+                "pricing_work_units" => pricing_work_units,
+                "update_work_units" => 0.0,
+                "total_work_units" => iteration_total_work,
+                "branch_and_bound_nodes" => pricing_nodes,
+                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
+                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            ))
             break
         end
         
@@ -355,6 +429,19 @@ function column_generation_algorithm(
         if reduced_cost < 1  # Convergence tolerance
             println("✅ Algorithm converged! Reduced cost < 0")
             push!(iteration_columns_data, (iteration=iteration, num_added=0))
+            termination_iteration = iteration
+            iteration_total_work = master_work_units + pricing_work_units
+            push!(iteration_details, Dict(
+                "iteration" => iteration,
+                "solutions_added" => 0,
+                "master_work_units" => master_work_units,
+                "pricing_work_units" => pricing_work_units,
+                "update_work_units" => 0.0,
+                "total_work_units" => iteration_total_work,
+                "branch_and_bound_nodes" => pricing_nodes,
+                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
+                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            ))
             break
         else
             # Add new columns to master problem
@@ -439,9 +526,20 @@ function column_generation_algorithm(
             println("  Total solutions: $nsol")
             println("  Update work units: $(round(local_update_work_units, digits=2))")
             push!(iteration_columns_data, (iteration=iteration, num_added=local_added))
+            iteration_total_work = master_work_units + pricing_work_units + local_update_work_units
+            push!(iteration_details, Dict(
+                "iteration" => iteration,
+                "solutions_added" => local_added,
+                "master_work_units" => master_work_units,
+                "pricing_work_units" => pricing_work_units,
+                "update_work_units" => local_update_work_units,
+                "total_work_units" => iteration_total_work,
+                "branch_and_bound_nodes" => pricing_nodes,
+                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
+                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            ))
         end
         
-        actual_iterations = iteration
         println()
     end
     
@@ -491,6 +589,7 @@ function column_generation_algorithm(
             end
             
             # Return integer selected solutions
+            total_work_units = total_master_work_units + total_pricing_work_units + total_update_work_units
             return Dict(
                 "status" => "OPTIMAL",
                 "final_objective_lp" => final_objective_lp,
@@ -502,14 +601,19 @@ function column_generation_algorithm(
                 "total_master_work_units" => total_master_work_units,
                 "total_pricing_work_units" => total_pricing_work_units,
                 "total_update_work_units" => total_update_work_units,
+                "total_work_units" => total_work_units,
                 "total_solutions_added" => total_solutions_added,
+                "termination_iteration" => termination_iteration,
+                "phase2_iterations" => phase2_iterations,
                 "iteration_master_data" => iteration_master_data,
                 "iteration_pricing_data" => iteration_pricing_data,
-                "iteration_columns_data" => iteration_columns_data
+                "iteration_columns_data" => iteration_columns_data,
+                "iteration_details" => iteration_details
             )
         else
             println("  Integer master problem failed to solve")
             integer_obj = Inf
+            total_work_units = total_master_work_units + total_pricing_work_units + total_update_work_units
             return Dict(
                 "status" => "OPTIMAL",
                 "final_objective_lp" => final_objective_lp,
@@ -521,10 +625,14 @@ function column_generation_algorithm(
                 "total_master_work_units" => total_master_work_units,
                 "total_pricing_work_units" => total_pricing_work_units,
                 "total_update_work_units" => total_update_work_units,
+                "total_work_units" => total_work_units,
                 "total_solutions_added" => total_solutions_added,
+                "termination_iteration" => termination_iteration,
+                "phase2_iterations" => phase2_iterations,
                 "iteration_master_data" => iteration_master_data,
                 "iteration_pricing_data" => iteration_pricing_data,
-                "iteration_columns_data" => iteration_columns_data
+                "iteration_columns_data" => iteration_columns_data,
+                "iteration_details" => iteration_details
             )
         end
     else
@@ -562,6 +670,7 @@ function sf_column_generation_algorithm(
     max_iterations::Int;
     # Problem-specific functions:
     evaluate_subset_cost::Function,        # (subset_vector, scenarios, problem_data) -> (cost, work_units)
+    evaluate_subset_cost_batch::Union{Function,Nothing}=nothing,  # (subset_vectors, scenarios, problem_data) -> (costs, work_units)
     build_pricing_model::Function,         # (scenarios, dual_lambda, dual_mu, problem_data, pricing_type, work_limit, opt_worklimit, use_solution_pool, return_nodes, log_file, iteration) -> (solutions, objectives, work_units)
     # Algorithm parameters:
     pricing_type::Int=2,
@@ -629,7 +738,8 @@ function sf_column_generation_algorithm(
     
     # Build initial cost vector and z_matrix
     cost_vector, z_matrix, initial_matrix_work_units = build_cost_vector(
-        scenarios, initial_subsets, evaluate_subset_cost, problem_data
+        scenarios, initial_subsets, evaluate_subset_cost, problem_data;
+        evaluate_subset_cost_batch=evaluate_subset_cost_batch
     )
     total_update_work_units += initial_matrix_work_units
     
@@ -792,39 +902,66 @@ function sf_column_generation_algorithm(
             local_added = 0
             local_update_work_units = 0.0
             
-            for pi_new in new_subsets
-                # Convert to Int vector
-                pi_new_int = round.(Int, pi_new)
-                
-                # Calculate cost for this subset
-                new_cost, work_units = evaluate_subset_cost(pi_new_int, scenarios, problem_data)
+            if evaluate_subset_cost_batch !== nothing
+                all_new_subsets_int = [round.(Int, pi_new) for pi_new in new_subsets]
+                new_costs, work_units = evaluate_subset_cost_batch(all_new_subsets_int, scenarios, problem_data)
                 local_update_work_units += work_units
-                
-                # Sanitize cost
-                new_cost = sanitize_cost(new_cost)
-                push!(cost_vector, new_cost)
-                
-                # Update z_matrix with new column
-                z_matrix = hcat(z_matrix, pi_new_int)
-                nsubsets += 1
-                
-                # Add new v_A variable to master problem
-                new_v = @variable(model, lower_bound = 0, upper_bound = 1)
-                push!(v_variables, new_v)
-                
-                # Update objective: set coefficient for new v_A variable
-                set_objective_coefficient(model, new_v, new_cost)
-                
-                # Update the constraint matrix entries
-                # Partition constraints: each scenario sums to 1
-                for s in 1:nscen
-                    set_normalized_coefficient(partition_constraints[s], new_v, pi_new_int[s])
+
+                for (idx, pi_new_int) in enumerate(all_new_subsets_int)
+                    new_cost = sanitize_cost(new_costs[idx])
+                    push!(cost_vector, new_cost)
+
+                    # Update z_matrix with new column
+                    z_matrix = hcat(z_matrix, pi_new_int)
+                    nsubsets += 1
+
+                    # Add new v_A variable to master problem
+                    new_v = @variable(model, lower_bound = 0, upper_bound = 1)
+                    push!(v_variables, new_v)
+
+                    # Update objective: set coefficient for new v_A variable
+                    set_objective_coefficient(model, new_v, new_cost)
+
+                    # Update the constraint matrix entries
+                    for s in 1:nscen
+                        set_normalized_coefficient(partition_constraints[s], new_v, pi_new_int[s])
+                    end
+                    set_normalized_coefficient(k_constraint, new_v, 1.0)
+
+                    local_added += 1
                 end
-                
-                # Cardinality constraint: sum v_A <= K
-                set_normalized_coefficient(k_constraint, new_v, 1.0)
-                
-                local_added += 1
+            else
+                for pi_new in new_subsets
+                    # Convert to Int vector
+                    pi_new_int = round.(Int, pi_new)
+
+                    # Calculate cost for this subset
+                    new_cost, work_units = evaluate_subset_cost(pi_new_int, scenarios, problem_data)
+                    local_update_work_units += work_units
+
+                    # Sanitize cost
+                    new_cost = sanitize_cost(new_cost)
+                    push!(cost_vector, new_cost)
+
+                    # Update z_matrix with new column
+                    z_matrix = hcat(z_matrix, pi_new_int)
+                    nsubsets += 1
+
+                    # Add new v_A variable to master problem
+                    new_v = @variable(model, lower_bound = 0, upper_bound = 1)
+                    push!(v_variables, new_v)
+
+                    # Update objective: set coefficient for new v_A variable
+                    set_objective_coefficient(model, new_v, new_cost)
+
+                    # Update the constraint matrix entries
+                    for s in 1:nscen
+                        set_normalized_coefficient(partition_constraints[s], new_v, pi_new_int[s])
+                    end
+                    set_normalized_coefficient(k_constraint, new_v, 1.0)
+
+                    local_added += 1
+                end
             end
             
             total_update_work_units += local_update_work_units

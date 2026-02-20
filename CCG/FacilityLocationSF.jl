@@ -128,6 +128,119 @@ function evaluate_subset_cost_FL(subset_vector::Vector{Int}, scenarios::Vector{V
 end
 
 # =============================================================================
+# SUBSET COST EVALUATION f(A) - TEMPLATE MODEL (BATCH)
+# =============================================================================
+
+function build_subset_cost_template_FL(scenarios::Vector{Vector{Float64}}, problem_data::Dict)
+    nloc = problem_data["nloc"]
+    ncust = problem_data["ncust"]
+    capacity = problem_data["capacity"]
+    cost = problem_data["cost"]
+    fixedcost = problem_data["fixedcost"]
+    unmet_pen = problem_data["unmet_pen"]
+    scaling_factor = problem_data["scaling_factor"]
+    nscen = length(scenarios)
+
+    model = Model(Gurobi.Optimizer)
+    set_optimizer_attribute(model, "OutputFlag", 0)
+    set_optimizer_attribute(model, "TimeLimit", 60)
+
+    @variable(model, x[1:nloc], Bin)
+    @variable(model, y[1:nloc, 1:ncust, 1:nscen] >= 0)
+    @variable(model, b[1:ncust, 1:nscen] >= 0)
+
+    demand_constraints = Array{ConstraintRef}(undef, nscen, ncust)
+    for s in 1:nscen
+        for j in 1:ncust
+            demand_constraints[s, j] = @constraint(model, sum(y[i, j, s] for i in 1:nloc) + b[j, s] == 0.0)
+        end
+    end
+
+    for s in 1:nscen
+        for i in 1:nloc
+            @constraint(model, sum(y[i, j, s] for j in 1:ncust) - capacity[i] * x[i] <= 0)
+        end
+    end
+
+    @objective(model, Min,
+        sum(fixedcost[i] * x[i] for i in 1:nloc) +
+        scaling_factor * sum(cost[i, j] * y[i, j, s] for s in 1:nscen for i in 1:nloc for j in 1:ncust) +
+        sum(unmet_pen * b[j, s] for s in 1:nscen for j in 1:ncust)
+    )
+
+    return model, x, y, b, demand_constraints
+end
+
+function evaluate_subset_cost_batch_template_FL(subset_vectors::Vector{Vector{Int}},
+                                                scenarios::Vector{Vector{Float64}},
+                                                problem_data::Dict)
+    if isempty(subset_vectors)
+        return Float64[], 0.0
+    end
+
+    nloc = problem_data["nloc"]
+    ncust = problem_data["ncust"]
+    fixedcost = problem_data["fixedcost"]
+    nscen = length(scenarios)
+
+    model, x, y, b, demand_constraints = build_subset_cost_template_FL(scenarios, problem_data)
+
+    costs = Float64[]
+    total_work_units = 0.0
+
+    for subset_vector in subset_vectors
+        subset_size = sum(subset_vector)
+
+        # Update objective coefficients for fixed cost term
+        for i in 1:nloc
+            set_objective_coefficient(model, x[i], subset_size * fixedcost[i])
+        end
+
+        # Update RHS and bounds based on subset membership
+        for s in 1:nscen
+            if subset_vector[s] == 1
+                for j in 1:ncust
+                    set_normalized_rhs(demand_constraints[s, j], scenarios[s][j])
+                    if has_upper_bound(b[j, s])
+                        delete_upper_bound(b[j, s])
+                    end
+                end
+                for i in 1:nloc, j in 1:ncust
+                    if has_upper_bound(y[i, j, s])
+                        delete_upper_bound(y[i, j, s])
+                    end
+                end
+            else
+                for j in 1:ncust
+                    set_normalized_rhs(demand_constraints[s, j], 0.0)
+                    set_upper_bound(b[j, s], 0.0)
+                end
+                for i in 1:nloc, j in 1:ncust
+                    set_upper_bound(y[i, j, s], 0.0)
+                end
+            end
+        end
+
+        optimize!(model)
+
+        work_units = 0.0
+        try
+            work_units = MOI.get(backend(model), Gurobi.ModelAttribute("Work"))
+        catch
+        end
+        total_work_units += work_units
+
+        if termination_status(model) == MOI.OPTIMAL
+            push!(costs, objective_value(model))
+        else
+            push!(costs, Inf)
+        end
+    end
+
+    return costs, total_work_units
+end
+
+# =============================================================================
 # PRICING SUBPROBLEM (Type 1) - SF
 # =============================================================================
 

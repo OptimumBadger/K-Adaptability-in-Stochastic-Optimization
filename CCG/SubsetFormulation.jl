@@ -128,7 +128,8 @@ end
 function build_cost_vector(scenarios::Vector{Vector{Float64}},
                           initial_subsets::Vector{Vector{Int}},
                           evaluate_subset_cost::Function,
-                          problem_data)
+                          problem_data;
+                          evaluate_subset_cost_batch::Union{Function,Nothing}=nothing)
     """Build the cost vector f(A) for Subset Formulation
     
     This is problem-independent - it just calls the problem-specific evaluate_subset_cost function.
@@ -153,28 +154,37 @@ function build_cost_vector(scenarios::Vector{Vector{Float64}},
     z_matrix = zeros(nscen, nsubsets)
     total_work_units = 0.0
     
+    if evaluate_subset_cost_batch !== nothing
+        # Batch evaluation: build model once and reuse for all subsets
+        costs, total_work_units = evaluate_subset_cost_batch(initial_subsets, scenarios, problem_data)
+        cost_vector = costs
+    else
+        for A_idx in 1:nsubsets
+            subset_vector = initial_subsets[A_idx]
+            
+            # Validate subset vector
+            if length(subset_vector) != nscen
+                error("Subset vector $A_idx has length $(length(subset_vector)) but expected $nscen")
+            end
+            
+            # Calculate cost for this subset
+            cost_val, work_units = evaluate_subset_cost(subset_vector, scenarios, problem_data)
+            push!(cost_vector, cost_val)
+            total_work_units += work_units
+            
+            if A_idx % 10 == 0
+                println("  Processed $A_idx subsets")
+            end
+        end
+    end
+
+    # Update z_matrix
     for A_idx in 1:nsubsets
         subset_vector = initial_subsets[A_idx]
-        
-        # Validate subset vector
-        if length(subset_vector) != nscen
-            error("Subset vector $A_idx has length $(length(subset_vector)) but expected $nscen")
-        end
-        
-        # Calculate cost for this subset
-        cost_val, work_units = evaluate_subset_cost(subset_vector, scenarios, problem_data)
-        push!(cost_vector, cost_val)
-        total_work_units += work_units
-        
-        # Update z_matrix
         for s in 1:nscen
             if subset_vector[s] == 1
                 z_matrix[s, A_idx] = 1
             end
-        end
-        
-        if A_idx % 10 == 0
-            println("  Processed $A_idx subsets")
         end
     end
     
