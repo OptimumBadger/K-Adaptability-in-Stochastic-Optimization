@@ -1,6 +1,7 @@
 # TransmissionSwitchingSF.jl
 # Problem-specific implementations for Transmission Switching Column Generation - Subset Formulation (SF)
 # This file provides the interface functions required by ColumnGenerationCore.jl for SF
+# This file is used to evaluate the cost of a subset of scenarios for the Transmission Switching problem with appropriate fixed lines.
 
 using JuMP, Gurobi
 using MathOptInterface
