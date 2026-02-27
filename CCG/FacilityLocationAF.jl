@@ -601,6 +601,7 @@ function solve_fl_recourse_lp_with_duals(
 
     demand_con = @constraint(model, [j in 1:ncust], sum(y[i, j] for i in 1:nloc) + shortfall[j] == scenario[j])
     cap_con = @constraint(model, [i in 1:nloc], sum(y[i, j] for j in 1:ncust) <= capacity[i] * x_hat[i])
+    valid_con = @constraint(model, [i in 1:nloc, j in 1:ncust], y[i, j] <= min(capacity[i], scenario[j]) * x_hat[i])
 
     @objective(model, Min,
         scaling_factor * sum(cost[i, j] * y[i, j] for i in 1:nloc for j in 1:ncust) +
@@ -611,11 +612,13 @@ function solve_fl_recourse_lp_with_duals(
 
     ts = termination_status(model)
     if ts != MOI.OPTIMAL
-        return Inf, zeros(ncust), zeros(nloc), 0.0
+        return Inf, zeros(ncust), zeros(nloc), zeros(nloc, ncust), 0.0
     end
 
-    mu_d = [dual(demand_con[j]) for j in 1:ncust]
-    mu_c = [dual(cap_con[i]) for i in 1:nloc]
+    # Vectorized dual extraction is faster than element-wise extraction.
+    mu_d = collect(dual.(demand_con))
+    mu_c = collect(dual.(cap_con))
+    lambda_v = collect(dual.(valid_con))
 
     work_units = 0.0
     try
@@ -628,7 +631,7 @@ function solve_fl_recourse_lp_with_duals(
     fixed_cost_term = sum(fixedcost[i] * x_hat[i] for i in 1:nloc)
     q_s = fixed_cost_term + recourse_obj
 
-    return q_s, mu_d, mu_c, work_units
+    return q_s, mu_d, mu_c, lambda_v, work_units
 end
 
 function solve_fl_recourse_lp_with_x_variables(
@@ -665,6 +668,7 @@ function solve_fl_recourse_lp_with_x_variables(
 
     demand_con = @constraint(model, [j in 1:ncust], sum(y[i, j] for i in 1:nloc) + shortfall[j] == scenario[j])
     cap_con = @constraint(model, [i in 1:nloc], sum(y[i, j] for j in 1:ncust) <= capacity[i] * x[i])
+    valid_con = @constraint(model, [i in 1:nloc, j in 1:ncust], y[i, j] <= min(capacity[i], scenario[j]) * x[i])
 
     @objective(model, Min,
         sum(fixedcost[i] * x[i] for i in 1:nloc) +
@@ -679,10 +683,10 @@ function solve_fl_recourse_lp_with_x_variables(
         return Inf, zeros(nloc), zeros(ncust), zeros(nloc), 0.0
     end
 
-    # Extract dual values of x[j] = x_hat[j] constraints
-    x_duals = [dual(x_fix_con[j]) for j in 1:nloc]
-    mu_d = [dual(demand_con[j]) for j in 1:ncust]
-    mu_c = [dual(cap_con[i]) for i in 1:nloc]
+    # Vectorized dual extraction is faster than element-wise extraction.
+    x_duals = collect(dual.(x_fix_con))
+    mu_d = collect(dual.(demand_con))
+    mu_c = collect(dual.(cap_con))
 
     work_units = 0.0
     try
@@ -765,6 +769,10 @@ function solve_fl_partial_recourse_mip(
     for j in 1:ncust
         @constraint(model, sum(y[i, j] for i in 1:nloc) + shortfall[j] == scenario[j])
     end
+    # Valid inequalities: y_ij <= min(u_i, d_j) * x_i
+    for i in 1:nloc, j in 1:ncust
+        @constraint(model, y[i, j] <= min(capacity[i], scenario[j]) * x[i])
+    end
     
     # Objective: includes fixed costs
     @objective(model, Min,
@@ -827,32 +835,37 @@ end
 function compute_M_value_FL(
     mu_d::Vector{Float64},
     mu_c::Vector{Float64},
+    lambda_v::AbstractMatrix{<:Real},
     demand_s::AbstractVector{<:Real},
     fixedcost::AbstractVector{<:Real},
     capacity::AbstractVector{<:Real},
     dual_lambda_s::Float64
 )
     """Compute M_s(mu) for FL by solving the optimization problem:
-    M(μ̂) = max_{x_i ∈ {0,1}} [Σ_{i∈I} f_i x_i + Σ_{j∈J} d_j^s μ̂_{d,j} + Σ_{i∈I} (u_i x_i) μ̂_{c,i} - λ_s^*]
-    
-    This simplifies to:
-    M(μ̂) = max_{x_i ∈ {0,1}} Σ_{i∈I} (f_i + u_i μ̂_{c,i}) x_i + [Σ_{j∈J} d_j^s μ̂_{d,j} - λ_s^*]
+    M(μ̂) = max_{x_i ∈ {0,1}} [Σ_{i∈I} f_i x_i + Σ_{j∈J} d_j^s μ̂_{d,j} + Σ_{i∈I} (u_i x_i) μ̂_{c,i}
+                                + Σ_{i∈I} Σ_{j∈J} min(u_i, d_j^s) x_i λ̂_{v,i,j} - λ_s^*]
+
+    This simplifies to (separable in x_i):
+    M(μ̂) = Σ_{j∈J} d_j^s μ̂_{d,j} - λ_s^* + Σ_{i∈I} max(0, f_i + u_i μ̂_{c,i} + Σ_{j∈J} min(u_i, d_j^s) λ̂_{v,i,j})
     """
     nloc = length(fixedcost)
-    
+    ncust = length(demand_s)
+
     # Constant term (independent of x_i)
-    constant_term = sum(demand_s[j] * mu_d[j] for j in eachindex(mu_d)) - dual_lambda_s
-    
-    # For each facility i, compute coefficient: (f_i + u_i * μ̂_{c,i})
+    constant_term = sum(demand_s[j] * mu_d[j] for j in 1:ncust) - dual_lambda_s
+
+    # For each facility i, compute coefficient:
+    # f_i + u_i * μ̂_{c,i} + Σ_j min(u_i, d_j^s) * λ̂_{v,i,j}
     # If coefficient > 0, set x_i = 1; otherwise x_i = 0
     M_value = constant_term
     for i in 1:nloc
-        coefficient = fixedcost[i] + capacity[i] * mu_c[i]
+        valid_coeff = sum(min(capacity[i], demand_s[j]) * lambda_v[i, j] for j in 1:ncust)
+        coefficient = fixedcost[i] + capacity[i] * mu_c[i] + valid_coeff
         if coefficient > 0.0
             M_value += coefficient
         end
     end
-    
+
     return M_value
 end
 
@@ -885,6 +898,7 @@ function af_pricing_type2_FL_decomp(
 )
     """Solve AF Pricing Type 2 with decomposition cutting-plane procedure."""
     nscen = length(scenarios)
+    dual_zero_tol = 1e-6
     if length(f_s_vector) != nscen
         error("❌ Error: f_s vector length ($(length(f_s_vector))) must equal number of scenarios ($nscen).")
     end
@@ -980,8 +994,8 @@ function af_pricing_type2_FL_decomp(
                     continue  # Skip if infeasible/unbounded
                 end
                 
-                # Step 2: Find indices where dual == 0.0 (exact zero)
-                zero_dual_indices = [i for i in 1:nloc if x_duals[i] == 0.0]
+                # Step 2: Find near-zero dual indices using tolerance (avoid exact equality).
+                zero_dual_indices = [i for i in 1:nloc if abs(x_duals[i]) <= dual_zero_tol]
                 
                 # Step 3: Update F1 and F0 by removing indices with zero duals
                 F1_partial = [i for i in F1_initial if !(i in zero_dual_indices)]
@@ -1018,22 +1032,23 @@ function af_pricing_type2_FL_decomp(
             # Still generate Cut 34 using fully fixed v (current approach)
             for s in 1:nscen
                 # Solve recourse LP to get q_s and duals for Cut 34
-                q_s, mu_d, mu_c, sub_work = solve_fl_recourse_lp_with_duals(
+                q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
                     v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
                 )
                 initial_pricing_work_units += sub_work
-                
+
                 if !isfinite(q_s)
                     continue  # Skip if infeasible/unbounded
                 end
-                
+
                 # Add Cut 34: Compute M_s and add cut
-                M_s = compute_M_value_FL(mu_d, mu_c, scenarios[s], fixedcost, capacity, dual_lambda[s])
+                M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
                 @constraint(master,
                     theta[s] +
                     sum(fixedcost[i] * x[i] for i in 1:nloc) +
                     sum(scenarios[s][j] * mu_d[j] for j in 1:ncust) +
-                    sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc)
+                    sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc) +
+                    sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
                     <= dual_lambda[s] + M_s * (1 - pi[s])
                 )
                 initial_cut34_count += 1
@@ -1076,15 +1091,16 @@ function af_pricing_type2_FL_decomp(
             q_s = rec["q_s"]::Float64
             mu_d = rec["mu_d"]::Vector{Float64}
             mu_c = rec["mu_c"]::Vector{Float64}
-            
+            lambda_v = rec["lambda_v"]::Matrix{Float64}
+
             # Recompute M_s with current dual_lambda[s] (since M_s depends on it)
-            M_s = compute_M_value_FL(mu_d, mu_c, scenarios[s], fixedcost, capacity, dual_lambda[s])
-            
+            M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
+
             # Compute F0 and F1 sets for delta_expr
             F0 = [i for i in 1:nloc if x_hat[i] == 0]
             F1 = [i for i in 1:nloc if x_hat[i] == 1]
             delta_expr = sum(1 - x[i] for i in F1; init=0.0) + sum(x[i] for i in F0; init=0.0)
-            
+
             # Cut 32 / Cut 33: Check sign with CURRENT dual_lambda
             sign_check = dual_lambda[s] - q_s
             if sign_check <= 0.0
@@ -1104,13 +1120,14 @@ function af_pricing_type2_FL_decomp(
                     end
                 end
             end
-            
+
             # Cut 34: Always preload (it's valid regardless of termination condition)
             @constraint(master,
                 theta[s] +
                 sum(fixedcost[i] * x[i] for i in 1:nloc) +
                 sum(scenarios[s][j] * mu_d[j] for j in 1:ncust) +
-                sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc)
+                sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc) +
+                sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
                 <= dual_lambda[s] + M_s * (1 - pi[s])
             )
             cut34_preloaded += 1
@@ -1236,7 +1253,7 @@ function af_pricing_type2_FL_decomp(
             for s in 1:nscen
                 # Solve LP recourse with x_hat fully fixed
                 print("    Scenario $s: Solving LP recourse (fully fixed x_hat)... ")
-                q_s, mu_d, mu_c, lp_work = solve_fl_recourse_lp_with_duals(
+                q_s, mu_d, mu_c, _lambda_v, lp_work = solve_fl_recourse_lp_with_duals(
                     x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
                 )
                 lp_work_units += lp_work
@@ -1495,8 +1512,8 @@ function af_pricing_type2_FL_decomp(
                     F1_initial = [j for j in 1:nloc if x_hat[j] == 1]
                     F0_initial = [j for j in 1:nloc if x_hat[j] == 0]
                     
-                    # Find indices where dual == 0.0 (exact zero)
-                    zero_dual_indices = [j for j in 1:nloc if x_duals[j] == 0.0]
+                    # Find near-zero dual indices using tolerance (avoid exact equality).
+                    zero_dual_indices = [j for j in 1:nloc if abs(x_duals[j]) <= dual_zero_tol]
                     
                     # Update F1 and F0 by removing indices with zero duals
                     F1_partial = [j for j in F1_initial if !(j in zero_dual_indices)]
@@ -1653,8 +1670,8 @@ function af_pricing_type2_FL_decomp(
                     continue
                 end
                 
-                # Step 2: Find indices where dual == 0.0 (exact zero)
-                zero_dual_indices = [j for j in 1:nloc if x_duals[j] == 0.0]
+                # Step 2: Find near-zero dual indices using tolerance (avoid exact equality).
+                zero_dual_indices = [j for j in 1:nloc if abs(x_duals[j]) <= dual_zero_tol]
                 
                 # Step 3: Update F1 and F0 by removing indices with zero duals
                 F1_partial = [j for j in F1_initial if !(j in zero_dual_indices)]
@@ -1732,7 +1749,7 @@ function af_pricing_type2_FL_decomp(
             println("  LP work units: $(round(lp_work_units, digits=2)), Partial MIP work units: $(round(partial_mip_work_units, digits=2))")
         end
         
-        # Still generate Cut 34 using fully fixed x_hat (current approach)
+        # Still generate Benders cuts using fully fixed x_hat (current approach)
         sig = x_signature_FL(x_hat)
         println("  Generating Cut 34 using fully fixed x_hat (signature: $sig)...")
         
@@ -1741,6 +1758,7 @@ function af_pricing_type2_FL_decomp(
             q_s = Inf
             mu_d = zeros(ncust)
             mu_c = zeros(nloc)
+            lambda_v = zeros(nloc, ncust)
             M_s = 0.0
             from_cache = false
 
@@ -1749,17 +1767,18 @@ function af_pricing_type2_FL_decomp(
                 q_s = cache_rec["q_s"]::Float64
                 mu_d = cache_rec["mu_d"]::Vector{Float64}
                 mu_c = cache_rec["mu_c"]::Vector{Float64}
+                lambda_v = cache_rec["lambda_v"]::Matrix{Float64}
                 M_s = cache_rec["M_s"]::Float64
                 from_cache = true
                 println("    Scenario $s: Using cached values for Cut 34 [q_s = $(round(q_s, digits=2)), M_s = $(round(M_s, digits=2))]")
             else
                 print("    Scenario $s: Solving recourse LP for Cut 34... ")
-                q_s, mu_d, mu_c, sub_work = solve_fl_recourse_lp_with_duals(
+                q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
                     x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
                 )
                 pricing_work_units += sub_work
                 if isfinite(q_s)
-                    M_s = compute_M_value_FL(mu_d, mu_c, scenarios[s], fixedcost, capacity, dual_lambda[s])
+                    M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
                     println("q_s = $(round(q_s, digits=2)), M_s = $(round(M_s, digits=2))")
                     cache_rec = Dict{String,Any}(
                         "s" => s,
@@ -1768,6 +1787,7 @@ function af_pricing_type2_FL_decomp(
                         "q_s" => q_s,
                         "mu_d" => copy(mu_d),
                         "mu_c" => copy(mu_c),
+                        "lambda_v" => copy(lambda_v),
                         "M_s" => M_s
                     )
                     scenario_x_cache[key] = cache_rec
@@ -1789,7 +1809,8 @@ function af_pricing_type2_FL_decomp(
                     theta[s] +
                     sum(fixedcost[i] * x[i] for i in 1:nloc) +
                     sum(scenarios[s][j] * mu_d[j] for j in 1:ncust) +
-                    sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc)
+                    sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc) +
+                    sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
                     <= dual_lambda[s] + M_s * (1 - pi[s])
                 )
                 cut_msg = "    Scenario $s: Added Cut 34 (Conditional Benders) [θ_hat = $(round(lhs_check, digits=4)) >= $(round(rhs_check, digits=4))]" * (from_cache ? " [from cache]" : "")
