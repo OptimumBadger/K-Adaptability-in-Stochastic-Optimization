@@ -880,43 +880,40 @@ function compute_M_value_FL(
 end
 
 function compute_M_value_FL_opt(
-    x_hat::Vector{Int},
-    scenarios::Vector{<:AbstractVector{<:Real}},
-    capacity::AbstractVector{<:Real},
-    cost::AbstractMatrix{<:Real},
-    fixedcost::AbstractVector{<:Real},
-    unmet_pen::Float64,
-    scaling_factor::Float64,
     mu_d::Vector{Float64},
     mu_c::Vector{Float64},
     lambda_v::AbstractMatrix{<:Real},
     demand_s::AbstractVector{<:Real},
-    dual_lambda_s::Float64;
-    subproblem_cuts::Bool=true
+    fixedcost::AbstractVector{<:Real},
+    capacity::AbstractVector{<:Real},
+    dual_lambda_s::Float64,
+    a_dmin::Vector{Float64},
+    const_dmin::Float64,
+    max_q::Float64
 )
-    """Compute M_s by solving a MIP 
+    """Compute M_s via MIP with the d_min domination constraint.
+
+    Objective  : max  Σ_i a_i·x_i + const_s - λ_s
+    Constraint : Σ_i a_dmin_i·x_i <= max_q - const_dmin
+
+    All precomputed by the caller once per x_hat:
+      a_i        = fixedcost_i + cap_i·μ_c_i + Σ_j min(cap_i,d_j^s)·λ_v_ij  [scenario-s LP duals, for objective]
+      const_s    = Σ_j d_j^s·μ_d_j
+      a_dmin_i   = fixedcost_i + cap_i·μ_c_dmin_i + Σ_j min(cap_i,d_min_j)·λ_v_dmin_ij
+      const_dmin = Σ_j d_min_j·μ_d_dmin_j                                     [d_min LP duals, for constraint]
+      max_q      = max_s { fixedcost·x_hat + f(x_hat, d_s) }                  [RHS of domination constraint]
+
+    Constraint logic: c^T x + L(x, d_min) <= max_q, where L is a linear lower bound on
+    f(x, d_min) via LP weak duality (fixed duals from LP(x_hat, d_min)). This excludes x
+    whose minimum possible total cost exceeds x_hat's worst-case total cost.
     """
-    nloc = length(fixedcost)
+    nloc  = length(fixedcost)
     ncust = length(demand_s)
 
-    # Step 1: compute max LP recourse of x_hat over all scenarios (includes fixed costs)
-    max_q = -Inf
-    total_lp_work = 0.0
-    for scen in scenarios
-        q, _, _, _, lp_work = solve_fl_recourse_lp_with_duals(
-            x_hat, scen, capacity, cost, fixedcost, unmet_pen, scaling_factor;
-            subproblem_cuts=subproblem_cuts
-        )
-        total_lp_work += lp_work
-        if isfinite(q) && q > max_q
-            max_q = q
-        end
-    end
-
-    # Step 2: build MIP 
-    a_current = [fixedcost[i] + capacity[i] * mu_c[i] +
-                  sum(min(capacity[i], demand_s[j]) * lambda_v[i, j] for j in 1:ncust)
-                 for i in 1:nloc]
+    # Objective: use scenario-s LP duals
+    a_current     = [fixedcost[i] + capacity[i] * mu_c[i] +
+                      sum(min(capacity[i], demand_s[j]) * lambda_v[i, j] for j in 1:ncust)
+                     for i in 1:nloc]
     const_current = sum(demand_s[j] * mu_d[j] for j in 1:ncust)
 
     model = Model(Gurobi.Optimizer)
@@ -926,8 +923,9 @@ function compute_M_value_FL_opt(
     @variable(model, x[1:nloc], Bin)
     @objective(model, Max, sum(a_current[i] * x[i] for i in 1:nloc) + const_current - dual_lambda_s)
 
+    # d_min domination constraint (linear in x; valid relaxation via LP weak duality)
     if isfinite(max_q)
-        @constraint(model, sum(a_current[i] * x[i] for i in 1:nloc) <= max_q - const_current)
+        @constraint(model, sum(a_dmin[i] * x[i] for i in 1:nloc) <= max_q - const_dmin)
     end
 
     optimize!(model)
@@ -938,10 +936,8 @@ function compute_M_value_FL_opt(
     catch
     end
 
-    total_work = total_lp_work + mip_work
-
     if termination_status(model) == MOI.OPTIMAL
-        return objective_value(model), total_work
+        return objective_value(model), mip_work
     end
 
     # Fallback: analytical formula (unconstrained max over binary x)
@@ -951,7 +947,7 @@ function compute_M_value_FL_opt(
             M_value += a_current[i]
         end
     end
-    return M_value, total_work
+    return M_value, mip_work
 end
 
 function x_signature_FL(x_hat::Vector{Int})
@@ -1850,6 +1846,66 @@ function af_pricing_type2_FL_decomp(
         sig = x_signature_FL(x_hat)
         println("  Generating Cut 34 using fully fixed x_hat (signature: $sig)...")
 
+        # ── MIP big-M pre-computation (once per x_hat, before the per-scenario loop) ──────────
+        # We need two things for the MIP constraint:
+        #   max_q      = max_s { c^T x_hat + f(x_hat, d_s) }   [RHS of domination constraint]
+        #   a_dmin, const_dmin                                   [LHS coefficients from LP(x_hat, d_min)]
+        # Computing these here (not inside the MIP function) avoids solving nscen redundant LPs.
+        max_q_mip  = -Inf
+        a_dmin     = zeros(nloc)
+        const_dmin = 0.0
+        if use_mip_bigM
+            # Step 1: collect max_q by scanning all scenario LPs; populates cache for the loop below
+            for s_pre in 1:nscen
+                key_pre = (s_pre, sig)
+                if haskey(scenario_x_cache, key_pre)
+                    q_pre = scenario_x_cache[key_pre]["q_s"]::Float64
+                else
+                    q_pre, mu_d_pre, mu_c_pre, lv_pre, pre_work = solve_fl_recourse_lp_with_duals(
+                        x_hat, scenarios[s_pre], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
+                    )
+                    pricing_work_units += pre_work
+                    if isfinite(q_pre)
+                        cache_rec_pre = Dict{String,Any}(
+                            "s"        => s_pre,
+                            "x_sig"    => sig,
+                            "x_hat"    => copy(x_hat),
+                            "q_s"      => q_pre,
+                            "mu_d"     => copy(mu_d_pre),
+                            "mu_c"     => copy(mu_c_pre),
+                            "lambda_v" => copy(lv_pre),
+                        )
+                        scenario_x_cache[key_pre] = cache_rec_pre
+                        push!(cut_records, cache_rec_pre)
+                    end
+                end
+                isfinite(q_pre) && (max_q_mip = max(max_q_mip, q_pre))
+            end
+            println("  [MIP big-M] max_q = $(round(max_q_mip, digits=2))")
+
+            # Step 2: compute d_min = component-wise minimum demand across all scenarios
+            d_min = [minimum(scenarios[s][j] for s in 1:nscen) for j in 1:ncust]
+
+            # Step 3: solve LP(x_hat, d_min) once to get duals for the domination constraint
+            _, mu_d_dmin, mu_c_dmin, lv_dmin, dmin_work = solve_fl_recourse_lp_with_duals(
+                x_hat, d_min, capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                subproblem_cuts=subproblem_cuts
+            )
+            pricing_work_units += dmin_work
+
+            # Step 4: build constraint coefficients
+            # a_dmin_i   = fixedcost_i + cap_i·μ_c_dmin_i + Σ_j min(cap_i, d_min_j)·λ_v_dmin_ij
+            # const_dmin = Σ_j d_min_j·μ_d_dmin_j
+            # Constraint in MIP: Σ_i a_dmin_i·x_i <= max_q - const_dmin
+            const_dmin = sum(d_min[j] * mu_d_dmin[j] for j in 1:ncust)
+            a_dmin     = [fixedcost[i] + capacity[i] * mu_c_dmin[i] +
+                           sum(min(capacity[i], d_min[j]) * lv_dmin[i, j] for j in 1:ncust)
+                          for i in 1:nloc]
+            println("  [MIP big-M] d_min constraint built (const_dmin = $(round(const_dmin, digits=2)))")
+        end
+        # ─────────────────────────────────────────────────────────────────────────────────────────
+
         for s in 1:nscen
             key = (s, sig)
             if haskey(scenario_x_cache, key)
@@ -1893,9 +1949,8 @@ function af_pricing_type2_FL_decomp(
 
             if use_mip_bigM
                 M_s, m_work = compute_M_value_FL_opt(
-                    x_hat, scenarios, capacity, cost, fixedcost, unmet_pen, scaling_factor,
-                    mu_d, mu_c, lambda_v, scenarios[s], dual_lambda[s];
-                    subproblem_cuts=subproblem_cuts
+                    mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s],
+                    a_dmin, const_dmin, max_q_mip
                 )
                 pricing_work_units += m_work
             else
