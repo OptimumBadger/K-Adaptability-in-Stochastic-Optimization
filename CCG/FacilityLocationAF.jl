@@ -892,25 +892,12 @@ function compute_M_value_FL_opt(
     max_q::Float64
 )
     """Compute M_s via MIP with the d_min domination constraint.
-
-    Objective  : max  Σ_i a_i·x_i + const_s - λ_s
-    Constraint : Σ_i a_dmin_i·x_i <= max_q - const_dmin
-
-    All precomputed by the caller once per x_hat:
-      a_i        = fixedcost_i + cap_i·μ_c_i + Σ_j min(cap_i,d_j^s)·λ_v_ij  [scenario-s LP duals, for objective]
-      const_s    = Σ_j d_j^s·μ_d_j
-      a_dmin_i   = fixedcost_i + cap_i·μ_c_dmin_i + Σ_j min(cap_i,d_min_j)·λ_v_dmin_ij
-      const_dmin = Σ_j d_min_j·μ_d_dmin_j                                     [d_min LP duals, for constraint]
-      max_q      = max_s { fixedcost·x_hat + f(x_hat, d_s) }                  [RHS of domination constraint]
-
-    Constraint logic: c^T x + L(x, d_min) <= max_q, where L is a linear lower bound on
-    f(x, d_min) via LP weak duality (fixed duals from LP(x_hat, d_min)). This excludes x
-    whose minimum possible total cost exceeds x_hat's worst-case total cost.
+    
     """
     nloc  = length(fixedcost)
-    ncust = length(demand_s)
+    ncust = length(demand_s) 
 
-    # Objective: use scenario-s LP duals
+    # Objective: use scenario-s LP duals 
     a_current     = [fixedcost[i] + capacity[i] * mu_c[i] +
                       sum(min(capacity[i], demand_s[j]) * lambda_v[i, j] for j in 1:ncust)
                      for i in 1:nloc]
@@ -923,7 +910,7 @@ function compute_M_value_FL_opt(
     @variable(model, x[1:nloc], Bin)
     @objective(model, Max, sum(a_current[i] * x[i] for i in 1:nloc) + const_current - dual_lambda_s)
 
-    # d_min domination constraint (linear in x; valid relaxation via LP weak duality)
+    # d_min domination constraint 
     if isfinite(max_q)
         @constraint(model, sum(a_dmin[i] * x[i] for i in 1:nloc) <= max_q - const_dmin)
     end
