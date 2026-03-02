@@ -894,13 +894,7 @@ function compute_M_value_FL_opt(
     dual_lambda_s::Float64;
     subproblem_cuts::Bool=true
 )
-    """Compute M_s by solving a MIP constrained by the image constraint.
-
-    Step 1: Compute LP recourse of x_hat for all scenarios, take max (including fixed costs).
-    Step 2: Impose constraint from image:
-            sum_i a_i x_i + const <= sum_i f_i x_hat_i + max_s f(x_hat, W_s)
-            i.e. sum_i a_i x_i <= max_q - const
-    Step 3: Maximize sum_i a_i x_i + const - lambda_s subject to that constraint.
+    """Compute M_s by solving a MIP 
     """
     nloc = length(fixedcost)
     ncust = length(demand_s)
@@ -919,7 +913,7 @@ function compute_M_value_FL_opt(
         end
     end
 
-    # Step 2: build MIP with the image constraint
+    # Step 2: build MIP 
     a_current = [fixedcost[i] + capacity[i] * mu_c[i] +
                   sum(min(capacity[i], demand_s[j]) * lambda_v[i, j] for j in 1:ncust)
                  for i in 1:nloc]
