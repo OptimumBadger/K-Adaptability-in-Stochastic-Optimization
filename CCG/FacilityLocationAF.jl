@@ -583,11 +583,13 @@ function solve_fl_recourse_lp_with_duals(
     cost::AbstractMatrix{<:Real},
     fixedcost::AbstractVector{<:Real},
     unmet_pen::Float64,
-    scaling_factor::Float64
+    scaling_factor::Float64;
+    subproblem_cuts::Bool=true
 )
     """Solve FL recourse LP for a fixed x and return objective + duals.
-    
+
     Returns q_s which includes: fixed costs (for open facilities) + transportation costs + unmet demand penalty.
+    subproblem_cuts: if true, add valid inequalities y[i,j] <= min(u_i, d_j) * x_hat[i] to the LP.
     """
     nloc = length(capacity)
     ncust = length(scenario)
@@ -601,7 +603,9 @@ function solve_fl_recourse_lp_with_duals(
 
     demand_con = @constraint(model, [j in 1:ncust], sum(y[i, j] for i in 1:nloc) + shortfall[j] == scenario[j])
     cap_con = @constraint(model, [i in 1:nloc], sum(y[i, j] for j in 1:ncust) <= capacity[i] * x_hat[i])
-    valid_con = @constraint(model, [i in 1:nloc, j in 1:ncust], y[i, j] <= min(capacity[i], scenario[j]) * x_hat[i])
+    if subproblem_cuts
+        valid_con = @constraint(model, [i in 1:nloc, j in 1:ncust], y[i, j] <= min(capacity[i], scenario[j]) * x_hat[i])
+    end
 
     @objective(model, Min,
         scaling_factor * sum(cost[i, j] * y[i, j] for i in 1:nloc for j in 1:ncust) +
@@ -618,7 +622,7 @@ function solve_fl_recourse_lp_with_duals(
     # Vectorized dual extraction is faster than element-wise extraction.
     mu_d = collect(dual.(demand_con))
     mu_c = collect(dual.(cap_con))
-    lambda_v = collect(dual.(valid_con))
+    lambda_v = subproblem_cuts ? collect(dual.(valid_con)) : zeros(nloc, ncust)
 
     work_units = 0.0
     try
@@ -641,7 +645,8 @@ function solve_fl_recourse_lp_with_x_variables(
     cost::AbstractMatrix{<:Real},
     fixedcost::AbstractVector{<:Real},
     unmet_pen::Float64,
-    scaling_factor::Float64
+    scaling_factor::Float64;
+    subproblem_cuts::Bool=true
 )
     """Solve FL recourse LP with x as continuous variables [0,1] and constraints x[j] = x_hat[j].
     
@@ -668,7 +673,9 @@ function solve_fl_recourse_lp_with_x_variables(
 
     demand_con = @constraint(model, [j in 1:ncust], sum(y[i, j] for i in 1:nloc) + shortfall[j] == scenario[j])
     cap_con = @constraint(model, [i in 1:nloc], sum(y[i, j] for j in 1:ncust) <= capacity[i] * x[i])
-    valid_con = @constraint(model, [i in 1:nloc, j in 1:ncust], y[i, j] <= min(capacity[i], scenario[j]) * x[i])
+    if subproblem_cuts
+        @constraint(model, [i in 1:nloc, j in 1:ncust], y[i, j] <= min(capacity[i], scenario[j]) * x[i])
+    end
 
     @objective(model, Min,
         sum(fixedcost[i] * x[i] for i in 1:nloc) +
@@ -708,7 +715,8 @@ function solve_fl_partial_recourse_mip(
     cost::AbstractMatrix{<:Real},
     fixedcost::AbstractVector{<:Real},
     unmet_pen::Float64,
-    scaling_factor::Float64
+    scaling_factor::Float64;
+    subproblem_cuts::Bool=true
 )
     """Solve FL recourse MIP with partial fixing (formulation 36).
     
@@ -770,8 +778,10 @@ function solve_fl_partial_recourse_mip(
         @constraint(model, sum(y[i, j] for i in 1:nloc) + shortfall[j] == scenario[j])
     end
     # Valid inequalities: y_ij <= min(u_i, d_j) * x_i
-    for i in 1:nloc, j in 1:ncust
-        @constraint(model, y[i, j] <= min(capacity[i], scenario[j]) * x[i])
+    if subproblem_cuts
+        for i in 1:nloc, j in 1:ncust
+            @constraint(model, y[i, j] <= min(capacity[i], scenario[j]) * x[i])
+        end
     end
     
     # Objective: includes fixed costs
@@ -869,6 +879,87 @@ function compute_M_value_FL(
     return M_value
 end
 
+function compute_M_value_FL_opt(
+    x_hat::Vector{Int},
+    scenarios::Vector{<:AbstractVector{<:Real}},
+    capacity::AbstractVector{<:Real},
+    cost::AbstractMatrix{<:Real},
+    fixedcost::AbstractVector{<:Real},
+    unmet_pen::Float64,
+    scaling_factor::Float64,
+    mu_d::Vector{Float64},
+    mu_c::Vector{Float64},
+    lambda_v::AbstractMatrix{<:Real},
+    demand_s::AbstractVector{<:Real},
+    dual_lambda_s::Float64;
+    subproblem_cuts::Bool=true
+)
+    """Compute M_s by solving a MIP constrained by the image constraint.
+
+    Step 1: Compute LP recourse of x_hat for all scenarios, take max (including fixed costs).
+    Step 2: Impose constraint from image:
+            sum_i a_i x_i + const <= sum_i f_i x_hat_i + max_s f(x_hat, W_s)
+            i.e. sum_i a_i x_i <= max_q - const
+    Step 3: Maximize sum_i a_i x_i + const - lambda_s subject to that constraint.
+    """
+    nloc = length(fixedcost)
+    ncust = length(demand_s)
+
+    # Step 1: compute max LP recourse of x_hat over all scenarios (includes fixed costs)
+    max_q = -Inf
+    total_lp_work = 0.0
+    for scen in scenarios
+        q, _, _, _, lp_work = solve_fl_recourse_lp_with_duals(
+            x_hat, scen, capacity, cost, fixedcost, unmet_pen, scaling_factor;
+            subproblem_cuts=subproblem_cuts
+        )
+        total_lp_work += lp_work
+        if isfinite(q) && q > max_q
+            max_q = q
+        end
+    end
+
+    # Step 2: build MIP with the image constraint
+    a_current = [fixedcost[i] + capacity[i] * mu_c[i] +
+                  sum(min(capacity[i], demand_s[j]) * lambda_v[i, j] for j in 1:ncust)
+                 for i in 1:nloc]
+    const_current = sum(demand_s[j] * mu_d[j] for j in 1:ncust)
+
+    model = Model(Gurobi.Optimizer)
+    set_optimizer_attribute(model, "OutputFlag", 0)
+    set_optimizer_attribute(model, "LogToConsole", 0)
+
+    @variable(model, x[1:nloc], Bin)
+    @objective(model, Max, sum(a_current[i] * x[i] for i in 1:nloc) + const_current - dual_lambda_s)
+
+    if isfinite(max_q)
+        @constraint(model, sum(a_current[i] * x[i] for i in 1:nloc) <= max_q - const_current)
+    end
+
+    optimize!(model)
+
+    mip_work = 0.0
+    try
+        mip_work = MOI.get(backend(model), Gurobi.ModelAttribute("Work"))
+    catch
+    end
+
+    total_work = total_lp_work + mip_work
+
+    if termination_status(model) == MOI.OPTIMAL
+        return objective_value(model), total_work
+    end
+
+    # Fallback: analytical formula (unconstrained max over binary x)
+    M_value = const_current - dual_lambda_s
+    for i in 1:nloc
+        if a_current[i] > 0.0
+            M_value += a_current[i]
+        end
+    end
+    return M_value, total_work
+end
+
 function x_signature_FL(x_hat::Vector{Int})
     return join(x_hat, ",")
 end
@@ -894,7 +985,9 @@ function af_pricing_type2_FL_decomp(
     max_cut_iters::Int=500,
     tol::Float64=1e-4,
     use_simple_decomp::Bool=false,
-    decomp_mode::Int=2
+    decomp_mode::Int=2,
+    subproblem_cuts::Bool=true,
+    use_mip_bigM::Bool=true
 )
     """Solve AF Pricing Type 2 with decomposition cutting-plane procedure."""
     nscen = length(scenarios)
@@ -960,7 +1053,7 @@ function af_pricing_type2_FL_decomp(
 
     # Add cuts from initial binary vectors (for every CG iteration)(Right now this portion is disabled to avoid adding cuts from initial binary vectors)
     initial_vectors = get(problem_data, "initial_binary_vectors", nothing)
-    if false && initial_vectors !== nothing && !isempty(initial_vectors)  # Changed condition to false to disable cuts for now
+    if initial_vectors !== nothing && !isempty(initial_vectors)
         println("\nAdding cuts from $(length(initial_vectors)) initial binary vectors...")
         if log_file !== nothing && iteration !== nothing
             open(log_file, "a") do file
@@ -986,7 +1079,8 @@ function af_pricing_type2_FL_decomp(
             for s in 1:nscen
                 # Step 1: Solve LP with x as variables to get dual information
                 q_s, x_duals, mu_d, mu_c, lp_work = solve_fl_recourse_lp_with_x_variables(
-                    v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 initial_pricing_work_units += lp_work
                 
@@ -1006,7 +1100,8 @@ function af_pricing_type2_FL_decomp(
                 
                 # Step 5: Solve partial MIP recourse with updated F0/F1
                 g_s, mip_work = solve_fl_partial_recourse_mip(
-                    F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 initial_pricing_work_units += mip_work
                 
@@ -1033,7 +1128,8 @@ function af_pricing_type2_FL_decomp(
             for s in 1:nscen
                 # Solve recourse LP to get q_s and duals for Cut 34
                 q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
-                    v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 initial_pricing_work_units += sub_work
 
@@ -1254,7 +1350,8 @@ function af_pricing_type2_FL_decomp(
                 # Solve LP recourse with x_hat fully fixed
                 print("    Scenario $s: Solving LP recourse (fully fixed x_hat)... ")
                 q_s, mu_d, mu_c, _lambda_v, lp_work = solve_fl_recourse_lp_with_duals(
-                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 lp_work_units += lp_work
                 pricing_work_units += lp_work
@@ -1328,7 +1425,8 @@ function af_pricing_type2_FL_decomp(
                 # Solve partial MIP recourse with F1=open facilities, F0=empty
                 print("    Scenario $s: Solving partial MIP (F1=$F1_initial, F0=[])... ")
                 g_s, mip_work = solve_fl_partial_recourse_mip(
-                    F0_initial, F1_initial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    F0_initial, F1_initial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 partial_mip_work_units += mip_work
                 pricing_work_units += mip_work
@@ -1416,7 +1514,8 @@ function af_pricing_type2_FL_decomp(
                 # Solve partial MIP recourse with random F0/F1
                 print("    Scenario $s: Solving partial MIP (F0=$F0_random, F1=$F1_random)... ")
                 g_s, mip_work = solve_fl_partial_recourse_mip(
-                    F0_random, F1_random, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    F0_random, F1_random, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 partial_mip_work_units += mip_work
                 pricing_work_units += mip_work
@@ -1479,7 +1578,8 @@ function af_pricing_type2_FL_decomp(
                 # Step 1: Solve LP with x as variables to get q_s and duals
                 print("    Scenario $s: Solving LP with x variables... ")
                 q_s, x_duals, mu_d, mu_c, lp_work = solve_fl_recourse_lp_with_x_variables(
-                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 lp_work_units += lp_work
                 pricing_work_units += lp_work
@@ -1599,7 +1699,8 @@ function af_pricing_type2_FL_decomp(
                     # Solve MIP with updated F0/F1 to get updated objective value
                     print("      Solving MIP after unfixing... ")
                     g_s_updated, mip_work = solve_fl_partial_recourse_mip(
-                        F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                        F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
                     )
                     pricing_work_units += mip_work
                     
@@ -1660,7 +1761,8 @@ function af_pricing_type2_FL_decomp(
                 # Step 1: Solve LP with x as variables to get dual information
                 print("    Scenario $s: Solving LP with x variables... ")
                 q_s, x_duals, mu_d, mu_c, lp_work = solve_fl_recourse_lp_with_x_variables(
-                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 lp_work_units += lp_work
                 pricing_work_units += lp_work
@@ -1700,7 +1802,8 @@ function af_pricing_type2_FL_decomp(
                 # Step 5: Solve partial MIP recourse with updated F0/F1
                 print("      Solving partial MIP (F0=$F0_partial, F1=$F1_partial)... ")
                 g_s, mip_work = solve_fl_partial_recourse_mip(
-                    F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 partial_mip_work_units += mip_work
                 pricing_work_units += mip_work
@@ -1749,51 +1852,44 @@ function af_pricing_type2_FL_decomp(
             println("  LP work units: $(round(lp_work_units, digits=2)), Partial MIP work units: $(round(partial_mip_work_units, digits=2))")
         end
         
-        # Still generate Benders cuts using fully fixed x_hat (current approach)
+        # Generate Benders cuts (Cut 34) using fully fixed x_hat
         sig = x_signature_FL(x_hat)
         println("  Generating Cut 34 using fully fixed x_hat (signature: $sig)...")
-        
+
         for s in 1:nscen
             key = (s, sig)
-            q_s = Inf
-            mu_d = zeros(ncust)
-            mu_c = zeros(nloc)
-            lambda_v = zeros(nloc, ncust)
-            M_s = 0.0
-            from_cache = false
-
             if haskey(scenario_x_cache, key)
                 cache_rec = scenario_x_cache[key]
-                q_s = cache_rec["q_s"]::Float64
-                mu_d = cache_rec["mu_d"]::Vector{Float64}
-                mu_c = cache_rec["mu_c"]::Vector{Float64}
+                q_s      = cache_rec["q_s"]::Float64
+                mu_d     = cache_rec["mu_d"]::Vector{Float64}
+                mu_c     = cache_rec["mu_c"]::Vector{Float64}
                 lambda_v = cache_rec["lambda_v"]::Matrix{Float64}
-                M_s = cache_rec["M_s"]::Float64
-                from_cache = true
-                println("    Scenario $s: Using cached values for Cut 34 [q_s = $(round(q_s, digits=2)), M_s = $(round(M_s, digits=2))]")
+                println("    Scenario $s: Using cached LP values [q_s = $(round(q_s, digits=2))]")
             else
                 print("    Scenario $s: Solving recourse LP for Cut 34... ")
                 q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
-                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor
+                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
                 )
                 pricing_work_units += sub_work
                 if isfinite(q_s)
-                    M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
-                    println("q_s = $(round(q_s, digits=2)), M_s = $(round(M_s, digits=2))")
+                    println("q_s = $(round(q_s, digits=2))")
                     cache_rec = Dict{String,Any}(
-                        "s" => s,
-                        "x_sig" => sig,
-                        "x_hat" => copy(x_hat),
-                        "q_s" => q_s,
-                        "mu_d" => copy(mu_d),
-                        "mu_c" => copy(mu_c),
+                        "s"        => s,
+                        "x_sig"   => sig,
+                        "x_hat"   => copy(x_hat),
+                        "q_s"     => q_s,
+                        "mu_d"    => copy(mu_d),
+                        "mu_c"    => copy(mu_c),
                         "lambda_v" => copy(lambda_v),
-                        "M_s" => M_s
                     )
                     scenario_x_cache[key] = cache_rec
                     push!(cut_records, cache_rec)
                 else
                     println("Infeasible/unbounded")
+                    mu_d     = zeros(ncust)
+                    mu_c     = zeros(nloc)
+                    lambda_v = zeros(nloc, ncust)
                 end
             end
 
@@ -1801,7 +1897,17 @@ function af_pricing_type2_FL_decomp(
                 continue
             end
 
-            # Cut 34 trigger
+            if use_mip_bigM
+                M_s, m_work = compute_M_value_FL_opt(
+                    x_hat, scenarios, capacity, cost, fixedcost, unmet_pen, scaling_factor,
+                    mu_d, mu_c, lambda_v, scenarios[s], dual_lambda[s];
+                    subproblem_cuts=subproblem_cuts
+                )
+                pricing_work_units += m_work
+            else
+                M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
+            end
+
             lhs_check = theta_hat[s]
             rhs_check = (dual_lambda[s] - q_s) * pi_hat[s] + tol
             if lhs_check >= rhs_check
@@ -1813,7 +1919,8 @@ function af_pricing_type2_FL_decomp(
                     sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
                     <= dual_lambda[s] + M_s * (1 - pi[s])
                 )
-                cut_msg = "    Scenario $s: Added Cut 34 (Conditional Benders) [θ_hat = $(round(lhs_check, digits=4)) >= $(round(rhs_check, digits=4))]" * (from_cache ? " [from cache]" : "")
+                bigM_mode_str = use_mip_bigM ? "MIP" : "analytical"
+                cut_msg = "    Scenario $s: Added Cut 34 [M_s = $(round(M_s, digits=4)), bigM=$bigM_mode_str, θ_hat = $(round(lhs_check, digits=4)) >= $(round(rhs_check, digits=4))]"
                 println(cut_msg)
                 if log_file !== nothing && iteration !== nothing
                     open(log_file, "a") do file
@@ -1977,9 +2084,11 @@ function build_pricing_model_AF_FL(scenarios::Vector{Vector{Float64}}, dual_lamb
             use_simple_decomp = get(problem_data, "use_simple_decomp", false) == true ||
                                  lowercase(get(ENV, "FL_PRICING_SIMPLE_DECOMP", "0")) in ("1", "true", "yes")
             decomp_mode = get(problem_data, "decomp_mode", use_simple_decomp ? 1 : 2)  # Default: 1 if simple, 2 otherwise
+            subproblem_cuts = get(problem_data, "subproblem_cuts", true) == true
+            use_mip_bigM = get(problem_data, "use_mip_bigM", true) == true
             return af_pricing_type2_FL_decomp(
                 nloc, ncust, capacity, cost, scenarios, dual_lambda, dual_mu, unmet_pen, scaling_factor, fixedcost, f_s_vector, decomp_cache, problem_data;
-                return_nodes=return_nodes, analysis=analysis, log_file=log_file, iteration=iteration, max_cut_iters=500, tol=1e-4, use_simple_decomp=use_simple_decomp, decomp_mode=decomp_mode
+                return_nodes=return_nodes, analysis=analysis, log_file=log_file, iteration=iteration, max_cut_iters=500, tol=1e-4, use_simple_decomp=use_simple_decomp, decomp_mode=decomp_mode, subproblem_cuts=subproblem_cuts, use_mip_bigM=use_mip_bigM
             )
         end
         return af_pricing_type2_FL(nloc, ncust, capacity, cost, scenarios, m_values, dual_lambda, dual_mu, unmet_pen, scaling_factor, fixedcost; 
