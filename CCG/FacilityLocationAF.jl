@@ -923,8 +923,7 @@ function compute_M_value_FL_opt(
     @variable(model, x[1:nloc], Bin)
     @objective(model, Max, sum(a_current[i] * x[i] for i in 1:nloc) + const_current - dual_lambda_s)
 
-    # d_min domination constraint (linear in x; valid relaxation via LP weak duality)
-    if isfinite(max_q)
+    # d_min domination constraint 
         @constraint(model, sum(a_dmin[i] * x[i] for i in 1:nloc) <= max_q - const_dmin)
     end
 
