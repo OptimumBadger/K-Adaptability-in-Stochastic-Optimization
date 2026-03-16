@@ -77,7 +77,7 @@ end
 if abspath(PROGRAM_FILE) == @__FILE__
     if length(ARGS) < 6
         println("❌ Error: Incorrect number of arguments!")
-        println("Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor] [total_work_budget] [decomp_mode]")
+        println("Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [decomp_mode] [subproblem_cuts] [num_init_cuts] [use_mip_bigM] [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor] [total_work_budget]")
         println("\nArguments:")
         println("  instance_file: Instance file path (e.g., Facility_Location/instances/cap91.txt)")
         println("  scenarios_file: File containing SAA samples (e.g., Samples/FL/Scenarios/S300_bernoulli.txt)")
@@ -85,11 +85,6 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println("  L: Number of candidate policies to use (first L from binary_vectors_file)")
         println("  S: Number of scenarios to use (first S from scenarios_file)")
         println("  K: Number of solutions to select")
-        println("  pricing_type: 1 or 2 (default: 2)")
-        println("  unmet_pen: Unmet demand penalty (default: 15.0)")
-        println("  scaling_factor: Scaling factor for transportation cost (default: 0.2)")
-        println("  capacity_factor: Capacity factor (default: 0.3)")
-        println("  total_work_budget: Total work unit cap for CG (default: 30000.0)")
         println("  decomp_mode: Decomposition mode for Type-2 pricing (default: 0)")
         println("               0 = No decomposition (standard pricing)")
         println("               1 = Simple LP-based decomposition")
@@ -97,6 +92,14 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println("               3 = Partial MIP with F1=open facilities, F0=empty")
         println("               4 = Partial MIP with random subsets of F0 and F1")
         println("               5 = Gap-based dual unfixing (unfix until sum|dual| < gap)")
+        println("  subproblem_cuts: true/false — add valid inequalities to recourse subproblems (default: true)")
+        println("  num_init_cuts: Number of initial binary vectors to use for warm-start cuts (default: 0 = none)")
+        println("  use_mip_bigM: true/false — use MIP-based big-M for Cut 34; false uses analytical formula (default: true)")
+        println("  pricing_type: 1 or 2 (default: 2)")
+        println("  unmet_pen: Unmet demand penalty (default: 15.0)")
+        println("  scaling_factor: Scaling factor for transportation cost (default: 0.2)")
+        println("  capacity_factor: Capacity factor (default: 0.3)")
+        println("  total_work_budget: Total work unit cap for CG (default: 30000.0)")
         println("\nExample:")
         println("  julia CG_AF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt Samples/FL/Binary_vectors/B300_bernoulli.txt 50 30 2")
         exit(1)
@@ -147,27 +150,31 @@ if abspath(PROGRAM_FILE) == @__FILE__
     end
     
     # Parse optional arguments
-    pricing_type = length(ARGS) > 6 ? parse(Int, ARGS[7]) : 2
-    unmet_pen = length(ARGS) > 7 ? parse(Float64, ARGS[8]) : 15.0
-    scaling_factor = length(ARGS) > 8 ? parse(Float64, ARGS[9]) : 0.2
-    capacity_factor = length(ARGS) > 9 ? parse(Float64, ARGS[10]) : 0.3
-    total_work_budget = length(ARGS) > 10 ? parse(Float64, ARGS[11]) : 30000.0
-    decomp_mode = length(ARGS) > 11 ? parse(Int, ARGS[12]) : 0
+    decomp_mode = length(ARGS) > 6 ? parse(Int, ARGS[7]) : 0
+    subproblem_cuts = length(ARGS) > 7 ? parse_bool_flag(ARGS[8]) : true
+    num_init_cuts = length(ARGS) > 8 ? parse(Int, ARGS[9]) : 0
+    use_mip_bigM = length(ARGS) > 9 ? parse_bool_flag(ARGS[10]) : true
+    pricing_type = length(ARGS) > 10 ? parse(Int, ARGS[11]) : 2
+    unmet_pen = length(ARGS) > 11 ? parse(Float64, ARGS[12]) : 15.0
+    scaling_factor = length(ARGS) > 12 ? parse(Float64, ARGS[13]) : 0.2
+    capacity_factor = length(ARGS) > 13 ? parse(Float64, ARGS[14]) : 0.3
+    total_work_budget = length(ARGS) > 14 ? parse(Float64, ARGS[15]) : 30000.0
     
     # Validate decomp_mode
-    if !(decomp_mode in [0, 1, 2, 3, 4, 5])
-        println("❌ Error: decomp_mode must be 0, 1, 2, 3, 4, or 5!")
+    if !(decomp_mode in [0, 1, 2, 3, 4, 5, 6])
+        println("❌ Error: decomp_mode must be 0, 1, 2, 3, 4, 5, or 6!")
         println("  0 = No decomposition (standard pricing)")
         println("  1 = Simple LP-based decomposition")
         println("  2 = Dual-based unfixing decomposition")
         println("  3 = Partial MIP with F1=open facilities, F0=empty")
         println("  4 = Partial MIP with random subsets of F0 and F1")
         println("  5 = Gap-based dual unfixing (unfix until sum|dual| < gap)")
+        println("  6 = ACG formulation (Alternating Cut Generation)")
         exit(1)
     end
     
     # Set use_decomp and use_simple_decomp based on decomp_mode
-    use_decomp = decomp_mode in [1, 2, 3, 4, 5]
+    use_decomp = decomp_mode in [1, 2, 3, 4, 5, 6]
     use_simple_decomp = decomp_mode == 1
     
     # Validate pricing_type
@@ -198,6 +205,9 @@ if abspath(PROGRAM_FILE) == @__FILE__
         "gap-based dual unfixing (unfix until sum|dual| < gap)"
     end
     println("Pricing mode: $decomp_mode_str")
+    println("Subproblem cuts: $subproblem_cuts")
+    println("Num init cuts: $num_init_cuts")
+    println("Use MIP big-M: $use_mip_bigM")
     println("="^80)
     println()
     
@@ -233,15 +243,16 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("✅ Loaded $(length(initial_binary_vectors)) binary vectors (first L from file)")
     println()
     
-    # For decomposition: Load all 300 binary vectors (default L=300)
-    if use_decomp
-        # Load all vectors from file (up to 300)
+    # For decomposition: Load up to num_init_cuts binary vectors for warm-start cuts
+    if use_decomp && num_init_cuts > 0
         all_initial_vectors = load_binary_vectors_from_file(binary_vectors_file)
-        # Take first 300 (or all if less than 300)
-        num_vectors_to_use = min(300, length(all_initial_vectors))
+        num_vectors_to_use = min(num_init_cuts, length(all_initial_vectors))
         initial_vectors_for_decomp = all_initial_vectors[1:num_vectors_to_use]
         fl_data["initial_binary_vectors"] = initial_vectors_for_decomp
         println("✅ Loaded $(length(initial_vectors_for_decomp)) initial binary vectors for decomposition cuts")
+        println()
+    elseif use_decomp
+        println("ℹ️  No initial binary vectors used for warm-start cuts (num_init_cuts=0)")
         println()
     end
     
@@ -291,6 +302,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
     fl_data["use_decomp"] = use_decomp
     fl_data["use_simple_decomp"] = use_simple_decomp
     fl_data["decomp_mode"] = decomp_mode
+    fl_data["subproblem_cuts"] = subproblem_cuts
+    fl_data["use_mip_bigM"] = use_mip_bigM
     
     # Create logs directory
     script_dir = @__DIR__
@@ -320,8 +333,10 @@ if abspath(PROGRAM_FILE) == @__FILE__
             "Type 2 (Decomposition - Partial MIP F1=open, F0=empty)"
         elseif decomp_mode == 4
             "Type 2 (Decomposition - Partial MIP Random F0/F1)"
-        else  # decomp_mode == 5
+        elseif decomp_mode == 5
             "Type 2 (Decomposition - Gap-based Dual Unfixing)"
+        else  # decomp_mode == 6
+            "Type 2 (Decomposition - ACG Formulation)"
         end
     else
         "Type $pricing_type"
