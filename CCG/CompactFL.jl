@@ -307,29 +307,6 @@ function solve_new_compact_FL(
     end
 end
 
-# =============================================================================
-# COMMAND-LINE INTERFACE
-# =============================================================================
-#
-# Usage:
-#   julia CCG/CompactFL.jl <instance_file> <samples_file> <S> <K> [formulation] [unmet_pen] [scaling_factor] [capacity_factor] [work_limit] [experiment]
-#
-# Arguments:
-#   instance_file   (required) Instance filename, e.g. cap91.txt
-#   samples_file    (required) Path to scenarios file
-#   S               (required) Number of scenarios to use
-#   K               (required) Number of clusters
-#   formulation     (optional, default 1)      1=Compact, 2=New Compact
-#   unmet_pen       (optional, default 15.0)
-#   scaling_factor  (optional, default 0.2)
-#   capacity_factor (optional, default 0.3)
-#   work_limit      (optional, default 30000.0) Gurobi work unit limit
-#   experiment      (optional, default "bernoulli") Label for output files
-#
-# Examples:
-#   julia CCG/CompactFL.jl cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt 25 2
-#   julia CCG/CompactFL.jl cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt 25 2 2
-#   julia CCG/CompactFL.jl cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt 50 4 1 15.0 0.2 0.3 30000 bernoulli
 
 if abspath(PROGRAM_FILE) == @__FILE__
     if length(ARGS) < 4
