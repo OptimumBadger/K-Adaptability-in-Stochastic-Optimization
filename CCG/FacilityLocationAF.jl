@@ -718,29 +718,6 @@ function solve_fl_partial_recourse_mip(
     scaling_factor::Float64;
     subproblem_cuts::Bool=true
 )
-    """Solve FL recourse MIP with partial fixing (formulation 36).
-    
-    Solves: g_s(F0, F1) = min (c_s)^T x + (d_s)^T y
-    subject to:
-    - x_j = 1 for j ∈ F1 (forced open)
-    - x_j = 0 for j ∈ F0 (forced closed)
-    - x_j ∈ {0,1} for j ∉ (F1 ∪ F0) (free binary)
-    - Capacity and demand constraints
-    
-    Args:
-        F0: Indices where x_j = 0 (forced closed)
-        F1: Indices where x_j = 1 (forced open)
-        scenario: Demand scenario vector
-        capacity: Facility capacity vector
-        cost: Transportation cost matrix
-        fixedcost: Fixed cost vector
-        unmet_pen: Unmet demand penalty
-        scaling_factor: Scaling factor for transportation cost
-    
-    Returns:
-        (g_s::Float64, work_units::Float64)
-        g_s includes fixed costs + transportation costs + unmet demand penalty
-    """
     nloc = length(capacity)
     ncust = length(scenario)
     
