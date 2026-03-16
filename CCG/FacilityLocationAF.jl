@@ -895,7 +895,7 @@ function compute_M_value_FL_opt(
     
     """
     nloc  = length(fixedcost)
-    ncust = length(demand_s) 
+    ncust = length(demand_s)
 
     # Objective: use scenario-s LP duals 
     a_current     = [fixedcost[i] + capacity[i] * mu_c[i] +
@@ -910,7 +910,7 @@ function compute_M_value_FL_opt(
     @variable(model, x[1:nloc], Bin)
     @objective(model, Max, sum(a_current[i] * x[i] for i in 1:nloc) + const_current - dual_lambda_s)
 
-    # d_min domination constraint 
+    # d_min domination constraint
     if isfinite(max_q)
         @constraint(model, sum(a_dmin[i] * x[i] for i in 1:nloc) <= max_q - const_dmin)
     end
