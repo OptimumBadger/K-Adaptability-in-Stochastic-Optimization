@@ -291,8 +291,20 @@ function column_generation_algorithm(
         
         dual_lambda = dual.(assignment_constraints)  # Extract duals from assignment constraints
         dual_mu = dual(k_constraint)  # Extract dual from K constraint
-        
+
         println("  Dual μ value: $(round(dual_mu, digits=6))")
+
+        # Dump dual_lambda to file for B&B testing (standard MIP mode only)
+        if !get(problem_data, "use_decomp", false)
+            S_val = get(problem_data, "S", "unknown")
+            K_val = get(problem_data, "K", "unknown")
+            dual_file = joinpath(@__DIR__, "CG_dual_values_S$(S_val)_K$(K_val).txt")
+            file_mode = iteration == 1 ? "w" : "a"
+            open(dual_file, file_mode) do f
+                println(f, "iteration=$iteration")
+                println(f, join(dual_lambda, " "))
+            end
+        end
         
         # Stage 4: Pricing Subproblem
         println("Stage 4: Solving Pricing Subproblem")
@@ -723,6 +735,7 @@ function sf_column_generation_algorithm(
     pricing_iteration_analysis = []
     actual_iterations = 0
     total_subsets_added = 0
+    phase2_iterations = 0
     
     # Stage 1: Initialization
     println("Stage 1: Initialization")
@@ -839,15 +852,28 @@ function sf_column_generation_algorithm(
         new_subsets = Vector{Vector{Float64}}()
         pool_objs = Float64[]
         pricing_work_units = 0.0
-        
+        pricing_analysis = Dict{Symbol,Any}()
+
         try
-            new_subsets, pool_objs, pricing_work_units = 
-                build_pricing_model(scenarios, dual_lambda, dual_mu, problem_data, pricing_type, 
+            pricing_result = build_pricing_model(scenarios, dual_lambda, dual_mu, problem_data, pricing_type,
                                  remaining_work, opt_worklimit, use_solution_pool, false, pricing_log_file, iteration)
-            
+            new_subsets = pricing_result[1]
+            pool_objs = pricing_result[2]
+            pricing_work_units = pricing_result[3]
+            pricing_analysis = length(pricing_result) >= 4 ? pricing_result[4] : Dict{Symbol,Any}()
+
             total_pricing_work_units += pricing_work_units
             println("  Pricing work units: $(round(pricing_work_units, digits=2))")
-            
+
+            # Report phase info
+            went_phase2 = get(pricing_analysis, :went_phase2, nothing)
+            if went_phase2 === true
+                phase2_iterations += 1
+                println("  Phase 2 entered this iteration")
+            elseif went_phase2 === false
+                println("  Phase 1 sufficient (no Phase 2 needed)")
+            end
+
         catch e
             println("❌ Error in pricing subproblem: $e")
             break
@@ -885,11 +911,15 @@ function sf_column_generation_algorithm(
         reduced_cost = obj_pricing  # For SF: pricing objective IS the reduced cost
         println("  Pricing objective (reduced cost): $(round(obj_pricing, digits=6))")
         
+        phase1_optimal = get(pricing_analysis, :phase1_optimal, nothing)
+        went_phase2 = get(pricing_analysis, :went_phase2, nothing)
         push!(iteration_pricing_data, (
-            iteration=iteration, 
-            obj_pricing=obj_pricing, 
-            dual_mu=dual_mu, 
-            reduced_cost=reduced_cost
+            iteration=iteration,
+            obj_pricing=obj_pricing,
+            dual_mu=dual_mu,
+            reduced_cost=reduced_cost,
+            phase1_status=phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
+            phase2=went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
         ))
         
         if reduced_cost >= -1  # Convergence tolerance
@@ -1025,6 +1055,7 @@ function sf_column_generation_algorithm(
                 "total_pricing_work_units" => total_pricing_work_units,
                 "total_update_work_units" => total_update_work_units,
                 "total_subsets_added" => total_subsets_added,
+                "phase2_iterations" => phase2_iterations,
                 "iteration_master_data" => iteration_master_data,
                 "iteration_pricing_data" => iteration_pricing_data,
                 "iteration_columns_data" => iteration_columns_data
@@ -1044,6 +1075,7 @@ function sf_column_generation_algorithm(
                 "total_pricing_work_units" => total_pricing_work_units,
                 "total_update_work_units" => total_update_work_units,
                 "total_subsets_added" => total_subsets_added,
+                "phase2_iterations" => phase2_iterations,
                 "iteration_master_data" => iteration_master_data,
                 "iteration_pricing_data" => iteration_pricing_data,
                 "iteration_columns_data" => iteration_columns_data
@@ -1063,6 +1095,7 @@ function sf_column_generation_algorithm(
             "total_pricing_work_units" => total_pricing_work_units,
             "total_update_work_units" => total_update_work_units,
             "total_subsets_added" => total_subsets_added,
+            "phase2_iterations" => phase2_iterations,
             "iteration_master_data" => iteration_master_data,
             "iteration_pricing_data" => iteration_pricing_data,
             "iteration_columns_data" => iteration_columns_data
