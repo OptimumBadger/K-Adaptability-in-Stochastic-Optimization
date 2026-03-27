@@ -1,6 +1,6 @@
 # CG_AF_FL.jl
 # Entry point for Facility Location Column Generation
-# Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor] [total_work_budget] [decomp_mode]
+# Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [decomp_mode] [subproblem_cuts] [use_mip_bigM] [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor] [total_work_budget]
 
 using Printf
 using Dates
@@ -8,7 +8,7 @@ using Dates
 # Include required files
 include("CGUtilities.jl")
 include("AssignmentFormulation.jl")
-include("FacilityLocationAF.jl")
+include("FacilityLocationAFDecomposition.jl")
 
 # =============================================================================
 # JSON OUTPUT HELPERS
@@ -77,7 +77,7 @@ end
 if abspath(PROGRAM_FILE) == @__FILE__
     if length(ARGS) < 6
         println("❌ Error: Incorrect number of arguments!")
-        println("Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [decomp_mode] [subproblem_cuts] [num_init_cuts] [use_mip_bigM] [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor] [total_work_budget]")
+        println("Usage: julia CG_AF_FL.jl <instance_file> <scenarios_file> <binary_vectors_file> <L> <S> <K> [decomp_mode] [subproblem_cuts] [use_mip_bigM] [pricing_type] [unmet_pen] [scaling_factor] [capacity_factor] [total_work_budget]")
         println("\nArguments:")
         println("  instance_file: Instance file path (e.g., Facility_Location/instances/cap91.txt)")
         println("  scenarios_file: File containing SAA samples (e.g., Samples/FL/Scenarios/S300_bernoulli.txt)")
@@ -85,23 +85,23 @@ if abspath(PROGRAM_FILE) == @__FILE__
         println("  L: Number of candidate policies to use (first L from binary_vectors_file)")
         println("  S: Number of scenarios to use (first S from scenarios_file)")
         println("  K: Number of solutions to select")
-        println("  decomp_mode: Decomposition mode for Type-2 pricing (default: 0)")
-        println("               0 = No decomposition (standard pricing)")
+        println("  decomp_mode: (optional) Decomposition mode — if omitted, runs standard MIP pricing")
         println("               1 = Simple LP-based decomposition")
         println("               2 = Dual-based unfixing decomposition")
         println("               3 = Partial MIP with F1=open facilities, F0=empty")
         println("               4 = Partial MIP with random subsets of F0 and F1")
         println("               5 = Gap-based dual unfixing (unfix until sum|dual| < gap)")
-        println("  subproblem_cuts: true/false — add valid inequalities to recourse subproblems (default: true)")
-        println("  num_init_cuts: Number of initial binary vectors to use for warm-start cuts (default: 0 = none)")
-        println("  use_mip_bigM: true/false — use MIP-based big-M for Cut 34; false uses analytical formula (default: true)")
+        println("               6 = Iterative single-variable unfixing (LP duals + partial MIP cuts)")
+        println("  subproblem_cuts: true/false — add valid inequalities to recourse subproblems (default: false)")
+        println("  use_mip_bigM: true/false — use MIP-based big-M for Cut 34; false uses analytical formula (default: false)")
         println("  pricing_type: 1 or 2 (default: 2)")
         println("  unmet_pen: Unmet demand penalty (default: 15.0)")
         println("  scaling_factor: Scaling factor for transportation cost (default: 0.2)")
         println("  capacity_factor: Capacity factor (default: 0.3)")
         println("  total_work_budget: Total work unit cap for CG (default: 30000.0)")
-        println("\nExample:")
-        println("  julia CG_AF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt Samples/FL/Binary_vectors/B300_bernoulli.txt 50 30 2")
+        println("\nExamples:")
+        println("  Standard MIP:   julia CG_AF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt Samples/FL/Binary_vectors/B300_bernoulli.txt 50 30 2")
+        println("  Decomposition:  julia CG_AF_FL.jl Facility_Location/instances/cap91.txt Samples/FL/Scenarios/S300_bernoulli.txt Samples/FL/Binary_vectors/B300_bernoulli.txt 50 30 2 6")
         exit(1)
     end
     
@@ -150,31 +150,29 @@ if abspath(PROGRAM_FILE) == @__FILE__
     end
     
     # Parse optional arguments
-    decomp_mode = length(ARGS) > 6 ? parse(Int, ARGS[7]) : 0
-    subproblem_cuts = length(ARGS) > 7 ? parse_bool_flag(ARGS[8]) : true
-    num_init_cuts = length(ARGS) > 8 ? parse(Int, ARGS[9]) : 0
-    use_mip_bigM = length(ARGS) > 9 ? parse_bool_flag(ARGS[10]) : true
-    pricing_type = length(ARGS) > 10 ? parse(Int, ARGS[11]) : 2
-    unmet_pen = length(ARGS) > 11 ? parse(Float64, ARGS[12]) : 15.0
-    scaling_factor = length(ARGS) > 12 ? parse(Float64, ARGS[13]) : 0.2
-    capacity_factor = length(ARGS) > 13 ? parse(Float64, ARGS[14]) : 0.3
-    total_work_budget = length(ARGS) > 14 ? parse(Float64, ARGS[15]) : 30000.0
-    
-    # Validate decomp_mode
-    if !(decomp_mode in [0, 1, 2, 3, 4, 5, 6])
-        println("❌ Error: decomp_mode must be 0, 1, 2, 3, 4, 5, or 6!")
-        println("  0 = No decomposition (standard pricing)")
+    use_decomp = length(ARGS) > 6  # decomp mode is present in CLI → use decomposition
+    decomp_mode = use_decomp ? parse(Int, ARGS[7]) : 0
+    subproblem_cuts = length(ARGS) > 7 ? parse_bool_flag(ARGS[8]) : false
+    use_mip_bigM = length(ARGS) > 8 ? parse_bool_flag(ARGS[9]) : false
+    pricing_type = length(ARGS) > 9 ? parse(Int, ARGS[10]) : 2
+    unmet_pen = length(ARGS) > 10 ? parse(Float64, ARGS[11]) : 15.0
+    scaling_factor = length(ARGS) > 11 ? parse(Float64, ARGS[12]) : 0.2
+    capacity_factor = length(ARGS) > 12 ? parse(Float64, ARGS[13]) : 0.3
+    total_work_budget = length(ARGS) > 13 ? parse(Float64, ARGS[14]) : 30000.0
+    num_init_cuts = 0  # warm-start cuts disabled
+
+    # Validate decomp_mode only when decomposition is requested
+    if use_decomp && !(decomp_mode in [1, 2, 3, 4, 5, 6])
+        println("❌ Error: decomp_mode must be 1, 2, 3, 4, 5, or 6!")
         println("  1 = Simple LP-based decomposition")
         println("  2 = Dual-based unfixing decomposition")
         println("  3 = Partial MIP with F1=open facilities, F0=empty")
         println("  4 = Partial MIP with random subsets of F0 and F1")
         println("  5 = Gap-based dual unfixing (unfix until sum|dual| < gap)")
-        println("  6 = ACG formulation (Alternating Cut Generation)")
+        println("  6 = Iterative single-variable unfixing (LP duals + partial MIP cuts)")
         exit(1)
     end
-    
-    # Set use_decomp and use_simple_decomp based on decomp_mode
-    use_decomp = decomp_mode in [1, 2, 3, 4, 5, 6]
+
     use_simple_decomp = decomp_mode == 1
     
     # Validate pricing_type
@@ -191,22 +189,23 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("Binary vectors file: $binary_vectors_file")
     println("Parameters: L=$L, S=$S, K=$K, pricing_type=$pricing_type")
     println("Problem parameters: unmet_pen=$unmet_pen, scaling_factor=$scaling_factor, capacity_factor=$capacity_factor")
-    decomp_mode_str = if decomp_mode == 0
-        "standard (no decomposition)"
+    decomp_mode_str = if !use_decomp
+        "standard MIP pricing (no decomposition)"
     elseif decomp_mode == 1
-        "simple LP-based decomposition"
+        "decomposition mode 1: simple LP-based"
     elseif decomp_mode == 2
-        "dual-based unfixing decomposition"
+        "decomposition mode 2: dual-based unfixing"
     elseif decomp_mode == 3
-        "partial MIP with F1=open facilities, F0=empty"
+        "decomposition mode 3: partial MIP (F1=open, F0=empty)"
     elseif decomp_mode == 4
-        "partial MIP with random subsets of F0 and F1"
-    else  # decomp_mode == 5
-        "gap-based dual unfixing (unfix until sum|dual| < gap)"
+        "decomposition mode 4: partial MIP (random F0/F1)"
+    elseif decomp_mode == 5
+        "decomposition mode 5: gap-based dual unfixing"
+    else  # decomp_mode == 6
+        "decomposition mode 6: iterative single-variable unfixing"
     end
     println("Pricing mode: $decomp_mode_str")
     println("Subproblem cuts: $subproblem_cuts")
-    println("Num init cuts: $num_init_cuts")
     println("Use MIP big-M: $use_mip_bigM")
     println("="^80)
     println()
@@ -299,6 +298,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
     
     # Store f_s in problem_data
     fl_data["f_s"] = f_s
+    fl_data["S"] = S
+    fl_data["K"] = K
     fl_data["use_decomp"] = use_decomp
     fl_data["use_simple_decomp"] = use_simple_decomp
     fl_data["decomp_mode"] = decomp_mode
@@ -316,15 +317,16 @@ if abspath(PROGRAM_FILE) == @__FILE__
     # Generate log file names with timestamp
     timestamp = Dates.format(now(), "YYYYmmdd_HHMMSS")
     instance_name = replace(splitext(basename(instance_file))[1], "." => "_")
-    master_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_M$(decomp_mode)_master_$(timestamp).log")
-    pricing_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_M$(decomp_mode)_pricing_$(timestamp).log")
+    mode_tag = use_decomp ? "M$(decomp_mode)" : "std"
+    master_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_$(mode_tag)_master_$(timestamp).log")
+    pricing_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_$(mode_tag)_pricing_$(timestamp).log")
     
     # Initialize log files with headers
     pricing_type_str = if pricing_type == 1
         "Type 1"
     elseif pricing_type == 2
-        if decomp_mode == 0
-            "Type 2 (Standard)"
+        if !use_decomp
+            "Type 2 (Standard MIP)"
         elseif decomp_mode == 1
             "Type 2 (Decomposition - Simple LP-based)"
         elseif decomp_mode == 2
@@ -336,7 +338,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         elseif decomp_mode == 5
             "Type 2 (Decomposition - Gap-based Dual Unfixing)"
         else  # decomp_mode == 6
-            "Type 2 (Decomposition - ACG Formulation)"
+            "Type 2 (Decomposition - Iterative Single-Variable Unfixing)"
         end
     else
         "Type $pricing_type"
