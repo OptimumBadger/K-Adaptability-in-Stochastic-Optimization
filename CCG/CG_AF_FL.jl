@@ -8,6 +8,7 @@ using Dates
 # Include required files
 include("CGUtilities.jl")
 include("AssignmentFormulation.jl")
+include("BranchAndBound.jl")
 include("FacilityLocationAFDecomposition.jl")
 
 # =============================================================================
@@ -150,8 +151,11 @@ if abspath(PROGRAM_FILE) == @__FILE__
     end
     
     # Parse optional arguments
-    use_decomp = length(ARGS) > 6  # decomp mode is present in CLI → use decomposition
-    decomp_mode = use_decomp ? parse(Int, ARGS[7]) : 0
+    arg7 = length(ARGS) > 6 ? uppercase(strip(ARGS[7])) : ""
+    use_bb_pricing = arg7 in ("BB", "BB_F", "BB_P")
+    bb_branching_strategy = arg7 == "BB_P" ? "P" : "F"
+    use_decomp = length(ARGS) > 6 && !use_bb_pricing && !isempty(arg7)
+    decomp_mode = use_decomp ? parse(Int, arg7) : 0
     subproblem_cuts = length(ARGS) > 7 ? parse_bool_flag(ARGS[8]) : false
     use_mip_bigM = length(ARGS) > 8 ? parse_bool_flag(ARGS[9]) : false
     pricing_type = length(ARGS) > 9 ? parse(Int, ARGS[10]) : 2
@@ -162,14 +166,15 @@ if abspath(PROGRAM_FILE) == @__FILE__
     num_init_cuts = 0  # warm-start cuts disabled
 
     # Validate decomp_mode only when decomposition is requested
-    if use_decomp && !(decomp_mode in [1, 2, 3, 4, 5, 6])
-        println("❌ Error: decomp_mode must be 1, 2, 3, 4, 5, or 6!")
+    if use_decomp && !(decomp_mode in [1, 2, 3, 4, 5, 6, 7]) && !use_bb_pricing
+        println("❌ Error: decomp_mode must be 1, 2, 3, 4, 5, 6, or 7!")
         println("  1 = Simple LP-based decomposition")
         println("  2 = Dual-based unfixing decomposition")
         println("  3 = Partial MIP with F1=open facilities, F0=empty")
         println("  4 = Partial MIP with random subsets of F0 and F1")
         println("  5 = Gap-based dual unfixing (unfix until sum|dual| < gap)")
         println("  6 = Iterative single-variable unfixing (LP duals + partial MIP cuts)")
+        println("  7 = Sequential unfixing heuristic (Cut 32 region only, fixed order)")
         exit(1)
     end
 
@@ -189,7 +194,9 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("Binary vectors file: $binary_vectors_file")
     println("Parameters: L=$L, S=$S, K=$K, pricing_type=$pricing_type")
     println("Problem parameters: unmet_pen=$unmet_pen, scaling_factor=$scaling_factor, capacity_factor=$capacity_factor")
-    decomp_mode_str = if !use_decomp
+    decomp_mode_str = if use_bb_pricing
+        "branch-and-bound pricing (branching: $(bb_branching_strategy == "P" ? "product/sensitivity" : "most-fractional"))"
+    elseif !use_decomp
         "standard MIP pricing (no decomposition)"
     elseif decomp_mode == 1
         "decomposition mode 1: simple LP-based"
@@ -201,8 +208,10 @@ if abspath(PROGRAM_FILE) == @__FILE__
         "decomposition mode 4: partial MIP (random F0/F1)"
     elseif decomp_mode == 5
         "decomposition mode 5: gap-based dual unfixing"
-    else  # decomp_mode == 6
+    elseif decomp_mode == 6
         "decomposition mode 6: iterative single-variable unfixing"
+    else  # decomp_mode == 7
+        "decomposition mode 7: sequential unfixing heuristic"
     end
     println("Pricing mode: $decomp_mode_str")
     println("Subproblem cuts: $subproblem_cuts")
@@ -305,6 +314,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
     fl_data["decomp_mode"] = decomp_mode
     fl_data["subproblem_cuts"] = subproblem_cuts
     fl_data["use_mip_bigM"] = use_mip_bigM
+    fl_data["use_bb_pricing"] = use_bb_pricing
+    fl_data["bb_branching_strategy"] = bb_branching_strategy
     
     # Create logs directory
     script_dir = @__DIR__
@@ -317,7 +328,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
     # Generate log file names with timestamp
     timestamp = Dates.format(now(), "YYYYmmdd_HHMMSS")
     instance_name = replace(splitext(basename(instance_file))[1], "." => "_")
-    mode_tag = use_decomp ? "M$(decomp_mode)" : "std"
+    mode_tag = use_bb_pricing ? "BB_$(bb_branching_strategy)" : (use_decomp ? "M$(decomp_mode)" : "std")
     master_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_$(mode_tag)_master_$(timestamp).log")
     pricing_log_file = joinpath(logs_dir, "CG_AF_FL_$(instance_name)_L$(L)_S$(S)_K$(K)_$(mode_tag)_pricing_$(timestamp).log")
     
@@ -380,7 +391,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         initial_binary_vectors,
         fl_data,
         K,
-        500;  # max_iterations
+        typemax(Int);  # no iteration cap — runs until convergence or work budget exhausted
         evaluate_cost = evaluate_cost_FL,
         build_pricing_model = build_pricing_model_AF_FL,
         calculate_m_values = calculate_m_values_FL,
@@ -426,33 +437,41 @@ if abspath(PROGRAM_FILE) == @__FILE__
     instance_tag = replace(splitext(basename(instance_file))[1], "." => "_")
     
     summary = Dict(
-        "instance" => instance_file,
-        "experiment" => experiment,
-        "L" => L,
-        "S" => S,
-        "K" => K,
-        "pricing_type" => pricing_type,
-        "iterations" => results["iterations"],
-        "termination_iteration" => get(results, "termination_iteration", results["iterations"]),
-        "phase2_iterations" => get(results, "phase2_iterations", 0),
-        "total_solutions_added" => results["total_solutions_added"],
-        "final_objective_lp" => results["final_objective_lp"],
-        "final_objective_ip" => results["final_objective_ip"],
-        "total_work_units" => get(results, "total_work_units", nothing),
-        "total_master_work_units" => results["total_master_work_units"],
+        "instance"                 => instance_file,
+        "experiment"               => experiment,
+        "L"                        => L,
+        "S"                        => S,
+        "K"                        => K,
+        "pricing_type"             => pricing_type,
+        "iterations"               => results["iterations"],
+        "termination_iteration"    => get(results, "termination_iteration", results["iterations"]),
+        "total_solutions_added"    => results["total_solutions_added"],
+        "final_objective_lp"       => results["final_objective_lp"],
+        "final_objective_ip"       => results["final_objective_ip"],
+        "total_work_units"         => get(results, "total_work_units", nothing),
+        "total_master_work_units"  => results["total_master_work_units"],
         "total_pricing_work_units" => results["total_pricing_work_units"],
-        "total_update_work_units" => results["total_update_work_units"]
+        "total_update_work_units"  => results["total_update_work_units"]
     )
+
+    # Mode-specific summary fields
+    if use_bb_pricing
+        summary["bb_cache_size"] = get(fl_data, "bb_cache", Dict()) |> length
+    elseif use_decomp
+        summary["decomp_mode"] = decomp_mode
+    else
+        summary["phase2_iterations"] = get(results, "phase2_iterations", 0)
+    end
     
     summary_file = joinpath(
         results_dir,
-        "cg_af_results_$(instance_tag)_L$(L)_S$(S)_K$(K)_$(experiment).json"
+        "cg_af_results_$(instance_tag)_L$(L)_S$(S)_K$(K)_$(mode_tag)_$(experiment).json"
     )
     write_json(summary_file, summary)
-    
+
     iteration_file = joinpath(
         results_dir,
-        "cg_af_iterations_$(instance_tag)_L$(L)_S$(S)_K$(K)_$(experiment).json"
+        "cg_af_iterations_$(instance_tag)_L$(L)_S$(S)_K$(K)_$(mode_tag)_$(experiment).json"
     )
     write_json(iteration_file, get(results, "iteration_details", []))
     
