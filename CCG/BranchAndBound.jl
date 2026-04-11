@@ -19,13 +19,117 @@ using Printf
 const MOI = MathOptInterface
 
 # =============================================================================
-# NODE STRUCTURE
+# NODE STRUCTURE AND CACHE
 # =============================================================================
 
 struct BBNode
     F0::Set{Int}             # Variables fixed to 0
     F1::Set{Int}             # Variables fixed to 1
     upper_bound::Float64     # UB estimate (parent's U_k) used for best-first ordering
+end
+
+# Cache key: (F0, F1) as sorted tuples for hashing
+# Cache value: (g_s_vec, x_sk) — both independent of lambda_star, fully reusable
+const BBCacheKey   = Tuple{Vector{Int}, Vector{Int}}   # (sorted F0, sorted F1)
+const BBCacheValue = Tuple{Vector{Float64}, Matrix{Float64}}  # (g_s_vec, x_sk)
+const BBCache      = Dict{BBCacheKey, BBCacheValue}
+
+cache_key(F0::Set{Int}, F1::Set{Int}) = (sort(collect(F0)), sort(collect(F1)))
+
+# =============================================================================
+# PERSISTENT SCENARIO MODELS
+# Build S models once; reuse across nodes by adjusting bounds (no rebuild).
+# =============================================================================
+
+struct PersistentScenarioModel
+    model::Model
+    x::Vector{VariableRef}
+    y::Matrix{VariableRef}
+    shortfall::Vector{VariableRef}
+end
+
+function build_persistent_models(
+    problem_data::Dict,
+    scenarios::Vector{Vector{Float64}}
+)
+    nloc           = problem_data["nloc"]
+    ncust          = problem_data["ncust"]
+    capacity       = problem_data["capacity"]
+    cost           = problem_data["cost"]
+    fixedcost      = problem_data["fixedcost"]
+    unmet_pen      = problem_data["unmet_pen"]
+    scaling_factor = problem_data["scaling_factor"]
+    nscen          = length(scenarios)
+
+    pmodels = Vector{PersistentScenarioModel}(undef, nscen)
+
+    for s in 1:nscen
+        scenario = scenarios[s]
+        model = Model(Gurobi.Optimizer)
+        set_optimizer_attribute(model, "OutputFlag",   0)
+        set_optimizer_attribute(model, "LogToConsole", 0)
+
+        @variable(model, x_s[1:nloc], Bin)
+        @variable(model, y_s[1:nloc, 1:ncust] >= 0)
+        @variable(model, sf_s[1:ncust] >= 0)
+        x         = x_s
+        y         = y_s
+        shortfall = sf_s
+
+        @constraint(model, [j in 1:ncust],
+            sum(y[i,j] for i in 1:nloc) + shortfall[j] == scenario[j])
+        @constraint(model, [i in 1:nloc],
+            sum(y[i,j] for j in 1:ncust) - capacity[i] * x[i] <= 0)
+
+        @objective(model, Min,
+            sum(fixedcost[i] * x[i] for i in 1:nloc) +
+            scaling_factor * sum(cost[i,j] * y[i,j] for i in 1:nloc for j in 1:ncust) +
+            sum(unmet_pen * shortfall[j] for j in 1:ncust))
+
+        pmodels[s] = PersistentScenarioModel(model, x, y, shortfall)
+    end
+
+    return pmodels
+end
+
+function solve_subproblem_persistent(
+    pm::PersistentScenarioModel,
+    F0::Set{Int},
+    F1::Set{Int}
+)
+    nloc = length(pm.x)
+
+    # Fix variables (removes integrality, same as fresh model approach)
+    for j in F0
+        fix(pm.x[j], 0; force=true)
+    end
+    for j in F1
+        fix(pm.x[j], 1; force=true)
+    end
+
+    optimize!(pm.model)
+
+    work_units = 0.0
+    try
+        work_units = MOI.get(backend(pm.model), Gurobi.ModelAttribute("Work"))
+    catch
+    end
+
+    if termination_status(pm.model) == MOI.OPTIMAL
+        result = (objective_value(pm.model), value.(pm.x), work_units)
+    else
+        result = (Inf, zeros(nloc), work_units)
+    end
+
+    # Unfix variables for next node
+    for j in F0
+        unfix(pm.x[j])
+    end
+    for j in F1
+        unfix(pm.x[j])
+    end
+
+    return result
 end
 
 # =============================================================================
@@ -121,6 +225,30 @@ function evaluate_node(
     return U_k, x_sk, g_s_vec, work_units
 end
 
+function evaluate_node_persistent(
+    pmodels::Vector{PersistentScenarioModel},
+    F0::Set{Int},
+    F1::Set{Int},
+    lambda_star::Vector{Float64}
+)
+    nloc  = length(pmodels[1].x)
+    nscen = length(pmodels)
+
+    x_sk       = zeros(nloc, nscen)
+    g_s_vec    = zeros(nscen)
+    work_units = 0.0
+
+    for s in 1:nscen
+        g_s, x_s, wu = solve_subproblem_persistent(pmodels[s], F0, F1)
+        g_s_vec[s]   = g_s
+        x_sk[:, s]   = x_s
+        work_units  += wu
+    end
+
+    U_k = sum(max(0.0, lambda_star[s] - g_s_vec[s]) for s in 1:nscen)
+    return U_k, x_sk, g_s_vec, work_units
+end
+
 # =============================================================================
 # SENSITIVITY PRE-COMPUTATION
 # Computes lambda_{sj}^0 and lambda_{sj}^1 at the root (F0 = F1 = empty).
@@ -207,12 +335,27 @@ end
 # =============================================================================
 # BRANCHING VARIABLE SELECTION
 #
-# Down-estimate:  e_j^0 = sum_s lambda0[s,j] * x_sk[j,s]
-# Up-estimate:    e_j^1 = sum_s lambda1[s,j] * (1 - x_sk[j,s])
-# Pick j* = argmax_j  e_j^0 * e_j^1
+# Most-fractional rule: pick j* = argmax_j |x̄_j - floor(x̄_j + 0.5)|
+# i.e., the variable whose average value across scenarios is closest to 0.5.
 # =============================================================================
 
 function select_branching_variable(
+    frac_vars::Vector{Int},
+    x_bar::Vector{Float64}
+)
+    best_j     = frac_vars[1]
+    best_score = -Inf
+    for j in frac_vars
+        score = abs(x_bar[j] - floor(x_bar[j] + 0.5))
+        if score > best_score
+            best_score = score
+            best_j     = j
+        end
+    end
+    return best_j, best_score
+end
+
+function select_branching_variable_product(
     frac_vars::Vector{Int},
     x_sk::Matrix{Float64},
     lambda0::Matrix{Float64},
@@ -221,18 +364,16 @@ function select_branching_variable(
 )
     best_j     = frac_vars[1]
     best_score = -Inf
-
     for j in frac_vars
-        e0 = sum(lambda0[s, j] * x_sk[j, s]          for s in 1:nscen)
-        e1 = sum(lambda1[s, j] * (1.0 - x_sk[j, s])  for s in 1:nscen)
+        e0 = sum(lambda0[s, j] * x_sk[j, s] for s in 1:nscen)
+        e1 = sum(lambda1[s, j] * (1.0 - x_sk[j, s]) for s in 1:nscen)
         score = e0 * e1
         if score > best_score
             best_score = score
             best_j     = j
         end
     end
-
-    return best_j
+    return best_j, best_score
 end
 
 # =============================================================================
@@ -243,7 +384,10 @@ function branch_and_bound(
     problem_data::Dict,
     scenarios::Vector{Vector{Float64}},
     lambda_star::Vector{Float64};
-    log_file::Union{String,Nothing} = nothing
+    work_limit::Float64 = 2000.0,
+    cache::BBCache = BBCache(),
+    log_file::Union{String,Nothing} = nothing,
+    branching_strategy::String = "F"
 )
     nloc  = problem_data["nloc"]
     nscen = length(scenarios)
@@ -259,33 +403,77 @@ function branch_and_bound(
         println(log_io, "="^60)
 
         # ------------------------------------------------------------------
-        # Step 1: Precompute lambda sensitivities (uses root solves)
+        # Step 1: Evaluate root node
         # ------------------------------------------------------------------
-        lambda0, lambda1, x_root, g_root, wu_precomp =
-            precompute_sensitivities(problem_data, scenarios, log_io)
+        total_work_units = 0.0
 
-        total_work_units = wu_precomp
-
-        # Root upper bound (we already have g_root from precomputation)
-        U_root = sum(max(0.0, lambda_star[s] - g_root[s]) for s in 1:nscen)
+        root_key = cache_key(Set{Int}(), Set{Int}())
+        if haskey(cache, root_key)
+            g_root, x_sk_root = cache[root_key]
+            U_root = sum(max(0.0, lambda_star[s] - g_root[s]) for s in 1:nscen)
+        else
+            U_root, x_sk_root, g_root, wu_root = evaluate_node(
+                problem_data, scenarios, Set{Int}(), Set{Int}(), lambda_star)
+            total_work_units += wu_root
+            cache[root_key] = (g_root, x_sk_root)
+        end
 
         println(log_io, "  Root UB = $(round(U_root, digits=6))")
 
         # ------------------------------------------------------------------
-        # Step 2: Initialise — no initial feasible solution (L_hat = -Inf)
+        # Step 2: Warm-start incumbent from scenario 1's root solution
         # ------------------------------------------------------------------
-        L_hat   = -Inf
-        x_star  = zeros(Int, nloc)
+        x_s1  = round.(Int, x_sk_root[:, 1])
+        F0_s1 = Set{Int}([j for j in 1:nloc if x_s1[j] == 0])
+        F1_s1 = Set{Int}([j for j in 1:nloc if x_s1[j] == 1])
+        ws_key = cache_key(F0_s1, F1_s1)
+        if haskey(cache, ws_key)
+            g_s1_vec, _ = cache[ws_key]
+            L_s1 = sum(max(0.0, lambda_star[s] - g_s1_vec[s]) for s in 1:nscen)
+        else
+            L_s1, _, g_s1_vec, wu_s1 = evaluate_node(
+                problem_data, scenarios, F0_s1, F1_s1, lambda_star)
+            total_work_units += wu_s1
+            cache[ws_key] = (g_s1_vec, x_sk_root)
+        end
+
+        L_hat  = L_s1
+        x_star = x_s1
+        println(log_io, "  Warm-start incumbent (x from scenario 1): L_hat = $(round(L_hat, digits=6))")
+
+        # ------------------------------------------------------------------
+        # Precompute sensitivities if using product branching strategy
+        # ------------------------------------------------------------------
+        lambda0 = zeros(nscen, nloc)
+        lambda1 = zeros(nscen, nloc)
+        if branching_strategy == "P"
+            println(log_io, "  Branching strategy: PRODUCT (sensitivity-based)")
+            lambda0, lambda1, _, _, wu_sens = precompute_sensitivities(problem_data, scenarios, log_io)
+            total_work_units += wu_sens
+        else
+            println(log_io, "  Branching strategy: MOST-FRACTIONAL")
+        end
 
         nodes_processed = 0
+        cache_hits      = 0
+        cache_misses    = 0
 
         open_nodes = BBNode[BBNode(Set{Int}(), Set{Int}(), U_root)]
 
         # ------------------------------------------------------------------
         # Step 3: B&B loop
         # ------------------------------------------------------------------
+        work_limit_hit = false
+
         while !isempty(open_nodes)
 
+            # Check work limit
+            if total_work_units >= work_limit
+                work_limit_hit = true
+                break
+            end
+
+            # Best-first search
             idx  = argmax(n.upper_bound for n in open_nodes)
             node = open_nodes[idx]
             deleteat!(open_nodes, idx)
@@ -296,13 +484,28 @@ function branch_and_bound(
 
             nodes_processed += 1
 
-            U_k, x_sk, g_s_vec, wu_node =
-                evaluate_node(problem_data, scenarios, node.F0, node.F1, lambda_star)
-            total_work_units += wu_node
+            key      = cache_key(node.F0, node.F1)
+            is_hit   = haskey(cache, key)
+            hit_str  = is_hit ? "HIT" : "MISS"
+            if is_hit
+                g_s_vec, x_sk = cache[key]
+                U_k = sum(max(0.0, lambda_star[s] - g_s_vec[s]) for s in 1:nscen)
+                cache_hits += 1
+            else
+                U_k, x_sk, g_s_vec, wu_node =
+                    evaluate_node(problem_data, scenarios, node.F0, node.F1, lambda_star)
+                total_work_units += wu_node
+                cache[key] = (g_s_vec, x_sk)
+                cache_misses += 1
+            end
+
+            UB  = isempty(open_nodes) ? U_k : max(U_k, maximum(n.upper_bound for n in open_nodes))
+            LB  = L_hat
+            gap = UB > 1e-10 ? 100.0 * (UB - LB) / abs(UB) : 0.0
 
             if U_k <= L_hat
-                @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  U_k=%.4f  L_hat=%.4f  outcome=FATHOMED  branch_var=∅  open_nodes=%d\n",
-                        nodes_processed, length(node.F0), length(node.F1), U_k, L_hat, length(open_nodes))
+                @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=FATHOMED  branch_var=∅  open_nodes=%d\n",
+                        nodes_processed, length(node.F0), length(node.F1), hit_str, U_k, LB, UB, gap, total_work_units, length(open_nodes))
                 continue
             end
 
@@ -312,12 +515,12 @@ function branch_and_bound(
                 if U_k > L_hat
                     L_hat  = U_k
                     x_star = round.(Int, x_bar)
-                end
-                @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  U_k=%.4f  L_hat=%.4f  outcome=FEASIBLE  branch_var=∅  open_nodes=%d\n",
-                        nodes_processed, length(node.F0), length(node.F1), U_k, L_hat, length(open_nodes))
-                if U_k == L_hat
                     println(log_io, "  *** New incumbent: L_hat = $(round(L_hat, digits=6))")
                 end
+                UB  = isempty(open_nodes) ? L_hat : maximum(n.upper_bound for n in open_nodes)
+                gap = UB > 1e-10 ? 100.0 * (UB - L_hat) / abs(UB) : 0.0
+                @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=FEASIBLE  branch_var=∅  open_nodes=%d\n",
+                        nodes_processed, length(node.F0), length(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, length(open_nodes))
                 continue
             end
 
@@ -336,7 +539,36 @@ function branch_and_bound(
             #     continue
             # end
 
-            j_star = select_branching_variable(frac_vars, x_sk, lambda0, lambda1, nscen)
+            # ------------------------------------------------------------------
+            # Rounding heuristic: round x_bar to nearest integer and evaluate
+            # as a candidate lower bound
+            # ------------------------------------------------------------------
+            x_rounded  = Int[floor(Int, x_bar[j] + 0.5) for j in 1:nloc]
+            F0_rounded = Set{Int}([j for j in 1:nloc if x_rounded[j] == 0])
+            F1_rounded = Set{Int}([j for j in 1:nloc if x_rounded[j] == 1])
+            rnd_key    = cache_key(F0_rounded, F1_rounded)
+            if haskey(cache, rnd_key)
+                g_rnd, _ = cache[rnd_key]
+                LB_rnd   = sum(max(0.0, lambda_star[s] - g_rnd[s]) for s in 1:nscen)
+            else
+                LB_rnd, _, g_rnd, wu_rnd =
+                    evaluate_node(problem_data, scenarios, F0_rounded, F1_rounded, lambda_star)
+                total_work_units += wu_rnd
+                cache[rnd_key] = (g_rnd, zeros(nloc, nscen))
+            end
+            if LB_rnd > L_hat
+                L_hat  = LB_rnd
+                x_star = x_rounded
+                println(log_io, "  *** New incumbent (rounding heuristic): L_hat = $(round(L_hat, digits=6))")
+            end
+
+            if branching_strategy == "P"
+                j_star, branch_score = select_branching_variable_product(frac_vars, x_sk, lambda0, lambda1, nscen)
+                score_label = "product_score"
+            else
+                j_star, branch_score = select_branching_variable(frac_vars, x_bar)
+                score_label = "frac_score"
+            end
 
             F0_down = union(node.F0, Set([j_star]))
             F1_up   = union(node.F1, Set([j_star]))
@@ -344,18 +576,36 @@ function branch_and_bound(
             push!(open_nodes, BBNode(F0_down, node.F1, U_k))
             push!(open_nodes, BBNode(node.F0, F1_up,   U_k))
 
-            @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  U_k=%.4f  L_hat=%.4f  outcome=BRANCHED  branch_var=%d  open_nodes=%d\n",
-                    nodes_processed, length(node.F0), length(node.F1), U_k, L_hat, j_star, length(open_nodes))
+            UB  = maximum(n.upper_bound for n in open_nodes)
+            gap = UB > 1e-10 ? 100.0 * (UB - L_hat) / abs(UB) : 0.0
+            @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=BRANCHED  branch_var=%d  %s=%.4f  nfrac=%d  open_nodes=%d\n",
+                    nodes_processed, length(node.F0), length(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, j_star, score_label, branch_score, length(frac_vars), length(open_nodes))
         end
 
+        # Final UB and gap
+        UB_final  = isempty(open_nodes) ? L_hat : maximum(n.upper_bound for n in open_nodes)
+        gap_final = UB_final > 1e-10 ? 100.0 * (UB_final - L_hat) / abs(UB_final) : 0.0
+
         println(log_io, "="^60)
-        println(log_io, "B&B complete: $nodes_processed nodes processed")
-        println(log_io, "Optimal value : $(round(L_hat, digits=6))")
-        println(log_io, "Optimal x*    : $x_star")
-        println(log_io, "Total work units consumed: $(round(total_work_units, digits=4))")
+        if work_limit_hit
+            println(log_io, "B&B terminated: work limit reached ($(round(total_work_units, digits=4)) work units)")
+        else
+            println(log_io, "B&B complete: $nodes_processed nodes processed")
+        end
+        println(log_io, "LB (best feasible) : $(round(L_hat, digits=6))")
+        println(log_io, "UB (best node)     : $(round(UB_final, digits=6))")
+        println(log_io, "Gap                : $(round(gap_final, digits=4))%")
+        println(log_io, "Optimal x*         : $x_star")
+        println(log_io, "Total work units   : $(round(total_work_units, digits=4))")
+        println(log_io, "Cached nodes       : $(length(cache))")
+        println(log_io, "Cache hits         : $cache_hits")
+        println(log_io, "Cache misses       : $cache_misses")
+        hit_rate = (cache_hits + cache_misses) > 0 ? 100.0 * cache_hits / (cache_hits + cache_misses) : 0.0
+        println(log_io, "Cache hit rate     : $(round(hit_rate, digits=1))%")
         println(log_io, "="^60)
 
-        return x_star, L_hat
+        hit_rate_final = (cache_hits + cache_misses) > 0 ? 100.0 * cache_hits / (cache_hits + cache_misses) : 0.0
+        return x_star, L_hat, UB_final, gap_final, cache, total_work_units, nodes_processed, hit_rate_final
 
     finally
         if log_file !== nothing
