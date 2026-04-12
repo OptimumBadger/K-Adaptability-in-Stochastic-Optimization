@@ -108,6 +108,58 @@ end
 # COLUMN GENERATION ALGORITHM - ASSIGNMENT FORMULATION
 # =============================================================================
 
+function build_iteration_dict(
+    iteration, master_work_units, pricing_work_units, update_work_units,
+    total_work_units, pricing_nodes, phase1_optimal, went_phase2,
+    solutions_added, pricing_analysis
+)
+    if haskey(pricing_analysis, :decomp_iterations)
+        # Decomposition mode
+        return Dict(
+            "iteration"           => iteration,
+            "solutions_added"     => solutions_added,
+            "master_work_units"   => master_work_units,
+            "pricing_work_units"  => pricing_work_units,
+            "update_work_units"   => update_work_units,
+            "total_work_units"    => total_work_units,
+            "decomp_iterations"   => pricing_analysis[:decomp_iterations],
+            "cut34_added"         => get(pricing_analysis, :cut34_added, 0),
+            "cuts_preloaded"      => get(pricing_analysis, :cuts_preloaded, 0),
+            "ub"                  => get(pricing_analysis, :ub, nothing),
+            "lb"                  => get(pricing_analysis, :lb, nothing),
+            "gap"                 => get(pricing_analysis, :gap, nothing)
+        )
+    elseif haskey(pricing_analysis, :bb_lb)
+        # Branch-and-bound mode
+        return Dict(
+            "iteration"              => iteration,
+            "solutions_added"        => solutions_added,
+            "master_work_units"      => master_work_units,
+            "pricing_work_units"     => pricing_work_units,
+            "update_work_units"      => update_work_units,
+            "total_work_units"       => total_work_units,
+            "bb_nodes_processed"     => get(pricing_analysis, :bb_nodes_processed, 0),
+            "bb_cache_hit_rate"      => get(pricing_analysis, :bb_cache_hit_rate, 0.0),
+            "bb_lb"                  => get(pricing_analysis, :bb_lb, nothing),
+            "bb_ub"                  => get(pricing_analysis, :bb_ub, nothing),
+            "bb_gap"                 => get(pricing_analysis, :bb_gap, nothing)
+        )
+    else
+        # Standard MIP mode
+        return Dict(
+            "iteration"              => iteration,
+            "solutions_added"        => solutions_added,
+            "master_work_units"      => master_work_units,
+            "pricing_work_units"     => pricing_work_units,
+            "update_work_units"      => update_work_units,
+            "total_work_units"       => total_work_units,
+            "branch_and_bound_nodes" => pricing_nodes,
+            "phase1_status"          => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
+            "phase2"                 => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+        )
+    end
+end
+
 # =============================================================================
 # MAIN COLUMN GENERATION ALGORITHM
 # =============================================================================
@@ -298,7 +350,7 @@ function column_generation_algorithm(
         if !get(problem_data, "use_decomp", false)
             S_val = get(problem_data, "S", "unknown")
             K_val = get(problem_data, "K", "unknown")
-            dual_file = joinpath(@__DIR__, "CG_dual_values_S$(S_val)_K$(K_val).txt")
+            dual_file = joinpath(@__DIR__, "CG_dual_values_S$(S_val)_K$(K_val)_test.txt")
             file_mode = iteration == 1 ? "w" : "a"
             open(dual_file, file_mode) do f
                 println(f, "iteration=$iteration")
@@ -326,18 +378,9 @@ function column_generation_algorithm(
             println("  Global work budget exhausted. Terminating.")
             termination_iteration = iteration
             iteration_total_work = master_work_units + pricing_work_units
-            push!(iteration_details, Dict(
-                "iteration" => iteration,
-                "solutions_added" => 0,
-                "master_work_units" => master_work_units,
-                "pricing_work_units" => pricing_work_units,
-                "update_work_units" => 0.0,
-                "total_work_units" => iteration_total_work,
-                "branch_and_bound_nodes" => pricing_nodes,
-                "phase1_status" => "unknown",
-                "phase2" => "unknown",
-                "decomp_iterations" => decomp_iterations,
-                "decomp_work_units" => decomp_work_units
+            push!(iteration_details, build_iteration_dict(
+                iteration, master_work_units, pricing_work_units, 0.0,
+                iteration_total_work, pricing_nodes, nothing, nothing, 0, pricing_analysis
             ))
             break
         end
@@ -378,40 +421,26 @@ function column_generation_algorithm(
             println("  No improving solutions from pricing. Terminating algorithm.")
             termination_iteration = iteration
             iteration_total_work = master_work_units + pricing_work_units
-            push!(iteration_details, Dict(
-                "iteration" => iteration,
-                "solutions_added" => 0,
-                "master_work_units" => master_work_units,
-                "pricing_work_units" => pricing_work_units,
-                "update_work_units" => 0.0,
-                "total_work_units" => iteration_total_work,
-                "branch_and_bound_nodes" => pricing_nodes,
-                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
-                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            push!(iteration_details, build_iteration_dict(
+                iteration, master_work_units, pricing_work_units, 0.0,
+                iteration_total_work, pricing_nodes, phase1_optimal, went_phase2, 0, pricing_analysis
             ))
             break
         end
-        
+
         # Filter by reduced-cost condition and cap to 10
         rc_ok_indices = [idx for idx in 1:length(pool_objs) if pool_objs[idx] + dual_mu > 1]
         if isempty(rc_ok_indices)
             println("  No RC-improving solutions from pricing. Terminating algorithm.")
             termination_iteration = iteration
             iteration_total_work = master_work_units + pricing_work_units
-            push!(iteration_details, Dict(
-                "iteration" => iteration,
-                "solutions_added" => 0,
-                "master_work_units" => master_work_units,
-                "pricing_work_units" => pricing_work_units,
-                "update_work_units" => 0.0,
-                "total_work_units" => iteration_total_work,
-                "branch_and_bound_nodes" => pricing_nodes,
-                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
-                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            push!(iteration_details, build_iteration_dict(
+                iteration, master_work_units, pricing_work_units, 0.0,
+                iteration_total_work, pricing_nodes, phase1_optimal, went_phase2, 0, pricing_analysis
             ))
             break
         end
-        
+
         keep = rc_ok_indices[1:min(10, length(rc_ok_indices))]
         new_solutions = new_solutions[keep]
         pool_objs = pool_objs[keep]
@@ -443,16 +472,9 @@ function column_generation_algorithm(
             push!(iteration_columns_data, (iteration=iteration, num_added=0))
             termination_iteration = iteration
             iteration_total_work = master_work_units + pricing_work_units
-            push!(iteration_details, Dict(
-                "iteration" => iteration,
-                "solutions_added" => 0,
-                "master_work_units" => master_work_units,
-                "pricing_work_units" => pricing_work_units,
-                "update_work_units" => 0.0,
-                "total_work_units" => iteration_total_work,
-                "branch_and_bound_nodes" => pricing_nodes,
-                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
-                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            push!(iteration_details, build_iteration_dict(
+                iteration, master_work_units, pricing_work_units, 0.0,
+                iteration_total_work, pricing_nodes, phase1_optimal, went_phase2, 0, pricing_analysis
             ))
             break
         else
@@ -539,16 +561,9 @@ function column_generation_algorithm(
             println("  Update work units: $(round(local_update_work_units, digits=2))")
             push!(iteration_columns_data, (iteration=iteration, num_added=local_added))
             iteration_total_work = master_work_units + pricing_work_units + local_update_work_units
-            push!(iteration_details, Dict(
-                "iteration" => iteration,
-                "solutions_added" => local_added,
-                "master_work_units" => master_work_units,
-                "pricing_work_units" => pricing_work_units,
-                "update_work_units" => local_update_work_units,
-                "total_work_units" => iteration_total_work,
-                "branch_and_bound_nodes" => pricing_nodes,
-                "phase1_status" => phase1_optimal === nothing ? "unknown" : (phase1_optimal ? "optimal" : "non_optimal"),
-                "phase2" => went_phase2 === nothing ? "unknown" : (went_phase2 ? "yes" : "no")
+            push!(iteration_details, build_iteration_dict(
+                iteration, master_work_units, pricing_work_units, local_update_work_units,
+                iteration_total_work, pricing_nodes, phase1_optimal, went_phase2, local_added, pricing_analysis
             ))
         end
         
