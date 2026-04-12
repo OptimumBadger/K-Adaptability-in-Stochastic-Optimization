@@ -11,6 +11,116 @@ include("FacilityLocationAF.jl")
 const USE_BENDERS_CUTS = true   # set to false to disable Cut 34 (Conditional Benders)
 
 # =============================================================================
+# PERSISTENT RECOURSE LP MODELS
+# Build S models once per decomp call; update RHS between iterations.
+# =============================================================================
+
+struct PersistentRecourseLPModel
+    model::Model
+    y::Any           # y[nloc, ncust] variables
+    shortfall::Any   # shortfall[ncust] variables
+    demand_con::Any  # demand constraints — RHS fixed (scenario-dependent, never changes)
+    cap_con::Any     # capacity constraints — RHS updated each iteration: capacity[i] * x_hat[i]
+    valid_con::Any   # valid inequalities — RHS updated each iteration, or nothing if subproblem_cuts=false
+    nloc::Int
+    ncust::Int
+end
+
+function build_persistent_recourse_models(
+    scenarios::Vector{Vector{Float64}},
+    capacity::AbstractVector{<:Real},
+    cost::AbstractMatrix{<:Real},
+    unmet_pen::Float64,
+    scaling_factor::Float64;
+    subproblem_cuts::Bool=true
+)
+    nscen = length(scenarios)
+    nloc  = length(capacity)
+    ncust = length(scenarios[1])
+
+    pmodels = Vector{PersistentRecourseLPModel}(undef, nscen)
+
+    for s in 1:nscen
+        scenario = scenarios[s]
+        model = Model(Gurobi.Optimizer)
+        set_optimizer_attribute(model, "OutputFlag",   0)
+        set_optimizer_attribute(model, "LogToConsole", 0)
+
+        @variable(model, y_s[1:nloc, 1:ncust] >= 0)
+        @variable(model, sf_s[1:ncust] >= 0)
+
+        # Demand constraints: RHS = scenario[j] — fixed for life of this model
+        @constraint(model, demand_con_s[j in 1:ncust],
+            sum(y_s[i,j] for i in 1:nloc) + sf_s[j] == scenario[j])
+
+        # Capacity constraints: RHS = capacity[i] * x_hat[i] — updated each iteration
+        @constraint(model, cap_con_s[i in 1:nloc],
+            sum(y_s[i,j] for j in 1:ncust) <= 0.0)
+
+        valid_con = nothing
+        if subproblem_cuts
+            # Valid inequalities: RHS = min(capacity[i], scenario[j]) * x_hat[i] — updated each iteration
+            @constraint(model, valid_con_s[i in 1:nloc, j in 1:ncust],
+                y_s[i,j] <= 0.0)
+            valid_con = valid_con_s
+        end
+
+        @objective(model, Min,
+            scaling_factor * sum(cost[i,j] * y_s[i,j] for i in 1:nloc for j in 1:ncust) +
+            unmet_pen * sum(sf_s[j] for j in 1:ncust))
+
+        pmodels[s] = PersistentRecourseLPModel(model, y_s, sf_s, demand_con_s, cap_con_s, valid_con, nloc, ncust)
+    end
+
+    return pmodels
+end
+
+function solve_persistent_recourse_lp(
+    pm::PersistentRecourseLPModel,
+    x_hat::Vector{Int},
+    scenario::AbstractVector{<:Real},
+    capacity::AbstractVector{<:Real},
+    fixedcost::AbstractVector{<:Real};
+    subproblem_cuts::Bool=true
+)
+    # Update capacity constraint RHS for new x_hat
+    for i in 1:pm.nloc
+        set_normalized_rhs(pm.cap_con[i], capacity[i] * x_hat[i])
+    end
+
+    # Update valid inequality RHS for new x_hat
+    if subproblem_cuts && pm.valid_con !== nothing
+        for i in 1:pm.nloc, j in 1:pm.ncust
+            set_normalized_rhs(pm.valid_con[i,j], min(capacity[i], scenario[j]) * x_hat[i])
+        end
+    end
+
+    optimize!(pm.model)
+
+    work_units = 0.0
+    try
+        work_units = MOI.get(backend(pm.model), Gurobi.ModelAttribute("Work"))
+    catch
+    end
+
+    ts = termination_status(pm.model)
+    if ts != MOI.OPTIMAL
+        return Inf, zeros(pm.ncust), zeros(pm.nloc), zeros(pm.nloc, pm.ncust), work_units
+    end
+
+    mu_d     = collect(dual.(pm.demand_con))
+    mu_c     = collect(dual.(pm.cap_con))
+    lambda_v = subproblem_cuts && pm.valid_con !== nothing ?
+               collect(dual.(pm.valid_con)) : zeros(pm.nloc, pm.ncust)
+
+    recourse_obj    = objective_value(pm.model)
+    fixed_cost_term = sum(fixedcost[i] * x_hat[i] for i in 1:pm.nloc)
+    q_s             = fixed_cost_term + recourse_obj
+
+    return q_s, mu_d, mu_c, lambda_v, work_units
+end
+
+# =============================================================================
 # DECOMPOSITION HELPERS (Type 2)
 # =============================================================================
 
@@ -190,7 +300,6 @@ function solve_fl_partial_recourse_mip(
     model = Model(Gurobi.Optimizer)
     set_optimizer_attribute(model, "OutputFlag", 0)
     set_optimizer_attribute(model, "LogToConsole", 0)
-    set_optimizer_attribute(model, "MIPGap", 0.001)
     # No WorkLimit as requested
     
     # Variables
@@ -467,13 +576,14 @@ function af_pricing_type2_FL_decomp(
     analysis::Dict{Symbol,Any}=Dict{Symbol,Any}(),
     log_file=nothing,
     iteration=nothing,
-    max_cut_iters::Int=500,
+    max_cut_iters::Int=typemax(Int),
     tol::Float64=1e-4,
     use_simple_decomp::Bool=false,
     decomp_mode::Int=2,
     subproblem_cuts::Bool=true,
     use_mip_bigM::Bool=true,
-    use_benders_cuts::Bool=true
+    use_benders_cuts::Bool=true,
+    work_limit::Float64=Inf
 )
     """Solve AF Pricing Type 2 with decomposition cutting-plane procedure."""
     nscen = length(scenarios)
@@ -491,7 +601,6 @@ function af_pricing_type2_FL_decomp(
     println("  Using f_s vector (wait-and-see costs) from WS file")
     println("  Number of scenarios: $nscen")
     println("  Number of facilities: $nloc")
-    println("  Max cutting-plane iterations: $max_cut_iters")
     println("  Tolerance: $tol")
     mode_str = if decomp_mode == 1
         "SIMPLE (LP-based cuts)"
@@ -503,8 +612,10 @@ function af_pricing_type2_FL_decomp(
         "PARTIAL MIP (Random subsets of F0 and F1)"
     elseif decomp_mode == 5
         "GAP-BASED DUAL UNFIXING (unfix until sum|dual| < gap)"
-    else  # decomp_mode == 6
+    elseif decomp_mode == 6
         "ITERATIVE SINGLE-VARIABLE UNFIXING (LP duals + partial MIP cuts)"
+    else  # decomp_mode == 7
+        "SEQUENTIAL UNFIXING HEURISTIC (Cut 32 region only, fixed order)"
     end
     println("  Mode: $mode_str")
     println("="^80)
@@ -517,7 +628,6 @@ function af_pricing_type2_FL_decomp(
             println(file, "="^80)
             println(file, "Timestamp: $(now())")
             println(file, "Problem size: $nscen scenarios, $nloc facilities")
-            println(file, "Max cutting-plane iterations: $max_cut_iters")
             println(file, "Tolerance: $tol")
             println(file, "="^80)
         end
@@ -555,87 +665,245 @@ function af_pricing_type2_FL_decomp(
         initial_pricing_work_units = 0.0
         
         for (vec_idx, v) in enumerate(initial_vectors)
-            # Initial deterministic selection: F1 = all open facilities, F0 = all closed facilities
-            F1_initial = [i for i in 1:nloc if v[i] == 1]  # All indices where v[i] == 1
-            F0_initial = [i for i in 1:nloc if v[i] == 0]  # All indices where v[i] == 0
-            
+            F1_initial = [i for i in 1:nloc if v[i] == 1]
+            F0_initial = [i for i in 1:nloc if v[i] == 0]
+
             if vec_idx == 1 || vec_idx % 50 == 0
                 println("  Processing initial vector $vec_idx: Initial F1 = $(length(F1_initial)), F0 = $(length(F0_initial))")
             end
-            
-            # Process each scenario: solve LP, update F0/F1 based on duals, then solve MIP
-            for s in 1:nscen
-                # Step 1: Solve LP with x as variables to get dual information
-                q_s, x_duals, mu_d, mu_c, lp_work = solve_fl_recourse_lp_with_x_variables(
-                    v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
-                    subproblem_cuts=subproblem_cuts
-                )
-                initial_pricing_work_units += lp_work
-                
-                if !isfinite(q_s)
-                    continue  # Skip if infeasible/unbounded
-                end
-                
-                # Step 2: Find near-zero dual indices using tolerance (avoid exact equality).
-                zero_dual_indices = [i for i in 1:nloc if abs(x_duals[i]) <= dual_zero_tol]
-                
-                # Step 3: Update F1 and F0 by removing indices with zero duals
-                F1_partial = [i for i in F1_initial if !(i in zero_dual_indices)]
-                F0_partial = [i for i in F0_initial if !(i in zero_dual_indices)]
-                
-                # Step 4: Compute delta_expr for updated F0/F1
-                delta_expr_partial = sum(1 - x[i] for i in F1_partial; init=0.0) + sum(x[i] for i in F0_partial; init=0.0)
-                
-                # Step 5: Solve partial MIP recourse with updated F0/F1
-                g_s, mip_work = solve_fl_partial_recourse_mip(
-                    F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
-                    subproblem_cuts=subproblem_cuts
-                )
-                initial_pricing_work_units += mip_work
-                
-                if !isfinite(g_s)
-                    continue  # Skip if infeasible/unbounded
-                end
-                
-                # Print q_s, g_s, and dual_lambda[s] for this scenario
-                println("        Vector $vec_idx, Scenario $s: q_s = $(round(q_s, digits=2)), g_s(F0,F1) = $(round(g_s, digits=2)), λ_s^* = $(round(dual_lambda[s], digits=2))")
-                
-                # Step 6: Generate cuts based on g_s vs dual_lambda[s]
-                if g_s >= dual_lambda[s]
-                    # Conditional no-good cut
-                    @constraint(master, delta_expr_partial >= pi[s])
-                    initial_cut32_count += 1
-                else
-                    # Integer L-shaped cut
-                    @constraint(master, theta[s] <= dual_lambda[s] - g_s + (g_s - f_s_vector[s]) * delta_expr_partial)
-                    initial_cut33_count += 1
-                end
-            end
-            
-            # Still generate Cut 34 using fully fixed v (current approach)
-            for s in 1:nscen
-                # Solve recourse LP to get q_s and duals for Cut 34
-                q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
-                    v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
-                    subproblem_cuts=subproblem_cuts
-                )
-                initial_pricing_work_units += sub_work
 
-                if !isfinite(q_s)
-                    continue  # Skip if infeasible/unbounded
+            if decomp_mode == 7
+                # ── MODE 7: sequential unfixing heuristic for initial vectors ────────
+                do_detailed_log = vec_idx <= 10  # full tables only for first 10 vectors
+
+                for s in 1:nscen
+                    F1_cur = copy(F1_initial)
+                    F0_cur = copy(F0_initial)
+
+                    # Solve fully fixed formulation 36 → initial g_s
+                    g_s_init, mip_work = solve_fl_partial_recourse_mip(
+                        F0_cur, F1_cur, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
+                    )
+                    initial_pricing_work_units += mip_work
+
+                    if !isfinite(g_s_init)
+                        continue
+                    end
+
+                    if g_s_init >= dual_lambda[s]
+                        # Cut 32 region: sequential unfixing
+                        heuristic_rows = Vector{Tuple{Int,Float64,Bool}}()
+                        g_s_cur = g_s_init
+
+                        for j in 1:nloc
+                            in_F1 = j in F1_cur
+                            in_F0 = j in F0_cur
+                            if !in_F1 && !in_F0
+                                continue
+                            end
+
+                            F1_test = in_F1 ? filter(k -> k != j, F1_cur) : copy(F1_cur)
+                            F0_test = in_F0 ? filter(k -> k != j, F0_cur) : copy(F0_cur)
+
+                            g_s_test, mip_work = solve_fl_partial_recourse_mip(
+                                F0_test, F1_test, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                                subproblem_cuts=subproblem_cuts
+                            )
+                            initial_pricing_work_units += mip_work
+
+                            if isfinite(g_s_test) && g_s_test >= dual_lambda[s]
+                                F1_cur = F1_test
+                                F0_cur = F0_test
+                                g_s_cur = g_s_test
+                                push!(heuristic_rows, (j, g_s_test, true))
+                            else
+                                push!(heuristic_rows, (j, isfinite(g_s_test) ? g_s_test : Inf, false))
+                            end
+                        end
+
+                        # Add Cut 32 with final F0/F1
+                        delta_expr_partial = sum(1 - x[j] for j in F1_cur; init=0.0) +
+                                             sum(x[j]     for j in F0_cur; init=0.0)
+                        @constraint(master, delta_expr_partial >= pi[s])
+                        initial_cut32_count += 1
+
+                        if do_detailed_log
+                            if log_file !== nothing && iteration !== nothing
+                                open(log_file, "a") do file
+                                    println(file, "")
+                                    println(file, "    [Init vec $vec_idx] Scenario $s (λ_s*=$(round(dual_lambda[s],digits=4)), f_s=$(round(f_s_vector[s],digits=4)), init g_s=$(round(g_s_init,digits=4))) — Cut 32 region")
+                                    println(file, "    " * "-"^65)
+                                    @printf(file, "    %-6s  %-20s  %-10s\n", "j", "g_s after unfix", "Decision")
+                                    println(file, "    " * "-"^65)
+                                    for (j, gs, unfixed) in heuristic_rows
+                                        @printf(file, "    %-6d  %-20.4f  %-10s\n", j, gs, unfixed ? "UNFIXED" : "kept fixed")
+                                    end
+                                    println(file, "    " * "-"^65)
+                                    println(file, "    Final F1 = $(F1_cur)")
+                                    println(file, "    Final F0 = $(F0_cur)")
+                                    println(file, "    Final g_s = $(round(g_s_cur,digits=4))  →  Cut 32 added")
+                                    println(file, "")
+                                end
+                            end
+                        end
+
+                    else
+                        # Cut 33 region: LP-dual unfixing + MIP g_s, multiple Cut 33s
+                        F1_c33 = copy(F1_initial)
+                        F0_c33 = copy(F0_initial)
+                        first_round_c33 = true
+                        cut33_init_rows = Vector{Tuple{Int,Vector{Int},Float64,Int,Int}}()
+                        c33_round = 0
+
+                        # Add tight Cut 33 first (fully fixed, g_s_init = f(v, ω_s))
+                        delta_expr_tight = sum(1 - x[j] for j in F1_c33; init=0.0) +
+                                           sum(x[j]     for j in F0_c33; init=0.0)
+                        @constraint(master, theta[s] <= dual_lambda[s] - g_s_init + (g_s_init - f_s_vector[s]) * delta_expr_tight)
+                        initial_cut33_count += 1
+
+                        while length(F0_c33) + length(F1_c33) > 1
+                            c33_round += 1
+
+                            _, x_duals_c33, _, _, lp_work = solve_fl_partial_recourse_lp_with_x_duals(
+                                F0_c33, F1_c33, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                                subproblem_cuts=subproblem_cuts
+                            )
+                            initial_pricing_work_units += lp_work
+
+                            fixed_all_c33 = vcat(F0_c33, F1_c33)
+                            to_unfix_c33 = Int[]
+                            if first_round_c33
+                                first_round_c33 = false
+                                zero_duals = [j for j in fixed_all_c33 if abs(get(x_duals_c33, j, 0.0)) <= dual_zero_tol]
+                                to_unfix_c33 = !isempty(zero_duals) ? zero_duals : [fixed_all_c33[argmin([abs(get(x_duals_c33, j, 0.0)) for j in fixed_all_c33])]]
+                            else
+                                min_j = fixed_all_c33[argmin([abs(get(x_duals_c33, j, 0.0)) for j in fixed_all_c33])]
+                                to_unfix_c33 = [min_j]
+                            end
+
+                            to_unfix_set = Set(to_unfix_c33)
+                            F1_c33 = [j for j in F1_c33 if !(j in to_unfix_set)]
+                            F0_c33 = [j for j in F0_c33 if !(j in to_unfix_set)]
+
+                            g_s_c33, mip_work = solve_fl_partial_recourse_mip(
+                                F0_c33, F1_c33, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                                subproblem_cuts=subproblem_cuts
+                            )
+                            initial_pricing_work_units += mip_work
+
+                            if !isfinite(g_s_c33)
+                                break
+                            end
+
+                            delta_expr_c33 = sum(1 - x[j] for j in F1_c33; init=0.0) +
+                                              sum(x[j]     for j in F0_c33; init=0.0)
+                            @constraint(master, theta[s] <= dual_lambda[s] - g_s_c33 + (g_s_c33 - f_s_vector[s]) * delta_expr_c33)
+                            initial_cut33_count += 1
+
+                            push!(cut33_init_rows, (c33_round, sort(to_unfix_c33), g_s_c33, length(F1_c33), length(F0_c33)))
+                        end
+
+                        if do_detailed_log
+                            if log_file !== nothing && iteration !== nothing
+                                open(log_file, "a") do file
+                                    println(file, "    [Init vec $vec_idx] Scenario $s (λ_s*=$(round(dual_lambda[s],digits=4)), init g_s=$(round(g_s_init,digits=4))) — Cut 33 region")
+                                    println(file, "    " * "-"^75)
+                                    @printf(file, "    %-6s  %-25s  %-14s  %-8s  %-8s\n", "Round", "Variables unfixed", "g_s (MIP)", "|F1|", "|F0|")
+                                    println(file, "    " * "-"^75)
+                                    for (rnd, unfixed_vars, gs, nf1, nf0) in cut33_init_rows
+                                        @printf(file, "    %-6d  %-25s  %-14.4f  %-8d  %-8d\n", rnd, string(unfixed_vars), gs, nf1, nf0)
+                                    end
+                                    println(file, "    " * "-"^75)
+                                    println(file, "    Total Cut 33s added: $(length(cut33_init_rows))")
+                                    println(file, "")
+                                end
+                            end
+                        end
+                    end
                 end
 
-                # Add Cut 34: Compute M_s and add cut
-                M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
-                @constraint(master,
-                    theta[s] +
-                    sum(fixedcost[i] * x[i] for i in 1:nloc) +
-                    sum(scenarios[s][j] * mu_d[j] for j in 1:ncust) +
-                    sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc) +
-                    sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
-                    <= dual_lambda[s] + M_s * (1 - pi[s])
-                )
-                initial_cut34_count += 1
+                # Cut 34 for mode 7 initial vectors (fully fixed v)
+                for s in 1:nscen
+                    q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
+                        v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
+                    )
+                    initial_pricing_work_units += sub_work
+                    if !isfinite(q_s)
+                        continue
+                    end
+                    M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
+                    @constraint(master,
+                        theta[s] +
+                        sum(fixedcost[i] * x[i] for i in 1:nloc) +
+                        sum(scenarios[s][j] * mu_d[j] for j in 1:ncust) +
+                        sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc) +
+                        sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
+                        <= dual_lambda[s] + M_s * (1 - pi[s])
+                    )
+                    initial_cut34_count += 1
+                end
+
+            else
+                # ── ALL OTHER MODES: existing logic ──────────────────────────────────
+                for s in 1:nscen
+                    q_s, x_duals, mu_d, mu_c, lp_work = solve_fl_recourse_lp_with_x_variables(
+                        v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
+                    )
+                    initial_pricing_work_units += lp_work
+
+                    if !isfinite(q_s)
+                        continue
+                    end
+
+                    zero_dual_indices = [i for i in 1:nloc if abs(x_duals[i]) <= dual_zero_tol]
+                    F1_partial = [i for i in F1_initial if !(i in zero_dual_indices)]
+                    F0_partial = [i for i in F0_initial if !(i in zero_dual_indices)]
+                    delta_expr_partial = sum(1 - x[i] for i in F1_partial; init=0.0) + sum(x[i] for i in F0_partial; init=0.0)
+
+                    g_s, mip_work = solve_fl_partial_recourse_mip(
+                        F0_partial, F1_partial, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
+                    )
+                    initial_pricing_work_units += mip_work
+
+                    if !isfinite(g_s)
+                        continue
+                    end
+
+                    println("        Vector $vec_idx, Scenario $s: q_s = $(round(q_s, digits=2)), g_s(F0,F1) = $(round(g_s, digits=2)), λ_s^* = $(round(dual_lambda[s], digits=2))")
+
+                    if g_s >= dual_lambda[s]
+                        @constraint(master, delta_expr_partial >= pi[s])
+                        initial_cut32_count += 1
+                    else
+                        @constraint(master, theta[s] <= dual_lambda[s] - g_s + (g_s - f_s_vector[s]) * delta_expr_partial)
+                        initial_cut33_count += 1
+                    end
+                end
+
+                for s in 1:nscen
+                    q_s, mu_d, mu_c, lambda_v, sub_work = solve_fl_recourse_lp_with_duals(
+                        v, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                        subproblem_cuts=subproblem_cuts
+                    )
+                    initial_pricing_work_units += sub_work
+                    if !isfinite(q_s)
+                        continue
+                    end
+                    M_s = compute_M_value_FL(mu_d, mu_c, lambda_v, scenarios[s], fixedcost, capacity, dual_lambda[s])
+                    @constraint(master,
+                        theta[s] +
+                        sum(fixedcost[i] * x[i] for i in 1:nloc) +
+                        sum(scenarios[s][j] * mu_d[j] for j in 1:ncust) +
+                        sum((capacity[i] * x[i]) * mu_c[i] for i in 1:nloc) +
+                        sum(min(capacity[i], scenarios[s][j]) * x[i] * lambda_v[i, j] for i in 1:nloc, j in 1:ncust)
+                        <= dual_lambda[s] + M_s * (1 - pi[s])
+                    )
+                    initial_cut34_count += 1
+                end
             end
         end
         
@@ -685,22 +953,24 @@ function af_pricing_type2_FL_decomp(
             F1 = [i for i in 1:nloc if x_hat[i] == 1]
             delta_expr = sum(1 - x[i] for i in F1; init=0.0) + sum(x[i] for i in F0; init=0.0)
 
-            # Cut 32 / Cut 33: Check sign with CURRENT dual_lambda
-            sign_check = dual_lambda[s] - q_s
-            if sign_check <= 0.0
-                @constraint(master, delta_expr >= pi[s])
-                cut32_preloaded += 1
-                if log_file !== nothing && iteration !== nothing
-                    open(log_file, "a") do file
-                        println(file, "  Scenario $s: Preloaded Cut 32 (Conditional No-Good) [λ_s^* - q_s = $(round(sign_check, digits=4)) ≤ 0]")
+            # Cut 32 / Cut 33: skip for mode 1 (Cut 34 only)
+            if !use_simple_decomp
+                sign_check = dual_lambda[s] - q_s
+                if sign_check <= 0.0
+                    @constraint(master, delta_expr >= pi[s])
+                    cut32_preloaded += 1
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "  Scenario $s: Preloaded Cut 32 (Conditional No-Good) [λ_s^* - q_s = $(round(sign_check, digits=4)) ≤ 0]")
+                        end
                     end
-                end
-            else
-                @constraint(master, theta[s] <= (dual_lambda[s] - q_s) + (q_s - f_s_vector[s]) * delta_expr)
-                cut33_preloaded += 1
-                if log_file !== nothing && iteration !== nothing
-                    open(log_file, "a") do file
-                        println(file, "  Scenario $s: Preloaded Cut 33 (Integer L-Shaped) [λ_s^* - q_s = $(round(sign_check, digits=4)) > 0]")
+                else
+                    @constraint(master, theta[s] <= (dual_lambda[s] - q_s) + (q_s - f_s_vector[s]) * delta_expr)
+                    cut33_preloaded += 1
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "  Scenario $s: Preloaded Cut 33 (Integer L-Shaped) [λ_s^* - q_s = $(round(sign_check, digits=4)) > 0]")
+                        end
                     end
                 end
             end
@@ -742,6 +1012,7 @@ function af_pricing_type2_FL_decomp(
     # Track decomposition metrics
     decomp_iterations = 0
     decomp_work_units = 0.0
+    lb_best = -Inf
     total_cut32 = 0  # Total Conditional No-Good Cuts across all iterations
     total_cut33 = 0  # Total Integer L-Shaped Cuts across all iterations
     total_cut34 = 0  # Total Conditional Benders Cuts across all iterations
@@ -753,9 +1024,9 @@ function af_pricing_type2_FL_decomp(
         end
     end
 
-    # ── Decomposition table file (Mode 6 only) — one file per pricing call ───
+    # ── Decomposition table file (Mode 6 / Mode 7) — one file per pricing call ───
     decomp_table_file = nothing
-    if decomp_mode == 6
+    if decomp_mode == 6 || decomp_mode == 7
         decomp_table_dir = joinpath(@__DIR__, "logs", "Decomposition")
         if !isdir(decomp_table_dir)
             mkpath(decomp_table_dir)
@@ -774,9 +1045,15 @@ function af_pricing_type2_FL_decomp(
         end
     end
 
-    for it in 1:max_cut_iters
-        decomp_iterations = it  # Track number of iterations completed
-        decomp_iterations = it  # Track number of iterations completed
+
+    it = 0
+    while true
+        it += 1
+        decomp_iterations = it
+        if pricing_work_units >= work_limit
+            println("\n  [Decomp] Work budget exhausted ($(round(pricing_work_units, digits=2)) / $(round(work_limit, digits=2))). Terminating.")
+            break
+        end
         iter_header = "DECOMPOSITION ITERATION $it"
         # Print in red to console
         println("\n\033[91m" * iter_header * "\033[0m")
@@ -858,70 +1135,14 @@ function af_pricing_type2_FL_decomp(
         lp_work_units = 0.0
 
         if use_simple_decomp
-            # SIMPLE DECOMPOSITION: Solve LP with fully fixed x_hat, generate cuts based on q_s
-            println("  Processing scenarios with SIMPLE decomposition (LP-based cuts)...")
+            # SIMPLE DECOMPOSITION (Mode 1): Only Cut 34 — LP solve for duals, no Cut 32/33
+            println("  Processing scenarios with SIMPLE decomposition (Cut 34 only)...")
             if log_file !== nothing && iteration !== nothing
                 open(log_file, "a") do file
-                    println(file, "  Processing scenarios with SIMPLE decomposition (LP-based cuts)...")
+                    println(file, "  Processing scenarios with SIMPLE decomposition (Cut 34 only)...")
                 end
             end
-            
-            for s in 1:nscen
-                # Solve LP recourse with x_hat fully fixed
-                print("    Scenario $s: Solving LP recourse (fully fixed x_hat)... ")
-                q_s, mu_d, mu_c, _lambda_v, lp_work = solve_fl_recourse_lp_with_duals(
-                    x_hat, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
-                    subproblem_cuts=subproblem_cuts
-                )
-                lp_work_units += lp_work
-                pricing_work_units += lp_work
-                
-                if !isfinite(q_s)
-                    println("LP infeasible/unbounded")
-                    continue
-                end
-                
-                println("q_s = $(round(q_s, digits=2))")
-                
-                # Print q_s and dual_lambda[s] for this scenario
-                println("      Values: q_s = $(round(q_s, digits=2)), λ_s^* = $(round(dual_lambda[s], digits=2)), f_s = $(round(f_s_vector[s], digits=2))")
-                if log_file !== nothing && iteration !== nothing
-                    open(log_file, "a") do file
-                        println(file, "      Values: q_s = $(round(q_s, digits=2)), λ_s^* = $(round(dual_lambda[s], digits=2)), f_s = $(round(f_s_vector[s], digits=2))")
-                    end
-                end
-                
-                # Generate cuts based on q_s vs dual_lambda[s]
-                if dual_lambda[s] - q_s <= 0
-                    # Conditional no-good cut: Σ_{j: x_hat[j]=1} (1-x_j) + Σ_{j: x_hat[j]=0} x_j >= π_s
-                    delta_expr = sum(1 - x[j] for j in 1:nloc if x_hat[j] == 1; init=0.0) + 
-                                  sum(x[j] for j in 1:nloc if x_hat[j] == 0; init=0.0)
-                    @constraint(master, delta_expr >= pi[s])
-                    cut_msg = "    Scenario $s: Added Conditional No-Good Cut [q_s = $(round(q_s, digits=2)) >= λ_s^* = $(round(dual_lambda[s], digits=2))]"
-                    println(cut_msg)
-                    if log_file !== nothing && iteration !== nothing
-                        open(log_file, "a") do file
-                            println(file, cut_msg)
-                        end
-                    end
-                    cut32_new += 1
-                else
-                    # Integer L-shaped cut: θ_s <= λ_s^* - q_s + (Σ_{j: x_hat[j]=1} (1-x_j) + Σ_{j: x_hat[j]=0} x_j)(q_s - f_s)
-                    delta_expr = sum(1 - x[j] for j in 1:nloc if x_hat[j] == 1; init=0.0) + 
-                                  sum(x[j] for j in 1:nloc if x_hat[j] == 0; init=0.0)
-                    @constraint(master, theta[s] <= dual_lambda[s] - q_s + (q_s - f_s_vector[s]) * delta_expr)
-                    cut_msg = "    Scenario $s: Added Integer L-Shaped Cut [q_s = $(round(q_s, digits=2)) < λ_s^* = $(round(dual_lambda[s], digits=2))]"
-                    println(cut_msg)
-                    if log_file !== nothing && iteration !== nothing
-                        open(log_file, "a") do file
-                            println(file, cut_msg)
-                        end
-                    end
-                    cut33_new += 1
-                end
-            end
-            
-            println("  LP work units: $(round(lp_work_units, digits=2))")
+            # No Cut 32/33 generated here; Cut 34 is added in the dedicated section below.
         elseif decomp_mode == 3
             # MODE 3: F1 = open facilities, F0 = empty set, solve partial MIP
             F1_initial = [j for j in 1:nloc if x_hat[j] == 1]  # All indices where x_hat[j] == 1
@@ -1419,6 +1640,303 @@ function af_pricing_type2_FL_decomp(
             end
 
             println("  Mode 6 — LP work: $(round(lp_work_units, digits=2)), MIP work: $(round(mode6_mip_work, digits=2))")
+
+        elseif decomp_mode == 7
+            # MODE 7: SEQUENTIAL UNFIXING HEURISTIC
+            # For each scenario:
+            #   - Start fully fixed: F1 = {j: x_hat[j]=1}, F0 = {j: x_hat[j]=0}
+            #   - Solve formulation 36 to get initial g_s
+            #   - Cut 32 region (g_s >= lambda_s*): iterate j=1..nloc in fixed order,
+            #     tentatively unfix j, re-solve; if g_s still >= lambda_s* keep unfixed, else refix.
+            #     Add Cut 32 with final (smaller) F0/F1.
+            #   - Cut 33 region (g_s < lambda_s*): add Cut 33 directly, no unfixing.
+            println("  Processing scenarios with sequential unfixing heuristic (Mode 7)...")
+            if log_file !== nothing && iteration !== nothing
+                open(log_file, "a") do file
+                    println(file, "  Processing scenarios with sequential unfixing heuristic (Mode 7)...")
+                end
+            end
+
+            mode7_mip_work = 0.0
+
+            # Write decomp iteration header to table file
+            open(decomp_table_file, "a") do tfile
+                println(tfile, "")
+                println(tfile, "="^110)
+                println(tfile, "DECOMPOSITION ITERATION $it  (master obj = $(round(last_obj, digits=4)))")
+                println(tfile, "="^110)
+            end
+
+            for s in 1:nscen
+                F1_cur = [j for j in 1:nloc if x_hat[j] == 1]
+                F0_cur = [j for j in 1:nloc if x_hat[j] == 0]
+
+                println("    Scenario $s (λ_s* = $(round(dual_lambda[s], digits=4)), f_s = $(round(f_s_vector[s], digits=4))): starting with F1=$(F1_cur), F0=$(F0_cur)")
+                if log_file !== nothing && iteration !== nothing
+                    open(log_file, "a") do file
+                        println(file, "    Scenario $s (λ_s* = $(round(dual_lambda[s], digits=4)), f_s = $(round(f_s_vector[s], digits=4))): starting with F1=$(F1_cur), F0=$(F0_cur)")
+                    end
+                end
+
+                # ── Solve fully fixed formulation 36 to get initial g_s ──────────────
+                g_s_init, mip_work = solve_fl_partial_recourse_mip(
+                    F0_cur, F1_cur, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                    subproblem_cuts=subproblem_cuts
+                )
+                mode7_mip_work += mip_work
+                pricing_work_units += mip_work
+
+                if !isfinite(g_s_init)
+                    println("      Initial MIP infeasible/unbounded, skipping scenario $s")
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "      Initial MIP infeasible/unbounded, skipping scenario $s")
+                        end
+                    end
+                    continue
+                end
+
+                println("      Initial g_s = $(round(g_s_init, digits=4))")
+
+                if g_s_init >= dual_lambda[s]
+                    # ── CUT 32 REGION: sequential unfixing heuristic ──────────────────
+                    println("      Cut 32 region — running sequential unfixing heuristic...")
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "      Cut 32 region — running sequential unfixing heuristic...")
+                        end
+                    end
+
+                    # Table rows: (j, g_s_after_unfix, unfixed::Bool)
+                    heuristic_rows = Vector{Tuple{Int,Float64,Bool}}()
+                    g_s_cur = g_s_init
+
+                    for j in 1:nloc
+                        # Skip if j is already free (not in F0 or F1) — shouldn't happen
+                        # since we start fully fixed, but guard anyway
+                        in_F1 = j in F1_cur
+                        in_F0 = j in F0_cur
+                        if !in_F1 && !in_F0
+                            continue
+                        end
+
+                        # Tentatively unfix j
+                        F1_test = in_F1 ? filter(k -> k != j, F1_cur) : copy(F1_cur)
+                        F0_test = in_F0 ? filter(k -> k != j, F0_cur) : copy(F0_cur)
+
+                        g_s_test, mip_work = solve_fl_partial_recourse_mip(
+                            F0_test, F1_test, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                            subproblem_cuts=subproblem_cuts
+                        )
+                        mode7_mip_work += mip_work
+                        pricing_work_units += mip_work
+
+                        if isfinite(g_s_test) && g_s_test >= dual_lambda[s]
+                            # Unfixing j is safe — keep it unfixed
+                            F1_cur = F1_test
+                            F0_cur = F0_test
+                            g_s_cur = g_s_test
+                            push!(heuristic_rows, (j, g_s_test, true))
+                        else
+                            # Unfixing hurt g_s — refix j (do nothing, test arrays discarded)
+                            g_s_test_val = isfinite(g_s_test) ? g_s_test : Inf
+                            push!(heuristic_rows, (j, g_s_test_val, false))
+                        end
+                    end
+
+                    # Print heuristic table to log file
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "")
+                            println(file, "      Unfixing heuristic table (Scenario $s):")
+                            println(file, "      " * "-"^60)
+                            @printf(file, "      %-6s  %-18s  %-10s\n", "j", "g_s after unfix", "Decision")
+                            println(file, "      " * "-"^60)
+                            for (j, gs, unfixed) in heuristic_rows
+                                decision = unfixed ? "UNFIXED" : "kept fixed"
+                                @printf(file, "      %-6d  %-18.4f  %-10s\n", j, gs, decision)
+                            end
+                            println(file, "      " * "-"^60)
+                            println(file, "      Final F1 = $(F1_cur)")
+                            println(file, "      Final F0 = $(F0_cur)")
+                            println(file, "      Final g_s = $(round(g_s_cur, digits=4))")
+                            println(file, "")
+                        end
+                    end
+
+                    # Console summary
+                    n_unfixed = count(r -> r[3], heuristic_rows)
+                    println("      Unfixed $(n_unfixed)/$(nloc) variables. Final F1=$(F1_cur), F0=$(F0_cur), g_s=$(round(g_s_cur, digits=4))")
+
+                    # Add Cut 32 with final F0/F1
+                    delta_expr_partial = sum(1 - x[j] for j in F1_cur; init=0.0) +
+                                         sum(x[j]     for j in F0_cur; init=0.0)
+                    @constraint(master, delta_expr_partial >= pi[s])
+                    cut32_new += 1
+
+                    cut_msg = "      Scenario $s: Added Cut 32 (No-Good) [g_s=$(round(g_s_cur, digits=4)) >= λ_s*=$(round(dual_lambda[s], digits=4)), |F0|=$(length(F0_cur)), |F1|=$(length(F1_cur))]"
+                    println(cut_msg)
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, cut_msg)
+                        end
+                    end
+
+                    # Write to decomp table file
+                    open(decomp_table_file, "a") do tfile
+                        println(tfile, "")
+                        println(tfile, "  SCENARIO $s  (f_s = $(round(f_s_vector[s], digits=4)),  λ_s* = $(round(dual_lambda[s], digits=4)),  initial g_s = $(round(g_s_init, digits=4)))")
+                        println(tfile, "  " * "-"^90)
+                        @printf(tfile, "  %-6s  %-20s  %-10s\n", "j", "g_s after unfix", "Decision")
+                        println(tfile, "  " * "-"^90)
+                        for (j, gs, unfixed) in heuristic_rows
+                            decision = unfixed ? "UNFIXED" : "kept fixed"
+                            @printf(tfile, "  %-6d  %-20.4f  %-10s\n", j, gs, decision)
+                        end
+                        println(tfile, "  " * "-"^90)
+                        println(tfile, "  Final F1 = $(F1_cur)")
+                        println(tfile, "  Final F0 = $(F0_cur)")
+                        println(tfile, "  Final g_s = $(round(g_s_cur, digits=4))  →  Cut 32 added")
+                        println(tfile, "")
+                    end
+
+                else
+                    # ── CUT 33 REGION: LP-dual unfixing + MIP g_s, multiple Cut 33s ───
+                    println("      Cut 33 region — running LP-dual unfixing for multiple Cut 33s...")
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "      Cut 33 region — running LP-dual unfixing for multiple Cut 33s...")
+                        end
+                    end
+
+                    F1_c33 = [j for j in 1:nloc if x_hat[j] == 1]
+                    F0_c33 = [j for j in 1:nloc if x_hat[j] == 0]
+                    first_round_c33 = true
+                    # table rows: (round, variables_unfixed::Vector{Int}, g_s, |F1|, |F0|)
+                    cut33_table_rows = Vector{Tuple{Int,Vector{Int},Float64,Int,Int}}()
+                    c33_round = 0
+
+                    # Add tight Cut 33 first using fully fixed x_hat (g_s_init = f(x_hat, ω_s))
+                    # This ensures the master is correctly bounded at x_hat before unfixing begins
+                    delta_expr_tight = sum(1 - x[j] for j in F1_c33; init=0.0) +
+                                       sum(x[j]     for j in F0_c33; init=0.0)
+                    @constraint(master, theta[s] <= dual_lambda[s] - g_s_init + (g_s_init - f_s_vector[s]) * delta_expr_tight)
+                    cut33_new += 1
+                    tight_msg = "      Scenario $s: Added tight Cut 33 (fully fixed, g_s=$(round(g_s_init, digits=4)))"
+                    println(tight_msg)
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, tight_msg)
+                        end
+                    end
+
+                    while length(F0_c33) + length(F1_c33) > 1
+                        c33_round += 1
+
+                        # Step 1: LP relaxation with current F0/F1 → get duals
+                        _, x_duals_c33, _, _, lp_work = solve_fl_partial_recourse_lp_with_x_duals(
+                            F0_c33, F1_c33, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                            subproblem_cuts=subproblem_cuts
+                        )
+                        lp_work_units += lp_work
+                        pricing_work_units += lp_work
+
+                        # Step 2: decide which variables to unfix
+                        fixed_all_c33 = vcat(F0_c33, F1_c33)
+                        to_unfix_c33 = Int[]
+                        if first_round_c33
+                            first_round_c33 = false
+                            zero_duals = [j for j in fixed_all_c33 if abs(get(x_duals_c33, j, 0.0)) <= dual_zero_tol]
+                            if !isempty(zero_duals)
+                                to_unfix_c33 = zero_duals
+                            else
+                                # fallback: unfix one with smallest |dual|
+                                min_j = fixed_all_c33[argmin([abs(get(x_duals_c33, j, 0.0)) for j in fixed_all_c33])]
+                                to_unfix_c33 = [min_j]
+                            end
+                        else
+                            # Unfix one with smallest |dual|
+                            min_j = fixed_all_c33[argmin([abs(get(x_duals_c33, j, 0.0)) for j in fixed_all_c33])]
+                            to_unfix_c33 = [min_j]
+                        end
+
+                        to_unfix_set = Set(to_unfix_c33)
+                        F1_c33 = [j for j in F1_c33 if !(j in to_unfix_set)]
+                        F0_c33 = [j for j in F0_c33 if !(j in to_unfix_set)]
+
+                        # Step 3: solve MIP with updated F0/F1 → true g_s
+                        g_s_c33, mip_work = solve_fl_partial_recourse_mip(
+                            F0_c33, F1_c33, scenarios[s], capacity, cost, fixedcost, unmet_pen, scaling_factor;
+                            subproblem_cuts=subproblem_cuts
+                        )
+                        mode7_mip_work += mip_work
+                        pricing_work_units += mip_work
+
+                        if !isfinite(g_s_c33)
+                            println("      Round $c33_round: MIP infeasible/unbounded, stopping")
+                            break
+                        end
+
+                        # Step 4: add Cut 33 with updated F0/F1
+                        delta_expr_c33 = sum(1 - x[j] for j in F1_c33; init=0.0) +
+                                          sum(x[j]     for j in F0_c33; init=0.0)
+                        @constraint(master, theta[s] <= dual_lambda[s] - g_s_c33 + (g_s_c33 - f_s_vector[s]) * delta_expr_c33)
+                        cut33_new += 1
+
+                        push!(cut33_table_rows, (c33_round, sort(to_unfix_c33), g_s_c33, length(F1_c33), length(F0_c33)))
+
+                        cut_msg = "      Scenario $s, round $c33_round: unfixed=$(sort(to_unfix_c33)), g_s=$(round(g_s_c33, digits=4)), |F1|=$(length(F1_c33)), |F0|=$(length(F0_c33)) → Cut 33 added"
+                        println(cut_msg)
+                        if log_file !== nothing && iteration !== nothing
+                            open(log_file, "a") do file
+                                println(file, cut_msg)
+                            end
+                        end
+                    end
+
+                    # Write table to log file
+                    if log_file !== nothing && iteration !== nothing
+                        open(log_file, "a") do file
+                            println(file, "")
+                            println(file, "      Cut 33 unfixing summary (Scenario $s):")
+                            println(file, "      " * "-"^75)
+                            @printf(file, "      %-6s  %-25s  %-14s  %-8s  %-8s\n", "Round", "Variables unfixed", "g_s (MIP)", "|F1|", "|F0|")
+                            println(file, "      " * "-"^75)
+                            for (rnd, unfixed_vars, gs, nf1, nf0) in cut33_table_rows
+                                @printf(file, "      %-6d  %-25s  %-14.4f  %-8d  %-8d\n", rnd, string(unfixed_vars), gs, nf1, nf0)
+                            end
+                            println(file, "      " * "-"^75)
+                            println(file, "      Total Cut 33s added this scenario: $(length(cut33_table_rows))")
+                            println(file, "")
+                        end
+                    end
+
+                    # Write to decomp table file
+                    open(decomp_table_file, "a") do tfile
+                        println(tfile, "")
+                        println(tfile, "  SCENARIO $s  (f_s = $(round(f_s_vector[s], digits=4)),  λ_s* = $(round(dual_lambda[s], digits=4)),  init g_s = $(round(g_s_init, digits=4)))  — Cut 33 region")
+                        println(tfile, "  " * "-"^95)
+                        @printf(tfile, "  %-6s  %-25s  %-14s  %-8s  %-8s\n", "Round", "Variables unfixed", "g_s (MIP)", "|F1|", "|F0|")
+                        println(tfile, "  " * "-"^95)
+                        for (rnd, unfixed_vars, gs, nf1, nf0) in cut33_table_rows
+                            @printf(tfile, "  %-6d  %-25s  %-14.4f  %-8d  %-8d\n", rnd, string(unfixed_vars), gs, nf1, nf0)
+                        end
+                        println(tfile, "  " * "-"^95)
+                        println(tfile, "  Total Cut 33s added: $(length(cut33_table_rows))")
+                        println(tfile, "")
+                    end
+                end
+
+                println("\033[96m    " * "─"^70 * "\033[0m")  # cyan separator after each scenario
+                if log_file !== nothing && iteration !== nothing
+                    open(log_file, "a") do file
+                        println(file, "    " * "─"^70)
+                    end
+                end
+            end
+
+            println("  Mode 7 — MIP work: $(round(mode7_mip_work, digits=2))")
+
         else
             # DUAL-BASED UNFIXING (MODE 2): Solve LP with x variables, unfix based on duals, solve partial MIP
             F1_initial = [j for j in 1:nloc if x_hat[j] == 1]  # All indices where x_hat[j] == 1
@@ -1595,6 +2113,7 @@ function af_pricing_type2_FL_decomp(
         end
         # ─────────────────────────────────────────────────────────────────────────────────────────
 
+        q_s_vals = fill(NaN, nscen)
         for s in 1:nscen
             key = (s, sig)
             if haskey(scenario_x_cache, key)
@@ -1635,6 +2154,8 @@ function af_pricing_type2_FL_decomp(
             if !isfinite(q_s)
                 continue
             end
+
+            q_s_vals[s] = q_s
 
             if use_mip_bigM
                 M_s, m_work = compute_M_value_FL_opt(
@@ -1691,6 +2212,18 @@ function af_pricing_type2_FL_decomp(
 
         end  # end if use_benders_cuts
 
+        # UB = inner master objective; LB = best true pricing objective found so far
+        ub_iter  = last_obj
+        lb_iter  = sum(pi_hat[s] * (dual_lambda[s] - q_s_vals[s]) for s in 1:nscen if isfinite(q_s_vals[s]))
+        lb_best  = max(lb_best, lb_iter)
+        gap_iter = ub_iter > 1e-10 ? 100.0 * (ub_iter - lb_best) / abs(ub_iter) : 0.0
+        println("  UB (master obj): $(round(ub_iter, digits=6))  |  LB (best true obj): $(round(lb_best, digits=6))  |  gap: $(round(gap_iter, digits=2))%")
+        if log_file !== nothing && iteration !== nothing
+            open(log_file, "a") do file
+                println(file, "  UB (master obj): $(round(ub_iter, digits=6))  |  LB (best true obj): $(round(lb_best, digits=6))  |  gap: $(round(gap_iter, digits=2))%")
+            end
+        end
+
         if use_benders_cuts && !added_cut34
             term_msg = "  No Cut 34 added → Termination condition satisfied"
             println(term_msg)
@@ -1732,6 +2265,12 @@ function af_pricing_type2_FL_decomp(
 
     if !isfinite(last_obj)
         println("  No finite solution found")
+        analysis[:decomp_iterations] = decomp_iterations
+        analysis[:cut34_added]       = total_cut34
+        analysis[:cuts_preloaded]    = cut34_preloaded
+        analysis[:ub]                = NaN
+        analysis[:lb]                = lb_best
+        analysis[:gap]               = NaN
         return return_pricing_payload(Vector{Vector{Float64}}(), Float64[], pricing_work_units, return_nodes, master; analysis=analysis)
     end
 
@@ -1748,6 +2287,15 @@ function af_pricing_type2_FL_decomp(
             println(file, "="^80)
         end
     end
+    ub_final  = last_obj
+    gap_final = ub_final > 1e-10 ? 100.0 * (ub_final - lb_best) / abs(ub_final) : 0.0
+    analysis[:decomp_iterations] = decomp_iterations
+    analysis[:cut34_added]       = total_cut34
+    analysis[:cuts_preloaded]    = cut34_preloaded
+    analysis[:ub]                = ub_final
+    analysis[:lb]                = lb_best
+    analysis[:gap]               = gap_final
+
     return return_pricing_payload([Float64.(last_x_hat)], [last_obj], pricing_work_units, return_nodes, master; analysis=analysis)
 end
 # =============================================================================
@@ -1784,6 +2332,44 @@ function build_pricing_model_AF_FL(scenarios::Vector{Vector{Float64}}, dual_lamb
     
     nscen = length(scenarios)
     
+    # ------------------------------------------------------------------
+    # Branch-and-bound pricing path
+    # ------------------------------------------------------------------
+    if get(problem_data, "use_bb_pricing", false) == true
+        analysis = Dict{Symbol,Any}()
+        if !haskey(problem_data, "bb_cache")
+            problem_data["bb_cache"] = BBCache()
+            println("  [BB pricing] Initializing BB cache (first CG iteration)")
+        else
+            println("  [BB pricing] Reusing BB cache ($(length(problem_data["bb_cache"])) nodes cached)")
+        end
+
+        log_file_bb = log_file !== nothing ? replace(log_file, ".log" => "_BB_iter$(iteration !== nothing ? iteration : 0).log") : nothing
+
+        branching_strategy = get(problem_data, "bb_branching_strategy", "F")
+        x_star, L_hat, UB_final, gap_final, problem_data["bb_cache"], bb_work, bb_nodes, bb_hit_rate =
+            branch_and_bound(problem_data, scenarios, dual_lambda;
+                work_limit=work_limit,
+                cache=problem_data["bb_cache"],
+                log_file=log_file_bb,
+                branching_strategy=branching_strategy)
+
+        analysis[:bb_lb]             = L_hat
+        analysis[:bb_ub]             = UB_final
+        analysis[:bb_gap]            = gap_final
+        analysis[:bb_nodes_processed] = bb_nodes
+        analysis[:bb_cache_hit_rate] = bb_hit_rate
+        analysis[:bb_cache_size]     = length(problem_data["bb_cache"])
+
+        solutions  = [float.(x_star)]
+        objectives = [L_hat]
+        if return_nodes
+            return solutions, objectives, bb_work, bb_nodes, analysis
+        else
+            return solutions, objectives, bb_work, analysis
+        end
+    end
+
     if pricing_type == 1
         # Calculate m^s values
         m_values = calculate_m_values_FL(scenarios, dual_lambda, problem_data)
@@ -1829,11 +2415,11 @@ function build_pricing_model_AF_FL(scenarios::Vector{Vector{Float64}}, dual_lamb
             use_benders_cuts = USE_BENDERS_CUTS
             return af_pricing_type2_FL_decomp(
                 nloc, ncust, capacity, cost, scenarios, dual_lambda, dual_mu, unmet_pen, scaling_factor, fixedcost, f_s_vector, decomp_cache, problem_data;
-                return_nodes=return_nodes, analysis=analysis, log_file=log_file, iteration=iteration, max_cut_iters=100, tol=1e-4, use_simple_decomp=use_simple_decomp, decomp_mode=decomp_mode, subproblem_cuts=subproblem_cuts, use_mip_bigM=use_mip_bigM, use_benders_cuts=use_benders_cuts
+                return_nodes=return_nodes, analysis=analysis, log_file=log_file, iteration=iteration, tol=1e-4, use_simple_decomp=use_simple_decomp, decomp_mode=decomp_mode, subproblem_cuts=subproblem_cuts, use_mip_bigM=use_mip_bigM, use_benders_cuts=use_benders_cuts, work_limit=work_limit
             )
         end
-        return af_pricing_type2_FL(nloc, ncust, capacity, cost, scenarios, m_values, dual_lambda, dual_mu, unmet_pen, scaling_factor, fixedcost; 
-                                   use_solution_pool=use_solution_pool, return_nodes=return_nodes, work_limit=work_limit, opt_worklimit=opt_worklimit, analysis=analysis, log_file=log_file, iteration=iteration)
+        return af_pricing_type2_FL(nloc, ncust, capacity, cost, scenarios, m_values, dual_lambda, dual_mu, unmet_pen, scaling_factor, fixedcost;
+                                   use_solution_pool=use_solution_pool, return_nodes=return_nodes, work_limit=work_limit, opt_worklimit=opt_worklimit, analysis=analysis, log_file=log_file, iteration=iteration, pricing_cache=problem_data)
     else
         error("Invalid pricing_type. Use 1 or 2.")
     end
