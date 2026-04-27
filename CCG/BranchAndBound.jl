@@ -407,13 +407,15 @@ function branch_and_bound(
         # ------------------------------------------------------------------
         total_work_units = 0.0
 
+        pmodels = build_persistent_models(problem_data, scenarios)
+
         root_key = cache_key(Set{Int}(), Set{Int}())
         if haskey(cache, root_key)
             g_root, x_sk_root = cache[root_key]
             U_root = sum(max(0.0, lambda_star[s] - g_root[s]) for s in 1:nscen)
         else
-            U_root, x_sk_root, g_root, wu_root = evaluate_node(
-                problem_data, scenarios, Set{Int}(), Set{Int}(), lambda_star)
+            U_root, x_sk_root, g_root, wu_root = evaluate_node_persistent(
+                pmodels, Set{Int}(), Set{Int}(), lambda_star)
             total_work_units += wu_root
             cache[root_key] = (g_root, x_sk_root)
         end
@@ -431,8 +433,8 @@ function branch_and_bound(
             g_s1_vec, _ = cache[ws_key]
             L_s1 = sum(max(0.0, lambda_star[s] - g_s1_vec[s]) for s in 1:nscen)
         else
-            L_s1, _, g_s1_vec, wu_s1 = evaluate_node(
-                problem_data, scenarios, F0_s1, F1_s1, lambda_star)
+            L_s1, _, g_s1_vec, wu_s1 = evaluate_node_persistent(
+                pmodels, F0_s1, F1_s1, lambda_star)
             total_work_units += wu_s1
             cache[ws_key] = (g_s1_vec, x_sk_root)
         end
@@ -493,7 +495,7 @@ function branch_and_bound(
                 cache_hits += 1
             else
                 U_k, x_sk, g_s_vec, wu_node =
-                    evaluate_node(problem_data, scenarios, node.F0, node.F1, lambda_star)
+                    evaluate_node_persistent(pmodels, node.F0, node.F1, lambda_star)
                 total_work_units += wu_node
                 cache[key] = (g_s_vec, x_sk)
                 cache_misses += 1
@@ -552,7 +554,7 @@ function branch_and_bound(
                 LB_rnd   = sum(max(0.0, lambda_star[s] - g_rnd[s]) for s in 1:nscen)
             else
                 LB_rnd, _, g_rnd, wu_rnd =
-                    evaluate_node(problem_data, scenarios, F0_rounded, F1_rounded, lambda_star)
+                    evaluate_node_persistent(pmodels, F0_rounded, F1_rounded, lambda_star)
                 total_work_units += wu_rnd
                 cache[rnd_key] = (g_rnd, zeros(nloc, nscen))
             end
