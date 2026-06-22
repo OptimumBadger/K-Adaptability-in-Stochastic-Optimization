@@ -11,33 +11,12 @@ using Dates
 # MASTER PROBLEM (ASSIGNMENT FORMULATION)
 # =============================================================================
 
-function solve_assignment_formulation(cost_matrix, K; integer_vars=false, log_file=nothing, iteration=nothing)
-    """Solve the Assignment Formulation (AF) Master Problem - LINEAR RELAXATION or INTEGER
-    
-    This is IDENTICAL for all problem classes.
-    
-    Args:
-        cost_matrix: S x l matrix where cost_matrix[s, x] = r_s(x)
-        K: Number of solutions to select
-        integer_vars: If true, solve as integer program; if false, linear relaxation
-        log_file: Optional log file path (will append with iteration markers)
-        iteration: Optional iteration number for logging
-    
-    Returns:
-        model: JuMP model
-        sigma: Vector of σ variables (solution weights)
-        rho: Vector of vectors of ρ variables (scenario-solution assignments)
-        objective_value: Objective value
-        assignment_constraints: Constraint references for dual extraction
-        k_constraint: K constraint reference for dual extraction
-        work_units: Work units used
-    """
+function solve_assignment_formulation(cost_matrix, X_s, K; integer_vars=false, log_file=nothing, iteration=nothing)
     nscen, nsol = size(cost_matrix)
-    
+
     model = Model(Gurobi.Optimizer)
-    
+
     if log_file !== nothing
-        # Append iteration marker to log file
         if iteration !== nothing
             open(log_file, "a") do file
                 println(file, "\n" * "="^80)
@@ -49,46 +28,45 @@ function solve_assignment_formulation(cost_matrix, K; integer_vars=false, log_fi
                 println(file, "="^80)
             end
         end
-        # Enable file logging but disable console output
         set_optimizer_attribute(model, "LogFile", log_file)
         set_optimizer_attribute(model, "LogToConsole", 0)
-        set_optimizer_attribute(model, "OutputFlag", 1)  # Enable output (will go to file, not console due to LogToConsole=0)
+        set_optimizer_attribute(model, "OutputFlag", 1)
     else
-        # No logging - disable all output
         set_optimizer_attribute(model, "OutputFlag", 0)
     end
-    
-    # Decision Variables - LINEAR RELAXATION (continuous) or INTEGER
+
     if integer_vars
-        sigma = [@variable(model, binary = true) for x in 1:nsol]  # σ_x: weight of solution x (binary)
-        rho = [[@variable(model, binary = true) for x in 1:nsol] for s in 1:nscen]  # ρ_{s,x}: assignment of scenario s to solution x (binary)
+        sigma = [@variable(model, binary = true) for _ in 1:nsol]
+        rho = [Dict(v => @variable(model, binary = true) for v in X_s[s]) for s in 1:nscen]
     else
-        sigma = [@variable(model, lower_bound = 0) for x in 1:nsol]  # σ_x: weight of solution x (continuous)
-        rho = [[@variable(model, lower_bound = 0) for x in 1:nsol] for s in 1:nscen]  # ρ_{s,x}: assignment of scenario s to solution x (continuous)
+        sigma = [@variable(model, lower_bound = 0) for _ in 1:nsol]
+        rho = [Dict(v => @variable(model, lower_bound = 0) for v in X_s[s]) for s in 1:nscen]
     end
-    
-    # Objective Function (5a)
-    @objective(model, Min, sum(cost_matrix[s, x] * rho[s][x] for s in 1:nscen for x in 1:nsol))
-    
-    # Constraints - Store references for dual extraction
-    # Assignment constraints (5b): Each scenario must be assigned to exactly one solution
-    assignment_constraints = @constraint(model, [s in 1:nscen], sum(rho[s][x] for x in 1:nsol) == 1)
-    
-    # Selection constraints (5c): ρ_{s,x} <= σ_x for all s, x
-    @constraint(model, [s in 1:nscen, x in 1:nsol], rho[s][x] <= sigma[x])
-    
-    # K constraint (5d): Sum of σ_x <= K
-    k_constraint = @constraint(model, sum(sigma[x] for x in 1:nsol) <= K)
-    
-    # Solve
+
+    # Objective (6a): sum only over feasible (s,v) pairs
+    @objective(model, Min,
+        sum(cost_matrix[s, v] * rho[s][v] for s in 1:nscen for v in X_s[s]))
+
+    # Assignment constraints (6b): each scenario assigned to exactly one feasible solution
+    assignment_constraints = [@constraint(model,
+        sum(rho[s][v] for v in X_s[s]) == 1) for s in 1:nscen]
+
+    # Selection constraints (6c): ρ_{s,v} ≤ σ_v
+    for s in 1:nscen, v in X_s[s]
+        @constraint(model, rho[s][v] <= sigma[v])
+    end
+
+    # K constraint (6d): Σ σ_v ≤ K
+    k_constraint = @constraint(model, sum(sigma[v] for v in 1:nsol) <= K)
+
     optimize!(model)
-    
+
     work_units = 0.0
     try
         work_units = solve_time(model)
     catch
     end
-    
+
     if termination_status(model) == MOI.OPTIMAL
         return model, sigma, rho, objective_value(model), assignment_constraints, k_constraint, work_units
     else
@@ -132,27 +110,29 @@ function build_cost_matrix(
     if evaluate_cost_batch !== nothing
         println("  Using batch cost evaluation (template model optimization)")
         cost_matrix, total_work_units = evaluate_cost_batch(binary_vectors, scenarios, problem_data)
+        X_s = [findall(isfinite, cost_matrix[s, :]) for s in 1:nscen]
         println("Cost matrix built successfully (batch)")
-        return cost_matrix, total_work_units
+        return cost_matrix, X_s, total_work_units
     end
-    
+
     # Fallback: original per-(solution, scenario) evaluation
-    cost_matrix = zeros(nscen, nsol)
+    cost_matrix = fill(Inf, nscen, nsol)
     total_work_units = 0.0
-    
+
     for s in 1:nscen
         for x_idx in 1:nsol
             cost_val, work_units = evaluate_cost(binary_vectors[x_idx], scenarios[s], problem_data)
             cost_matrix[s, x_idx] = cost_val
             total_work_units += work_units
         end
-        
+
         if s % 10 == 0
             println("  Processed $s scenarios")
         end
     end
-    
+
+    X_s = [findall(isfinite, cost_matrix[s, :]) for s in 1:nscen]
     println("Cost matrix built successfully")
-    return cost_matrix, total_work_units
+    return cost_matrix, X_s, total_work_units
 end
 
