@@ -109,21 +109,26 @@ function build_cost_matrix(
     # If a batch evaluation function is provided, use it (more efficient)
     if evaluate_cost_batch !== nothing
         println("  Using batch cost evaluation (template model optimization)")
-        cost_matrix, total_work_units = evaluate_cost_batch(binary_vectors, scenarios, problem_data)
+        _bres = evaluate_cost_batch(binary_vectors, scenarios, problem_data)
+        cost_matrix      = _bres[1]
+        total_work_units = _bres[2]
+        total_runtime    = length(_bres) >= 3 ? _bres[3] : 0.0
         X_s = [findall(isfinite, cost_matrix[s, :]) for s in 1:nscen]
         println("Cost matrix built successfully (batch)")
-        return cost_matrix, X_s, total_work_units
+        return cost_matrix, X_s, total_work_units, total_runtime
     end
 
     # Fallback: original per-(solution, scenario) evaluation
     cost_matrix = fill(Inf, nscen, nsol)
     total_work_units = 0.0
+    total_runtime    = 0.0
 
     for s in 1:nscen
         for x_idx in 1:nsol
-            cost_val, work_units = evaluate_cost(binary_vectors[x_idx], scenarios[s], problem_data)
-            cost_matrix[s, x_idx] = cost_val
-            total_work_units += work_units
+            _eres = evaluate_cost(binary_vectors[x_idx], scenarios[s], problem_data)
+            cost_matrix[s, x_idx] = _eres[1]
+            total_work_units += _eres[2]
+            total_runtime    += length(_eres) >= 3 ? _eres[3] : 0.0
         end
 
         if s % 10 == 0
@@ -133,6 +138,6 @@ function build_cost_matrix(
 
     X_s = [findall(isfinite, cost_matrix[s, :]) for s in 1:nscen]
     println("Cost matrix built successfully")
-    return cost_matrix, X_s, total_work_units
+    return cost_matrix, X_s, total_work_units, total_runtime
 end
 

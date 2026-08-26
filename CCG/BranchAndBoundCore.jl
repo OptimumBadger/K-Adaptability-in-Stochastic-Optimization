@@ -22,13 +22,48 @@ const MOI = MathOptInterface
 # Hot-path solve functions bypass JuMP wrappers and call MOI.set/get on the
 # optimizer with Gurobi-native attributes.
 
-const _GRB_LB     = Gurobi.VariableAttribute("LB")
-const _GRB_UB     = Gurobi.VariableAttribute("UB")
-const _GRB_STATUS = Gurobi.ModelAttribute("Status")
-const _GRB_OBJVAL = Gurobi.ModelAttribute("ObjVal")
-const _GRB_WORK   = Gurobi.ModelAttribute("Work")
+const _GRB_LB      = Gurobi.VariableAttribute("LB")
+const _GRB_UB      = Gurobi.VariableAttribute("UB")
+const _GRB_STATUS  = Gurobi.ModelAttribute("Status")
+const _GRB_OBJVAL  = Gurobi.ModelAttribute("ObjVal")
+const _GRB_WORK    = Gurobi.ModelAttribute("Work")
+const _GRB_RUNTIME = Gurobi.ModelAttribute("Runtime")
 const _MOI_VARPRIM = MOI.VariablePrimal()
 const _GRB_OPTIMAL = 2   # GRB_OPTIMAL
+
+# Slack on the g_s < lambda_s* test that defines the active scenario set under
+# branching_strategy == "FA". A scenario with g_s == lambda_s* contributes
+# exactly 0 to U_k, so it is excluded; the tolerance keeps float noise from
+# pulling such a scenario back into the average.
+const LAMBDA_ACTIVE_TOL = 1e-9
+
+# =============================================================================
+# PER-NODE TRACE LOGGING  (BB_LOG)
+# =============================================================================
+# Set BB_LOG=1 to make the pricing B&B write its per-node trace — one line per
+# node, including `nactive` (scenarios entering the x_bar average) and `ntied`
+# (fractional variables sharing the winning branch score). Off by default.
+#
+#   BB_LOG=1 julia -t 8 CCG/CG_AF_Knapsack.jl KS <inst> 3 300 <pool> 12000 BB
+#
+# One file per CG iteration:  <BB_LOG_DIR>/bb_<tag>_iter<k>.log
+# BB_LOG_DIR defaults to CCG/logs/bb; the tag comes from problem_data["bb_log_tag"]
+# (set by the CG_AF_* drivers) or BB_LOG_TAG.
+#
+# Intended for work-unit mode. Work units come from Gurobi's Work attribute, so
+# this host-side I/O never touches the budget, and work mode sets no wall-clock
+# limit — the trace can only make a run slower, never shorter. In TIME mode the
+# I/O would eat the budget and silently shrink the tree, so don't combine them.
+# Expect ~200 bytes/node: a 10^6-node tree writes a ~200 MB file.
+_bb_log_on() = get(ENV, "BB_LOG", "0") == "1"
+
+function _bb_log_file(problem_data::Dict, iteration)
+    _bb_log_on() || return nothing
+    dir = get(ENV, "BB_LOG_DIR", joinpath(@__DIR__, "logs", "bb"))
+    mkpath(dir)
+    tag = get(ENV, "BB_LOG_TAG", get(problem_data, "bb_log_tag", "run"))
+    return joinpath(dir, "bb_$(tag)_iter$(iteration === nothing ? 0 : iteration).log")
+end
 
 @inline function _read_x_into_buf!(grb, vi::Vector{MOI.VariableIndex}, buf::Vector{Float64})
     @inbounds for j in eachindex(vi)
@@ -54,9 +89,11 @@ end
 # =============================================================================
 # PROFILING TIMERS  (nanoseconds; minimal 9-bucket pass)
 # =============================================================================
-# Module-level Refs so we can update from any BranchAndBound* file in scope.
-# Reset at the top of branch_and_bound, dumped before its return.
-
+# Commented out — re-enable by removing the #= ... =# block-comment wrapper
+# (and the corresponding `# PROF:` line-comments scattered throughout this
+# file and BranchAndBoundKnapsack.jl) when you want per-bucket profiling again.
+#
+#=
 const _T_SOLVE_SET_F0F1   = Threads.Atomic{UInt64}(0)
 const _T_SOLVE_OPTIMIZE   = Threads.Atomic{UInt64}(0)
 const _T_SOLVE_READ_META  = Threads.Atomic{UInt64}(0)
@@ -176,6 +213,7 @@ function _print_bb_timers(io::IO)
     println(io, "="^60)
     return nothing
 end
+=#
 
 # =============================================================================
 # NODE STRUCTURE AND CACHE
@@ -315,16 +353,18 @@ function evaluate_node(
     x_sk       = zeros(n_vars, nscen)
     g_s_vec    = zeros(nscen)
     work_units = 0.0
+    runtime    = 0.0
 
     for s in 1:nscen
-        g_s, x_s, wu = solve_subproblem_scenario_fn(problem_data, scenarios[s], F0, F1)
+        g_s, x_s, wu, rt = solve_subproblem_scenario_fn(problem_data, scenarios[s], F0, F1)
         g_s_vec[s]   = g_s
         x_sk[:, s]   = x_s
         work_units  += wu
+        runtime     += rt
     end
 
     U_k = sum(max(0.0, lambda_star[s] - g_s_vec[s]) for s in 1:nscen)
-    return U_k, x_sk, g_s_vec, work_units
+    return U_k, x_sk, g_s_vec, work_units, runtime
 end
 
 function evaluate_node_persistent(
@@ -336,11 +376,12 @@ function evaluate_node_persistent(
     solve_subproblem_persistent_fn::Function
 )
     nscen      = length(pmodels)
-    _t_alloc = time_ns()
+    # PROF: _t_alloc = time_ns()
     x_sk       = zeros(n_vars, nscen)
     g_s_vec    = zeros(nscen)
     wu_vec     = zeros(nscen)
-    _T_EVAL_XSK_ALLOC[] += time_ns() - _t_alloc
+    rt_vec     = zeros(nscen)
+    # PROF: _T_EVAL_XSK_ALLOC[] += time_ns() - _t_alloc
 
     # Parallel over scenarios. Safe because each pmodels[s] has its own Gurobi.Env
     # (built in build_persistent_models_*) and its own x_buf. Each thread touches
@@ -349,17 +390,19 @@ function evaluate_node_persistent(
     # an equal-sized chunk upfront. Wins when scenario solve times are uneven
     # (which they are: Gurobi B&B time on small knapsacks varies wildly per scen).
     Threads.@threads :dynamic for s in 1:nscen
-        g_s, x_s, wu = solve_subproblem_persistent_fn(pmodels[s], F0, F1)
+        g_s, x_s, wu, rt = solve_subproblem_persistent_fn(pmodels[s], F0, F1)
         g_s_vec[s]   = g_s
         @inbounds for j in 1:n_vars
             x_sk[j, s] = x_s[j]
         end
         wu_vec[s]    = wu
+        rt_vec[s]    = rt
     end
 
     work_units = sum(wu_vec)
+    runtime    = sum(rt_vec)
     U_k = sum(max(0.0, lambda_star[s] - g_s_vec[s]) for s in 1:nscen)
-    return U_k, x_sk, g_s_vec, work_units
+    return U_k, x_sk, g_s_vec, work_units, runtime
 end
 
 # =============================================================================
@@ -383,12 +426,14 @@ function precompute_sensitivities(
     x_root     = zeros(n_vars, nscen)
     g_root     = zeros(nscen)
     work_units = 0.0
+    runtime    = 0.0
 
     for s in 1:nscen
-        g_s, x_s, wu = solve_subproblem_scenario_fn(problem_data, scenarios[s], empty_mask, empty_mask)
+        g_s, x_s, wu, rt = solve_subproblem_scenario_fn(problem_data, scenarios[s], empty_mask, empty_mask)
         g_root[s]    = g_s
         x_root[:, s] = x_s
         work_units  += wu
+        runtime     += rt
         verbose && println(log_io, "    scenario $s: g_s(root) = $g_s")
     end
 
@@ -404,8 +449,9 @@ function precompute_sensitivities(
             x_js = x_root[j, s] >= 0.9 ? 1 : 0
 
             if x_js == 0
-                g_F1j, _, wu = solve_subproblem_scenario_fn(problem_data, scenarios[s], empty_mask, bit_j)
+                g_F1j, _, wu, rt = solve_subproblem_scenario_fn(problem_data, scenarios[s], empty_mask, bit_j)
                 work_units  += wu
+                runtime     += rt
                 diff1 = g_F1j - g_root[s]
                 if diff1 < -0.001
                     println(log_io, "  [BB] WARNING: lambda1[s=$s, j=$j] negative ($diff1)")
@@ -413,8 +459,9 @@ function precompute_sensitivities(
                 lambda0[s, j] = 0.0
                 lambda1[s, j] = max(0.0, diff1)
             else
-                g_F0j, _, wu = solve_subproblem_scenario_fn(problem_data, scenarios[s], bit_j, empty_mask)
+                g_F0j, _, wu, rt = solve_subproblem_scenario_fn(problem_data, scenarios[s], bit_j, empty_mask)
                 work_units  += wu
+                runtime     += rt
                 diff0 = g_F0j - g_root[s]
                 if diff0 < -0.001
                     println(log_io, "  [BB] WARNING: lambda0[s=$s, j=$j] negative ($diff0)")
@@ -428,7 +475,7 @@ function precompute_sensitivities(
     end
 
     verbose && println(log_io, "  [BB] Precomputation complete.")
-    return lambda0, lambda1, x_root, g_root, work_units
+    return lambda0, lambda1, x_root, g_root, work_units, runtime
 end
 
 # =============================================================================
@@ -444,14 +491,16 @@ function branch_and_bound(
     solve_subproblem_persistent_fn::Function,
     solve_subproblem_scenario_fn::Function;
     work_limit::Float64       = 2000.0,
+    time_limit::Float64       = Inf,
     cache::BBCache            = BBCache(),
     log_file::Union{String,Nothing} = nothing,
     branching_strategy::String = "F",
     verbose::Bool              = false
 )
-    _reset_bb_timers!()
-    _t_total0 = time_ns()
+    # PROF: _reset_bb_timers!()
+    # PROF: _t_total0 = time_ns()
     @assert n_vars <= 64 "Bitmask BB supports n_vars ≤ 64. Got n_vars=$n_vars. Migrate BBNode F0/F1 to a multi-word bitset (NTuple{K, UInt64}) for larger n."
+    @assert branching_strategy in ("F", "FA", "P") "Unknown branching_strategy \"$branching_strategy\". Expected \"F\" (most-fractional, feasible-scenario average), \"FA\" (most-fractional, lambda*-active average) or \"P\" (product/sensitivity)."
     nscen  = length(scenarios)
     log_io = log_file !== nothing ? open(log_file, "w") : stdout
 
@@ -463,12 +512,13 @@ function branch_and_bound(
         println(log_io, "="^60)
 
         total_work_units = 0.0
+        total_runtime    = 0.0
         pmodels = get!(problem_data, "bb_pmodels") do
             build_persistent_models_fn(problem_data, scenarios)
         end
 
         # ── Root node ────────────────────────────────────────────────────────
-        _t_root0 = time_ns()
+        # PROF: _t_root0 = time_ns()
         empty_mask = UInt64(0)
         root_key  = cache_key(empty_mask, empty_mask)
         local x_sk_root::Matrix{Float64}
@@ -476,17 +526,18 @@ function branch_and_bound(
             g_root, x_sk_root = cache[root_key]
             U_root = sum(max(0.0, lambda_star[s] - g_root[s]) for s in 1:nscen)
         else
-            U_root, x_sk_root, g_root, wu_root = evaluate_node_persistent(
+            U_root, x_sk_root, g_root, wu_root, rt_root = evaluate_node_persistent(
                 pmodels, empty_mask, empty_mask, lambda_star, n_vars,
                 solve_subproblem_persistent_fn)
             total_work_units += wu_root
+            total_runtime    += rt_root
             cache[root_key] = (g_root, x_sk_root)
         end
-        _T_ROOT[] += time_ns() - _t_root0
+        # PROF: _T_ROOT[] += time_ns() - _t_root0
         println(log_io, "  Root UB = $(round(U_root, digits=6))")
 
         # ── Warm-start incumbent from scenario 1's root solution ──────────────
-        _t_ws0 = time_ns()
+        # PROF: _t_ws0 = time_ns()
         x_s1 = round.(Int, x_sk_root[:, 1])
         F0_s1 = UInt64(0); F1_s1 = UInt64(0)
         for j in 1:n_vars
@@ -501,15 +552,16 @@ function branch_and_bound(
             g_s1_vec, _ = cache[ws_key]
             L_s1 = sum(max(0.0, lambda_star[s] - g_s1_vec[s]) for s in 1:nscen)
         else
-            L_s1, x_sk_ws, g_s1_vec, wu_s1 = evaluate_node_persistent(
+            L_s1, x_sk_ws, g_s1_vec, wu_s1, rt_s1 = evaluate_node_persistent(
                 pmodels, F0_s1, F1_s1, lambda_star, n_vars,
                 solve_subproblem_persistent_fn)
             total_work_units += wu_s1
+            total_runtime    += rt_s1
             cache[ws_key] = (g_s1_vec, x_sk_ws)
         end
         L_hat  = L_s1
         x_star = x_s1
-        _T_WARMSTART[] += time_ns() - _t_ws0
+        # PROF: _T_WARMSTART[] += time_ns() - _t_ws0
         println(log_io, "  Warm-start incumbent (x from scenario 1): L_hat = $(round(L_hat, digits=6))")
 
         # ── Sensitivity pre-computation (product branching only) ──────────────
@@ -517,11 +569,14 @@ function branch_and_bound(
         lambda1 = zeros(nscen, n_vars)
         if branching_strategy == "P"
             println(log_io, "  Branching strategy: PRODUCT (sensitivity-based)")
-            lambda0, lambda1, _, _, wu_sens = precompute_sensitivities(
+            lambda0, lambda1, _, _, wu_sens, rt_sens = precompute_sensitivities(
                 problem_data, scenarios, n_vars, solve_subproblem_scenario_fn, log_io, verbose)
             total_work_units += wu_sens
+            total_runtime    += rt_sens
+        elseif branching_strategy == "FA"
+            println(log_io, "  Branching strategy: MOST-FRACTIONAL (active set = scenarios with g_s < lambda_s*)")
         else
-            println(log_io, "  Branching strategy: MOST-FRACTIONAL")
+            println(log_io, "  Branching strategy: MOST-FRACTIONAL (active set = feasible scenarios)")
         end
 
         nodes_processed = 0
@@ -530,8 +585,28 @@ function branch_and_bound(
         open_nodes      = BBNode[]
         heap_push!(open_nodes, BBNode(UInt64(0), UInt64(0), U_root))
         work_limit_hit  = false
+        bb_start_time   = time()
         x_bar           = Vector{Float64}(undef, n_vars)
         x_rounded       = Vector{Int}(undef, n_vars)
+
+        # ── Branching diagnostics ────────────────────────────────────────────
+        # Accumulated over nodes that actually BRANCH (fathomed and integral
+        # nodes make no branching choice, so including them would dilute the
+        # rates). Raw counters rather than percentages, so the caller can sum
+        # across CG iterations and divide once for an exact run-level figure.
+        #   branch_decisions : nodes that chose a branching variable
+        #   tied_decisions   : of those, where >=2 variables shared the winning
+        #                      score — the rule did not pick, lowest index did
+        #   active_sum       : sum of n_active, for the mean
+        #   min_active       : smallest active set seen at a branch decision
+        # Cost is a <=64-iteration bit loop against a node that runs S Gurobi
+        # solves, so this is always-on rather than gated behind logging.
+        branch_decisions = 0
+        tied_decisions   = 0
+        active_sum       = 0
+        min_active       = typemax(Int)
+        # Which scenarios enter the x_bar average — see the comment at its use site.
+        use_lambda_active = (branching_strategy == "FA")
 
         # ── B&B loop ──────────────────────────────────────────────────────────
         while !isempty(open_nodes)
@@ -540,42 +615,48 @@ function branch_and_bound(
                 work_limit_hit = true
                 break
             end
+            # Time-based termination (only active when caller passes a finite time_limit).
+            if isfinite(time_limit) && (time() - bb_start_time) >= time_limit
+                work_limit_hit = true   # same downstream path — CG core will label as TIME_LIMIT via its own flag
+                break
+            end
 
             # Best-first (O(log N) heap pop)
-            _t_h = time_ns()
+            # PROF: _t_h = time_ns()
             node = heap_pop!(open_nodes)
-            _T_HEAP_OPS[] += time_ns() - _t_h
+            # PROF: _T_HEAP_OPS[] += time_ns() - _t_h
 
             if node.upper_bound <= L_hat
                 continue
             end
 
             nodes_processed += 1
-            _t_cl = time_ns()
+            # PROF: _t_cl = time_ns()
             key    = cache_key(node.F0, node.F1)
             is_hit = haskey(cache, key)
-            _T_CACHE_LOOKUP[] += time_ns() - _t_cl
+            # PROF: _T_CACHE_LOOKUP[] += time_ns() - _t_cl
             hit_str = is_hit ? "HIT" : "MISS"
             local g_s_vec::Vector{Float64}
             x_sk_or_nothing::Union{Matrix{Float64}, Nothing} = nothing
 
             if is_hit
-                _t_cl2 = time_ns()
+                # PROF: _t_cl2 = time_ns()
                 g_s_vec, xsk_cached = cache[key]
-                _T_CACHE_LOOKUP[] += time_ns() - _t_cl2
+                # PROF: _T_CACHE_LOOKUP[] += time_ns() - _t_cl2
                 U_k = sum(max(0.0, lambda_star[s] - g_s_vec[s]) for s in 1:nscen)
                 x_sk_or_nothing = xsk_cached
                 cache_hits += 1
             else
-                _t_em = time_ns()
-                U_k, xsk_new, g_s_vec, wu_node = evaluate_node_persistent(
+                # PROF: _t_em = time_ns()
+                U_k, xsk_new, g_s_vec, wu_node, rt_node = evaluate_node_persistent(
                     pmodels, node.F0, node.F1, lambda_star, n_vars,
                     solve_subproblem_persistent_fn)
-                _T_EVAL_MAIN[] += time_ns() - _t_em
+                # PROF: _T_EVAL_MAIN[] += time_ns() - _t_em
                 total_work_units += wu_node
-                _t_cs = time_ns()
+                total_runtime    += rt_node
+                # PROF: _t_cs = time_ns()
                 cache[key] = (g_s_vec, xsk_new)
-                _T_CACHE_STORE[] += time_ns() - _t_cs
+                # PROF: _T_CACHE_STORE[] += time_ns() - _t_cs
                 x_sk_or_nothing = xsk_new
                 cache_misses += 1
             end
@@ -590,9 +671,15 @@ function branch_and_bound(
             end
 
             # ── Compute x_bar (Float64). Fast path for full assignments. ─────
-            _t_xb = time_ns()
+            # PROF: _t_xb = time_ns()
             n_fixed = _popcount(node.F0) + _popcount(node.F1)
             is_integer::Bool = false
+            # Scenarios entering the x_bar average at this node. Declared here so
+            # it is still in scope for the trace line at the branch point below.
+            # x_bar[j] is a multiple of 1/n_active, so the most-fractional score
+            # takes only floor(n_active/2) distinct non-zero values — this is the
+            # quantity that governs how often branch scores tie.
+            n_active::Int = 0
             if n_fixed == n_vars
                 # All variables determined by F0/F1 — no x_sk needed
                 fill!(x_bar, 0.0)
@@ -606,21 +693,50 @@ function branch_and_bound(
             else
                 # Need x_sk — always available from evaluate or cache
                 x_sk = x_sk_or_nothing::Matrix{Float64}
-                # Average over feasible scenarios (manual loop, no allocations)
-                n_active = 0
+                # Average over ACTIVE scenarios (manual loop, no allocations).
+                #
+                # Two definitions of "active", selected by branching_strategy:
+                #
+                #   "F"/"P" : g_s finite, i.e. scenario s is feasible at this node.
+                #
+                #   "FA"    : g_s < lambda_star[s], i.e. scenario s contributes a
+                #             STRICTLY POSITIVE term to U_k = sum_s max(0, lam_s - g_s).
+                #             Scenarios with g_s >= lam_s contribute exactly 0 to the
+                #             node bound, so their optimal x carries no information
+                #             about what makes this node good — averaging them in only
+                #             blurs x_bar. Infeasible scenarios (g_s = Inf) are still
+                #             excluded automatically, so "FA" refines "F".
+                #
+                #             The integrality shortcut below stays EXACT under "FA":
+                #             if x_bar is integral then every contributing scenario
+                #             attains its optimum at x_star, so c_s(x_star) = g_s for
+                #             those; and for every excluded scenario c_s(x_star) >= g_s
+                #             >= lam_s (g_s is a MIN over the node region), so its term
+                #             is 0. Hence the true value of x_star equals U_k exactly.
                 fill!(x_bar, 0.0)
                 @inbounds for s in 1:nscen
-                    isinf(g_s_vec[s]) && continue
+                    if use_lambda_active
+                        g_s_vec[s] >= lambda_star[s] - LAMBDA_ACTIVE_TOL && continue
+                    else
+                        isinf(g_s_vec[s]) && continue
+                    end
                     n_active += 1
                     for j in 1:n_vars
                         x_bar[j] += x_sk[j, s]
                     end
                 end
-                if n_active > 0
-                    inv_n = 1.0 / n_active
-                    @inbounds for j in 1:n_vars
-                        x_bar[j] *= inv_n
-                    end
+                if n_active == 0
+                    # Every scenario contributes (essentially) nothing: U_k ~ 0, so
+                    # nothing in this subtree can beat L_hat >= 0. Normally the
+                    # U_k <= L_hat fathom above already caught this; this guard covers
+                    # the LAMBDA_ACTIVE_TOL boundary, where U_k can be a hair above 0.
+                    verbose && @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=FATHOMED_EMPTY_ACTIVE  branch_var=∅  open_nodes=%d\n",
+                            nodes_processed, _popcount(node.F0), _popcount(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, length(open_nodes))
+                    continue
+                end
+                inv_n = 1.0 / n_active
+                @inbounds for j in 1:n_vars
+                    x_bar[j] *= inv_n
                 end
                 # Integer check — manual, no isapprox overhead
                 is_integer = true
@@ -632,7 +748,7 @@ function branch_and_bound(
                     end
                 end
             end
-            _T_XBAR_INTCHECK[] += time_ns() - _t_xb
+            # PROF: _T_XBAR_INTCHECK[] += time_ns() - _t_xb
 
             # Integer node — update incumbent
             if is_integer
@@ -643,8 +759,12 @@ function branch_and_bound(
                 end
                 UB  = isempty(open_nodes) ? L_hat : heap_peek(open_nodes).upper_bound
                 gap = UB > 1e-10 ? 100.0 * (UB - L_hat) / abs(UB) : 0.0
-                verbose && @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=FEASIBLE  branch_var=∅  open_nodes=%d\n",
-                        nodes_processed, _popcount(node.F0), _popcount(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, length(open_nodes))
+                # nactive is logged here too: this is where the active scenarios
+                # agreed on a single x, so it measures the "fewer scenarios agree
+                # sooner" effect. nactive=0 marks the all-fixed fast path, where
+                # x_bar comes straight off F1 and no averaging happened.
+                verbose && @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=FEASIBLE  branch_var=∅  nactive=%d  open_nodes=%d\n",
+                        nodes_processed, _popcount(node.F0), _popcount(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, n_active, length(open_nodes))
                 continue
             end
 
@@ -652,7 +772,7 @@ function branch_and_bound(
 
             # Build fractional candidates and rounding key in one pass.
             # All three are UInt64 bitmasks (bit j ↔ variable j).
-            _t_fb = time_ns()
+            # PROF: _t_fb = time_ns()
             frac_vars::UInt64  = UInt64(0)
             F0_rounded::UInt64 = UInt64(0)
             F1_rounded::UInt64 = UInt64(0)
@@ -672,29 +792,30 @@ function branch_and_bound(
                     frac_vars |= bit_j
                 end
             end
-            _T_FRAC_BUILD[] += time_ns() - _t_fb
+            # PROF: _T_FRAC_BUILD[] += time_ns() - _t_fb
 
             # Rounding heuristic — candidate incumbent
-            _t_rcl = time_ns()
+            # PROF: _t_rcl = time_ns()
             rnd_key = cache_key(F0_rounded, F1_rounded)
             rnd_hit = haskey(cache, rnd_key)
-            _T_CACHE_LOOKUP[] += time_ns() - _t_rcl
+            # PROF: _T_CACHE_LOOKUP[] += time_ns() - _t_rcl
             local LB_rnd::Float64
             if rnd_hit
-                _t_rcl2 = time_ns()
+                # PROF: _t_rcl2 = time_ns()
                 g_rnd, _ = cache[rnd_key]
-                _T_CACHE_LOOKUP[] += time_ns() - _t_rcl2
+                # PROF: _T_CACHE_LOOKUP[] += time_ns() - _t_rcl2
                 LB_rnd = sum(max(0.0, lambda_star[s] - g_rnd[s]) for s in 1:nscen)
             else
-                _t_er = time_ns()
-                LB_rnd, x_sk_rnd, g_rnd, wu_rnd = evaluate_node_persistent(
+                # PROF: _t_er = time_ns()
+                LB_rnd, x_sk_rnd, g_rnd, wu_rnd, rt_rnd = evaluate_node_persistent(
                     pmodels, F0_rounded, F1_rounded, lambda_star, n_vars,
                     solve_subproblem_persistent_fn)
-                _T_EVAL_ROUNDING[] += time_ns() - _t_er
+                # PROF: _T_EVAL_ROUNDING[] += time_ns() - _t_er
                 total_work_units += wu_rnd
-                _t_rcs = time_ns()
+                total_runtime    += rt_rnd
+                # PROF: _t_rcs = time_ns()
                 cache[rnd_key] = (g_rnd, x_sk_rnd)
-                _T_CACHE_STORE[] += time_ns() - _t_rcs
+                # PROF: _T_CACHE_STORE[] += time_ns() - _t_rcs
             end
             if LB_rnd > L_hat
                 L_hat  = LB_rnd
@@ -703,7 +824,7 @@ function branch_and_bound(
             end
 
             # Branch
-            _t_bs = time_ns()
+            # PROF: _t_bs = time_ns()
             if branching_strategy == "P"
                 j_star, branch_score = select_branching_variable_product(
                     frac_vars, x_sk, lambda0, lambda1, nscen)
@@ -712,20 +833,40 @@ function branch_and_bound(
                 j_star, branch_score = select_branching_variable(frac_vars, x_bar)
                 score_label = "frac_score"
             end
-            _T_BRANCH_SELECT[] += time_ns() - _t_bs
+            # PROF: _T_BRANCH_SELECT[] += time_ns() - _t_bs
 
-            _t_hp = time_ns()
+            # Branching diagnostics: how many candidates tied for the win.
+            n_tied = 0
+            @inbounds begin
+                _m_t = frac_vars
+                while _m_t != UInt64(0)
+                    j = trailing_zeros(_m_t) + 1
+                    if abs(abs(x_bar[j] - floor(x_bar[j] + 0.5)) - branch_score) <= 1e-12
+                        n_tied += 1
+                    end
+                    _m_t &= _m_t - UInt64(1)
+                end
+            end
+            branch_decisions += 1
+            n_tied >= 2 && (tied_decisions += 1)
+            active_sum += n_active
+            n_active < min_active && (min_active = n_active)
+
+            # PROF: _t_hp = time_ns()
             bit_jstar = _bit(j_star)
             F0_down = node.F0 | bit_jstar
             F1_up   = node.F1 | bit_jstar
             heap_push!(open_nodes, BBNode(F0_down, node.F1, U_k))
             heap_push!(open_nodes, BBNode(node.F0, F1_up,   U_k))
-            _T_HEAP_OPS[] += time_ns() - _t_hp
+            # PROF: _T_HEAP_OPS[] += time_ns() - _t_hp
 
             UB  = heap_peek(open_nodes).upper_bound
             gap = UB > 1e-10 ? 100.0 * (UB - L_hat) / abs(UB) : 0.0
-            verbose && @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=BRANCHED  branch_var=%d  %s=%.4f  nfrac=%d  open_nodes=%d\n",
-                    nodes_processed, _popcount(node.F0), _popcount(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, j_star, score_label, branch_score, _popcount(frac_vars), length(open_nodes))
+            if verbose
+                # n_tied was computed above with the branching diagnostics.
+                @printf(log_io, "  Node %4d  |F0|=%2d  |F1|=%2d  cache=%-4s  U_k=%.4f  LB=%.4f  UB=%.4f  gap=%.2f%%  work=%.4f  outcome=BRANCHED  branch_var=%d  %s=%.4f  nfrac=%d  nactive=%d  ntied=%d  open_nodes=%d\n",
+                        nodes_processed, _popcount(node.F0), _popcount(node.F1), hit_str, U_k, L_hat, UB, gap, total_work_units, j_star, score_label, branch_score, _popcount(frac_vars), n_active, n_tied, length(open_nodes))
+            end
         end
 
         UB_final  = isempty(open_nodes) ? L_hat : heap_peek(open_nodes).upper_bound
@@ -742,21 +883,33 @@ function branch_and_bound(
         println(log_io, "Gap                : $(round(gap_final, digits=4))%")
         println(log_io, "Optimal x*         : $x_star")
         println(log_io, "Total work units   : $(round(total_work_units, digits=4))")
+        println(log_io, "Total Gurobi runtime: $(round(total_runtime, digits=4)) s")
         println(log_io, "Cached nodes       : $(length(cache))")
         hit_rate = (cache_hits + cache_misses) > 0 ?
             100.0 * cache_hits / (cache_hits + cache_misses) : 0.0
         println(log_io, "Cache hit rate     : $(round(hit_rate, digits=1))%")
         println(log_io, "="^60)
 
-        _T_TOTAL[] = time_ns() - _t_total0
-        _T_EVAL_MAIN_CUM[] += _T_EVAL_MAIN[]
-        _T_TOTAL_CUM[]     += _T_TOTAL[]
-        _BB_CALLS_CUM[]    += 1
-        _print_bb_timers(log_io)
+        # PROF: _T_TOTAL[] = time_ns() - _t_total0
+        # PROF: _T_EVAL_MAIN_CUM[] += _T_EVAL_MAIN[]
+        # PROF: _T_TOTAL_CUM[]     += _T_TOTAL[]
+        # PROF: _BB_CALLS_CUM[]    += 1
+        # PROF: _print_bb_timers(log_io)
+
+        # 10th element: branching diagnostics for this BB call (one CG iteration).
+        branch_stats = (
+            branch_decisions = branch_decisions,
+            tied_decisions   = tied_decisions,
+            active_sum       = active_sum,
+            min_active       = branch_decisions > 0 ? min_active : 0,
+            tie_pct          = branch_decisions > 0 ? 100.0 * tied_decisions / branch_decisions : 0.0,
+            mean_active      = branch_decisions > 0 ? active_sum / branch_decisions : 0.0,
+        )
 
         return x_star, L_hat, UB_final, gap_final, cache,
                total_work_units, nodes_processed,
-               (cache_hits + cache_misses) > 0 ? 100.0 * cache_hits / (cache_hits + cache_misses) : 0.0
+               (cache_hits + cache_misses) > 0 ? 100.0 * cache_hits / (cache_hits + cache_misses) : 0.0,
+               total_runtime, branch_stats
 
     finally
         log_file !== nothing && close(log_io)

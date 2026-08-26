@@ -84,11 +84,12 @@ function solve_subproblem_persistent_FL(
 
     work_units = 0.0
     try; work_units = MOI.get(backend(pm.model), Gurobi.ModelAttribute("Work")); catch; end
+    runtime = solve_time(pm.model)
 
     if termination_status(pm.model) == MOI.OPTIMAL
-        result = (objective_value(pm.model), value.(pm.x), work_units)
+        result = (objective_value(pm.model), value.(pm.x), work_units, runtime)
     else
-        result = (Inf, zeros(n_vars), work_units)
+        result = (Inf, zeros(n_vars), work_units, runtime)
     end
 
     _m = F0
@@ -156,11 +157,12 @@ function solve_subproblem_scenario_FL(
 
     work_units = 0.0
     try; work_units = MOI.get(backend(model), Gurobi.ModelAttribute("Work")); catch; end
+    runtime = solve_time(model)
 
     if termination_status(model) == MOI.OPTIMAL
-        return objective_value(model), value.(x), work_units
+        return objective_value(model), value.(x), work_units, runtime
     else
-        return Inf, zeros(nloc), work_units
+        return Inf, zeros(nloc), work_units, runtime
     end
 end
 
@@ -173,6 +175,7 @@ function branch_and_bound_FL(
     scenarios::Vector{Vector{Float64}},
     lambda_star::Vector{Float64};
     work_limit::Float64            = 2000.0,
+    time_limit::Float64            = Inf,
     cache::BBCache                 = BBCache(),
     log_file::Union{String,Nothing} = nothing,
     branching_strategy::String     = "F"
@@ -184,6 +187,7 @@ function branch_and_bound_FL(
         solve_subproblem_persistent_FL,
         solve_subproblem_scenario_FL;
         work_limit         = work_limit,
+        time_limit         = time_limit,
         cache              = cache,
         log_file           = log_file,
         branching_strategy = branching_strategy
